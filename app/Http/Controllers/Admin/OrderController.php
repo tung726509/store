@@ -291,7 +291,7 @@ class OrderController extends Controller
     }
 
     public function getEdit(Request $request,$id){
-        $id = base64_decode($id);ewr
+        $id = base64_decode($id);
         $order = $this->_m->with(['customer','order_items'])->find($id);
         if($order){
             $order_items = $order->order_items;
