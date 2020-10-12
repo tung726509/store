@@ -48,11 +48,11 @@
         <h4 class="ml-3"><i class="fas fa-chart-pie"></i> Thống Kê Đơn Hàng</h4>
         <div class="text-center m-3">
           <div class="row">
-              <div class="col-md-4 col-6">
-                <div class="card widget-flat border-blue bg-blue text-white pl-2 pr-2 pt-1 pb-1">
-                    <i class="fe-tag"></i>
+              <div class="col-12">
+                <div class="card bg-blue widget-flat border-blue text-white pl-2 pr-2 pt-1 pb-1">
+                    <i class="fas fa-microchip"></i>
                     <h4 class="text-white">{{ $total_orders != null ? $total_orders : 0 }}</h4>
-                    <p class="text-uppercase font-14 font-weight-bold mb-0">Tổng Đơn</p>
+                    <p class="text-uppercase font-7 font-weight-bold mb-0">Tổng</p>
                 </div>
               </div>
               <div class="col-md-4 col-6">
@@ -63,6 +63,13 @@
                 </div>
               </div>
               <div class="col-md-4 col-6">
+                <div class="card widget-flat border-warning bg-warning text-white pl-2 pr-2 pt-1 pb-1">
+                    <i class="far fa-trash-alt"></i>
+                    <h4 class="text-white">{{ $cancel_orders != null ? $cancel_orders : 0 }}</h4>
+                    <p class="text-uppercase font-14 font-weight-bold mb-0">Đã Hủy</p>
+                </div>
+              </div>
+              <div class="col-md-4 col-6">
                 <div class="card bg-info widget-flat border-info text-white pl-2 pr-2 pt-1 pb-1">
                     <i class="fas fa-check"></i>
                     <h4 class="text-white">{{ $confirm_orders != null ? $confirm_orders : 0 }}</h4>
@@ -70,10 +77,10 @@
                 </div>
               </div>
               <div class="col-md-4 col-6">
-                <div class="card widget-flat border-warning bg-warning text-white pl-2 pr-2 pt-1 pb-1">
-                    <i class="far fa-trash-alt"></i>
-                    <h4 class="text-white">{{ $cancel_orders != null ? $cancel_orders : 0 }}</h4>
-                    <p class="text-uppercase font-14 font-weight-bold mb-0">Đã Hủy</p>
+                <div class="card widget-flat border-info bg-info text-white pl-2 pr-2 pt-1 pb-1">
+                    <i class="fas fa-truck"></i>
+                    <h4 class="text-white">{{ $deli_orders != null ? $deli_orders : 0 }}</h4>
+                    <p class="text-uppercase font-14 font-weight-bold mb-0">Đang giao</p>
                 </div>
               </div>
               <div class="col-md-4 col-6">
@@ -163,7 +170,7 @@
                         {{-- chi tiết --}}
                         <a class="dropdown-item direct-link btn-detail" href="{{route('administrator.order.detail',['id'=>base64_encode($item->id)])}}"><i class="fas fa-info text-info icon-action"></i> Chi Tiết</a>
                         {{-- chỉnh sửa --}}
-                        @if(in_array($item->status,[1,2,3,6]))
+                        @if(in_array($item->status,[1,3,6]))
                         <a class="dropdown-item direct-link btn-edit" href="{{route('administrator.order.edit',['id'=>base64_encode($item->id)])}}"><i class="far fa-edit icon-action" style="color: #F4FA58"></i>{{ $item->status == 1 ? 'Xác nhận' : 'Chỉnh Sửa' }}</a>
                         @endif
                         {{-- đang giao hàng --}}
@@ -309,7 +316,8 @@
                 row.find('.animate-car').parent().append(`
                   <p class="mb-0">${res.now}</p>
                 `);
-                alertify.success('đang giao ...... <i class="fas fa-truck" style="font-size: 20px"></i>');
+                alertify.success('đang giao ...... <i class="fas fa-truck animate__animated animate__infinite animate__fadeOutRight" style="font-size: 20px"></i>');
+            // đơn hàng thành công
             }else if(res.message == 'success'){
                 row.find('.btn-edit').remove();
                 row.find('.btn-success').remove();
@@ -319,6 +327,63 @@
                   <p class="mb-0">${res.now}</p>
                 `);
                 row.find('.animate-car').prev().removeClass('badge-info').addClass('badge-success');
+                alertify.success('<i class="fas fa-check-double animate__animated animate__infinite animate__tada"></i> Giao hàng thành công !');
+            // đơn hàng thất bại
+            }else if(res.message == 'fail'){
+                row.find('.btn-edit').remove();
+                row.find('.btn-success').remove();
+                row.find('.btn-fail').remove();
+                row.find('.animate-car').html('').next().remove();
+                row.find('.animate-car').parent().append(`
+                  <p class="mb-0">${res.now}</p>
+                `);
+                row.find('.animate-car').prev().removeClass('badge-info').addClass('badge-danger');
+                alertify.error('<i class="fas fa-file-excel animate__animated animate__infinite animate__tada"></i> Giao hàng thất Bại !');
+            // trở lại
+            }else if(res.message == 'backed'){
+              if(res.status == 2){
+                    row.find('.btn-back').remove();
+                    row.find('.dropdown-menu').append(`
+                      <a class="dropdown-item direct-link btn-edit" href="{{ route('administrator.order.index') }}/${btoa(order_id)}/edit"><i class="far fa-edit icon-action" style="color: #F4FA58"></i>Xác nhận</a>
+                    `);
+                    row.find('.animate-car').next().html(`
+                      <p class="mb-0">${res.now}</p>
+                    `);
+                    row.find('.animate-car').prev().removeClass('badge-warning').addClass('badge-light');
+                    alertify.success('<i class="fas fa-undo animate__animated animate__infinite animate__tada"></i> Trở về trạng thái chưa xác nhận !');
+              }else if(res.status == 4 || res.status == 5){
+                    row.find('.btn-back').remove();
+                    row.find('.dropdown-menu').append(`
+                      <a class="dropdown-item direct-link btn-edit" href="{{ route('administrator.order.index') }}/${btoa(order_id)}/edit"><i class="far fa-edit icon-action" style="color: #F4FA58"></i>Xác nhận</a>
+                      <a class="dropdown-item order-change-status btn-success" href="javascript:;" data-order-id="${order_id}" data-type="success"><i class="fas fa-check-double icon-action" style="color: #0acf97!important"></i>Thành Công</a>
+                      <a class="dropdown-item order-change-status btn-fail" href="javascript:;" data-order-id="${order_id}" data-type="fail"><i class="fas fa-file-excel icon-action" style="color: #f1556c!important"></i></i>Thất Bại</a>
+                      <a class="dropdown-item order-change-status btn-back" href="javascript:;" data-order-id="${order_id}" data-type="back"><i class="fas fa-undo icon-action"></i>Trở Lại</a>
+                    `);
+                    row.find('.animate-car').append(`
+                      <p class="mb-0 car-move animate__animated animate__fadeOutRight animate__infinite animate__slower">đang giao ...... <i class="fas fa-truck" style="font-size: 20px"></i></p>
+                    `).next().remove();
+                    row.find('.animate-car').parent().append(`
+                      <p class="mb-0">${res.now}</p>
+                    `);
+                    if(res.status == 4){
+                      row.find('.animate-car').prev().removeClass('badge-success').addClass('badge-info');
+                    }else{
+                      row.find('.animate-car').prev().removeClass('badge-danger').addClass('badge-info');
+                    }
+                    alertify.success('<i class="fas fa-undo animate__animated animate__infinite animate__tada"></i> Trở về trạng thái giao hàng !');
+              }else if(res.status == 6){
+                    row.find('.btn-success').remove();
+                    row.find('.btn-fail').remove();
+                    row.find('.btn-back').remove();
+                    row.find('.dropdown-menu').append(`
+                      <a class="dropdown-item order-change-status btn-deli" href="javascript:;" data-order-id="${order_id}" data-type="delivery"><i class="fas fa-truck icon-action animate__animated animate__bounce" style="color: black" data-order-id="${order_id}"></i>Giao Hàng</a>
+                    `);
+                    row.find('.animate-car').html('').next().remove();
+                    row.find('.animate-car').parent().append(`
+                      <p class="mb-0">${res.now}</p>
+                    `);
+                    alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Trở về trạng thái đã xác nhận !');
+              }
             }
           }else if(res.success == false){
             Swal.fire(
@@ -328,7 +393,7 @@
             )
           }
         })
-        .fail(function() {
+        .fail(function(){
           console.log("error");
         })
       }
@@ -347,12 +412,7 @@
       $(".table-responsive").on('click','.order-change-status',function(event) {
         let order_id = $(this).data('order-id');
         let type = $(this).data('type');
-
-        // if(type == 'delivery'){
-        //   alertify.normal('Warning message');
-        // }
-
-        // console.log(order_id,type);
+        
         if(order_id && type){
           order_change_status_ajax(order_id,type);
         }

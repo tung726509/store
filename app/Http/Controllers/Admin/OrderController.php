@@ -17,6 +17,7 @@ use App\Product;
 use App\Warehouse;
 use App\Customer;
 use App\WarehouseItem;
+use App\WarehouseLog;
 use App\Option;
 
 class OrderController extends Controller
@@ -29,6 +30,7 @@ class OrderController extends Controller
         $this->customer_m = new Customer();
         $this->warehouse_m = new Warehouse();
         $this->wh_items_m = new WarehouseItem();
+        $this->wh_logs_m = new WarehouseLog();
     	$this->option_m = new Option();
         $this->res_status_mess_default = ['success'=>false,'message'=>'Lỗi hệ thống !'];
     }
@@ -39,7 +41,7 @@ class OrderController extends Controller
         $o_status = request()->query('o_status','');
         $param = [];
 
-        $query = $this->_m->with(['customer']);
+        $query = $this->_m->with(['customer','user']);
 
         if($search != null && $search != ""){
             $param['code'] = $search;
@@ -51,7 +53,7 @@ class OrderController extends Controller
 
         $query = $query->filter($param);
         $orders = $query->orderBy('created_at','desc')->paginate($per_page);
-        $orders1 = $this->_m->get();
+        $orders1 = clone $orders;
 
         $total_orders = $orders1->count();
         $un_process_orders = $orders1->where('status',1)->count();
@@ -59,8 +61,9 @@ class OrderController extends Controller
         $confirm_orders = $orders1->where('status',3)->count();
         $success_orders = $orders1->where('status',4)->count();
         $fail_orders = $orders1->where('status',5)->count();
+        $deli_orders = $orders1->where('status',6)->count();
     	
-    	return view('admin.order.index',compact('orders','per_page','search','o_status','total_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders'));
+    	return view('admin.order.index',compact('orders','per_page','search','o_status','total_orders','deli_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders'));
     }
 
     public function detail(Request $request,$id){
@@ -819,10 +822,14 @@ class OrderController extends Controller
         $data = $this->res_status_mess_default;
         $data['status'] = $status;
 
-        if(in_array($status,[2,5,6])){// (2-5-6 : hủy-thất bại-đang giao)
+        if(in_array($status,[2,4,5,6])){// (2-5-6 : hủy-thành công-thất bại-đang giao)
             switch ($status) {
                 case 6:
                     $order->status = 3;
+                    break;
+                case 4:
+                    $order->status = 6;
+                    $order->reason = null;
                     break;
                 case 5:
                     $order->status = 6;
@@ -836,11 +843,28 @@ class OrderController extends Controller
             }
             $updated = $order->save();
             if($updated){
+                if($status == 4){
+                    $order_items = $order->order_items->pluck('quantity','product_id')->filter(function($value,$key){
+                        return $value > 0;
+                    })->toArray();
+                    $wh_items = $this->warehouse_m->where('id',$order->warehouse_id)->first()->wh_items->pluck('quantity','product_id')->toArray();
+                    // dd($order_items,$wh_items);
+                    
+                    // cộng trả lại số lượng đã trừ
+                        foreach ($order_items as $product_id => $quantity){
+                            // cộng lại số lượng
+                            $wh_item = $this->wh_items_m->where('warehouse_id',$order->warehouse_id)->where('product_id',$product_id)->first();
+                            $old_quantity = $wh_item->quantity;
+                            $updated = $wh_item->increment('quantity',$quantity);
+                        }
+
+                    // xóa lịch sử
+                    $this->wh_logs_m->where('reason',base64_encode($order->id))->delete();
+                }
+
                 $data['success'] = true;
                 $data['message'] = 'backed';
             }
-        }else if($status == 4){// thành công
-            // $order = $this->_m->where('id',$order->id)->update(['status'=>])
         }
 
         return $data;
@@ -868,8 +892,10 @@ class OrderController extends Controller
         $updated = null;
         $data = $this->res_status_mess_default;
         $data['status'] = $status;
-        $order_items = $order->order_items->pluck('quantity','product_id')->toArray();
-        $wh_items = $this->warehouse_m->with(['wh_items'])->where('id',$order->warehouse_id)->first()->wh_items->pluck('quantity','product_id')->toArray();
+        $order_items = $order->order_items->pluck('quantity','product_id')->filter(function($value,$key){
+            return $value > 0;
+        })->toArray();
+        $wh_items = $this->warehouse_m->where('id',$order->warehouse_id)->first()->wh_items->pluck('quantity','product_id')->toArray();
 
         // dd($order_items,count($order_items),$wh_items,count($wh_items));
 
@@ -907,7 +933,17 @@ class OrderController extends Controller
         $updated = null;
         $data = $this->res_status_mess_default;
         $data['status'] = $status;
-        dd(1);
+
+        if($status == 6){// 6 : đang giao hàng
+            $order->status = 5;
+            $updated = $order->save();
+            if($updated){
+                $data['success'] = true;
+                $data['message'] = 'fail';
+            }
+        }
+
+        return $data;
     }
 
     function generateRandomString($length = 10) {

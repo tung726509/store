@@ -170,9 +170,11 @@
             </div>
 
             {{-- thông báo kho hàng có phú hợp với đơn hàng --}}
+            @if($order->status != 1)
             <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
-              <button type="submit" class="btn btn-primary update-order text-center direct-link" name="btn_update_1">Cập nhật</button>
+              <button type="submit" class="btn btn-primary update-order text-center" name="btn_update_1">Cập nhật</button>
             </div>
+            @endif
 
             {{-- phần sản phẩm trong đơn hàng --}}
             <div class="form-group col-12 btn-add-pf">
