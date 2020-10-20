@@ -190,8 +190,7 @@ class OptionController extends Controller
 	}
 
 	public function getIncentive(){
-		$options = $this->_m->get()->keyBy('slug');
-		$arr_options = $options->toArray();
+		$arr_options = $this->_m->get()->keyBy('slug')->toArray();
 		$bd_discount = null;
 		$fs_discount = null;
 		$tf_discount = null;
@@ -240,7 +239,7 @@ class OptionController extends Controller
 		return view('admin.option.incentive',compact('arr_options','bd_check','bd_val','fs_check','fs_val','tf_check','tf_val'));
 	}
 
-	public function bdfsSaveValAjax(Request $request) {	
+	public function bdfsSaveValAjax(Request $request){
 		if($request->ajax()){
 			$rules =  [];
 			$messages =  [];

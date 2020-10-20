@@ -41,29 +41,48 @@ class Option extends Model
 
     function getOption(){
         $data = $this->get()->keyBy('slug')->toArray();
-
         return $data;
     }
 
     function getImageOption(){
-        $arr_options = $this->get()->keyBy('slug')->toArray();
+        $arr_options = $this->get()->pluck('content','slug')->map(function ($item, $key) {
+            return json_decode($item,true);
+        });;
+        // dd($arr_options->toArray());
         $data['big_b_i'] = null;
         $data['med_b_i'] = null;
         $data['small_b_i'] = null;
 
         if(Arr::has($arr_options,'b_b_i')){
-            $data['big_b_i'] = json_decode($arr_options['b_b_i']['content'],true);
+            $data['big_b_i'] = $arr_options['b_b_i'];
         }
 
         if(Arr::has($arr_options,'m_b_i')){
-            $data['med_b_i'] = json_decode($arr_options['m_b_i']['content'],true);
+            $data['med_b_i'] = $arr_options['m_b_i'];
         }
 
         if(Arr::has($arr_options,'s_b_i')){
-            $data['small_b_i'] = json_decode($arr_options['s_b_i']['content'],true);
+            $data['small_b_i'] = $arr_options['s_b_i'];
+            // $data['small_b_i'] = json_decode($arr_options['s_b_i']['content'],true);
         }
 
         return $data;
+    }
+
+    function getOptionIncentive(){
+        $data = $this->get()->pluck('content','slug')->toArray();
+        return $data;
+    }
+
+    function checkIncentive($arr_incentive_options,$slug){
+        if(Arr::has($arr_incentive_options,$slug)){
+            $data = json_decode($arr_incentive_options[$slug],true);
+            if($data['key'] == 1){
+                return true;
+            }
+        }else{
+            return false;
+        }
     }
 
 }

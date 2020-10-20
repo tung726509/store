@@ -85,6 +85,22 @@
       width: 100%;
       height: 150%;
     }
+    .star-rating span:before{
+    color: #ffea30;
+   }
+   .add-to-cart{
+    background-color: #2b2b2d;
+    border: 1px solid #2b2b2d;
+   }
+   .bor-radius-1{
+    border-radius: 8px;
+   }
+   .sale-product-daily-deal{
+    padding: 5px;
+   }
+   .sale-product-daily-deal:before{
+    border-radius: 7px;
+   }
     #porto-product-categories-3675 li.product-category .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0); }#porto-product-categories-3675 li.product-category:hover .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0.15); }
   </style>
   <style type="text/css">
@@ -171,63 +187,66 @@
                         </section>
                         {{-- freeship and porto watches --}}
                         <section class="vc_section porto-section porto-inner-container p-t-md pb-0">
-                           <div class="container">
-                              <div class="porto-carousel owl-carousel has-ccols ccols-xl-3 ccols-lg-3 ccols-md-2 ccols-sm-2 ccols-1 m-b-md home-bar owl-loaded owl-drag" data-plugin-options="{&quot;stagePadding&quot;:0,&quot;margin&quot;:2,&quot;autoplay&quot;:true,&quot;autoplayTimeout&quot;:3000,&quot;autoplayHoverPause&quot;:false,&quot;items&quot;:3,&quot;lg&quot;:3,&quot;md&quot;:2,&quot;sm&quot;:2,&quot;xs&quot;:1,&quot;nav&quot;:false,&quot;dots&quot;:false,&quot;animateIn&quot;:&quot;&quot;,&quot;animateOut&quot;:&quot;&quot;,&quot;loop&quot;:true,&quot;center&quot;:false,&quot;video&quot;:false,&quot;lazyLoad&quot;:false,&quot;fullscreen&quot;:false}">
-                                 <!-- porto-sicon-box --><!-- porto-sicon-box --><!-- porto-sicon-box -->
+                          @if($ict_count > 0)
+                            <div class="container">
+                              <div class="porto-carousel owl-carousel has-ccols ccols-xl-3 ccols-lg-3 ccols-md-2 ccols-sm-2 ccols-1 m-b-md home-bar owl-loaded owl-drag" data-plugin-options="{&quot;stagePadding&quot;:0,&quot;margin&quot;:2,&quot;autoplay&quot;:true,&quot;autoplayTimeout&quot;:3000,&quot;autoplayHoverPause&quot;:false,&quot;items&quot;:{{ $ict_count }},&quot;lg&quot;:{{ $ict_count }},&quot;md&quot;:{{ $ict_count >= 3 ? 2 : $ict_count }},&quot;sm&quot;:1,&quot;xs&quot;:1,&quot;nav&quot;:false,&quot;dots&quot;:false,&quot;animateIn&quot;:&quot;&quot;,&quot;animateOut&quot;:&quot;&quot;,&quot;loop&quot;:true,&quot;center&quot;:false,&quot;video&quot;:false,&quot;lazyLoad&quot;:false,&quot;fullscreen&quot;:false}">
                                  <div class="owl-stage-outer">
                                     <div class="owl-stage">
                                       {{-- free ship --}}
-                                       <div class="owl-item active" style="">
+                                      @if($use_free_ship['key'] == 1)
+                                        <div class="owl-item active" style="">
                                           <div class="porto-sicon-box style_1 default-icon">
                                             <div class="porto-sicon-default">
                                               <div id="porto-icon-20075240475e96bf4361bb5" class="porto-just-icon-wrapper" style="text-align:center;">
-                                                <div class="porto-icon none" style="color:#222529;font-size:37px;display:inline-block;">
-                                                  <i class="fas fa-shipping-fast"></i>
-                                                </div>
+                                                <div class="porto-icon none" style="color:#222529;font-size:37px;display:inline-block;"><i class="fas fa-shipping-fast"></i></div>
                                               </div>
                                             </div>
                                             <div class="porto-sicon-header">
                                               <h3 class="porto-sicon-title" style="font-weight:700;font-size:14px;line-height:1;">FREE SHIP</h3>
-                                              <p style="font-size:13px;line-height:17px;">cho đơn hàng trên 250k .</p>
+                                              <p style="font-size:13px;line-height:17px;">cho đơn hàng trên {{ $use_free_ship['value'] / 1000 }}k .</p>
                                             </div>
                                           </div>
-                                       </div>
-                                       {{-- sinh nhật --}}
-                                       <div class="owl-item active" style="">
+                                        </div>
+                                      @endif
+                                      {{-- sinh nhật --}}
+                                      @if($use_birth_discount['key'] == 1)
+                                        <div class="owl-item active" style="">
                                           <div class="porto-sicon-box style_1 default-icon">
                                             <div class="porto-sicon-default">
                                               <div id="porto-icon-15879685035e96bf4361d2e" class="porto-just-icon-wrapper" style="text-align:center;">
-                                                <div class="porto-icon none" style="color:#222529;font-size:37px;display:inline-block;">
-                                                  <i class="fas fa-birthday-cake"></i>
-                                                </div>
+                                                <div class="porto-icon none" style="color:#222529;font-size:37px;display:inline-block;"><i class="fas fa-birthday-cake"></i></div>
                                               </div>
                                             </div>
                                             <div class="porto-sicon-header">
-                                                <h3 class="porto-sicon-title" style="font-weight:700;font-size:14px;line-height:1;">SINH NHẬT GIẢM 10%</h3>
+                                                <h3 class="porto-sicon-title" style="font-weight:700;font-size:14px;line-height:1;">SINH NHẬT GIẢM {{ $use_birth_discount['value'] }}%</h3>
                                                 <p style="font-size:13px;line-height:17px;">trong tháng sinh nhật khách hàng .</p>
                                             </div>
                                           </div>
-                                       </div>
-                                       {{-- chuyển khoản --}}
-                                       <div class="owl-item active" style="">
+                                        </div>
+                                      @endif
+                                      {{-- chuyển khoản --}}
+                                      @if($use_transfer_discount['key'] == 1)
+                                        <div class="owl-item active" style="">
                                           <div class="porto-sicon-box style_1 default-icon">
-                                             <div class="porto-sicon-default">
+                                              <div class="porto-sicon-default">
                                                 <div id="porto-icon-15879685035e96bf4361d2e" class="porto-just-icon-wrapper" style="text-align:center;">
                                                    <div class="porto-icon none" style="color:#222529;font-size:37px;display:inline-block;"><i class="fas fa-hand-holding-usd"></i></div>
                                                 </div>
-                                             </div>
-                                             <div class="porto-sicon-header">
-                                                <h3 class="porto-sicon-title" style="font-weight:700;font-size:14px;line-height:1;">CHUYỂN KHOẢN GIẢM 5%</h3>
+                                              </div>
+                                              <div class="porto-sicon-header">
+                                                <h3 class="porto-sicon-title" style="font-weight:700;font-size:14px;line-height:1;">CHUYỂN KHOẢN GIẢM {{ $use_transfer_discount['value'] }}%</h3>
                                                 <p style="font-size:13px;line-height:17px;">áp dụng cho mọi đơn hàng .</p>
-                                             </div>
+                                              </div>
                                           </div>
-                                       </div>
+                                        </div>
+                                      @endif
                                     </div>
                                  </div>
                                  <div class="owl-nav disabled"><button type="button" role="presentation" class="owl-prev"></button><button type="button" role="presentation" class="owl-next"></button></div>
                                  <div class="owl-dots disabled"></div>
                               </div>
-                           </div>
+                            </div>
+                          @endif
                         </section>
                         {{-- bán chạy --}}
                         <section class="vc_section porto-section porto-inner-container pb-4" style="padding-top: 0px">
@@ -252,7 +271,7 @@
                                                     <div class="owl-item">
                                                        <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
                                                             <div class="product-inner">
-                                                               <div class="product-image">
+                                                               <div class="product-image bor-radius-1">
                                                                   <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                                      <div class="labels">
                                                                          <div class="onhot">Hot</div>
@@ -264,7 +283,7 @@
                                                                          }
                                                                          @endphp
                                                                      </div>
-                                                                     <div class="inner img-effect">
+                                                                     <div class="inner img-effect bor-radius-1">
                                                                         @if($item->product_images->isNotEmpty())
                                                                            <img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="">
                                                                            @if($item->product_images->count() >= 2)
@@ -329,8 +348,8 @@
                                                                       @endif
                                                                    </span>
                                                                    <div class="add-links-wrap">
-                                                                      <div class="add-links clearfix">
-                                                                         <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow">Thêm Vào Giỏ</a>
+                                                                      <div class="add-links clearfix bor-radius-1">
+                                                                         <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button bor-radius-1" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow">Thêm Vào Giỏ</a>
                                                                          <div class="yith-wcwl-add-to-wishlist add-to-wishlist-1368  wishlist-fragment on-first-load" >
                                                                             {{-- <div class="yith-wcwl-add-button"> 
                                                                                <a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4?add_to_wishlist=1368" rel="nofollow" data-product-id="1368" data-product-type="variable" data-original-product-id="1368" class="add_to_wishlist single_add_to_wishlist" data-title="Add to Wishlist"> <span>Add to Wishlist</span> 
@@ -359,7 +378,6 @@
                         {{-- NORMAL BANNER --}}
                         @if($dataImageOption['med_b_i']['text'][1] != '' && $dataImageOption['med_b_i']['text'][2] != '' && $dataImageOption['med_b_i']['text'][3] != '')
                           <section class="vc_section porto-section section-parallax porto-inner-container parallax-disabled mbi-1" data-image-src="" style="">
-                            {{-- <div class="parallax-background mbi-2" style=""></div> --}}
                             <div class="container">
                               <div class="wp-block-columns mb-0 align-items-center">
                                   @if($dataImageOption['med_b_i']['text'][1] != '')
@@ -409,7 +427,7 @@
                                                     <div class="owl-item">
                                                        <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
                                                             <div class="product-inner">
-                                                               <div class="product-image">
+                                                               <div class="product-image bor-radius-1">
                                                                   <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                                      <div class="labels">
                                                                          <div class="onhot">Hot</div>
@@ -421,7 +439,7 @@
                                                                          }
                                                                          @endphp
                                                                      </div>
-                                                                     <div class="inner img-effect">
+                                                                     <div class="inner img-effect bor-radius-1">
                                                                         @if($item->product_images->isNotEmpty())
                                                                            <img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="">
                                                                            @if($item->product_images->count() >= 2)
@@ -486,8 +504,8 @@
                                                                       @endif
                                                                    </span>
                                                                    <div class="add-links-wrap">
-                                                                      <div class="add-links clearfix">
-                                                                         <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button" rel="nofollow">Thêm Vào Giỏ</a>
+                                                                      <div class="add-links clearfix bor-radius-1">
+                                                                         <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button bor-radius-1" rel="nofollow">Thêm Vào Giỏ</a>
                                                                          <div class="yith-wcwl-add-to-wishlist add-to-wishlist-1368  wishlist-fragment on-first-load" >
                                                                             {{-- <div class="yith-wcwl-add-button"> 
                                                                                <a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4?add_to_wishlist=1368" rel="nofollow" data-product-id="1368" data-product-type="variable" data-original-product-id="1368" class="add_to_wishlist single_add_to_wishlist" data-title="Add to Wishlist"> <span>Add to Wishlist</span> 

@@ -84,6 +84,22 @@
    width: 100%;
    height: 150%;
  }
+ .star-rating span:before{
+    color: #ffea30;
+   }
+   .add-to-cart{
+    background-color: #2b2b2d;
+    border: 1px solid #2b2b2d;
+   }
+   .bor-radius-1{
+    border-radius: 8px;
+   }
+   .sale-product-daily-deal{
+    padding: 5px;
+   }
+   .sale-product-daily-deal:before{
+    border-radius: 7px;
+   }
  #porto-product-categories-3675 li.product-category .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0); }#porto-product-categories-3675 li.product-category:hover .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0.15); }
 </style>
 @endpush
@@ -257,7 +273,7 @@
                                     <label>Hiển Thị : </label>
                                  </div>
                                  <div class="col-7">
-                                    <select name="count" class="count" id="filter_per">
+                                    <select name="count" class="count" id="filter_per" style="">
                                        <option value="10" {{$count == "10" ? 'selected' : ''}}>10</option>
                                        <option value="20" {{$count == "20" ? 'selected' : ''}}>20</option>
                                        <option value="30" {{$count == "30" ? 'selected' : ''}}>30</option>
@@ -287,7 +303,7 @@
                               @endphp
                               <li class="product-col product-default product type-product post-1366 status-publish first instock product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-clothes product_tag-fashion has-post-thumbnail sale downloadable shipping-taxable purchasable product-type-simple">
                                  <div class="product-inner">
-                                    <div class="product-image">
+                                    <div class="product-image bor-radius-1">
                                        <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                           <div class="labels">
                                              <div class="onhot">Hot</div>
@@ -299,7 +315,7 @@
                                              }
                                              @endphp
                                           </div>
-                                          <div class="inner img-effect">
+                                          <div class="inner img-effect bor-radius-1">
                                              @if($item->product_images->isNotEmpty())
                                                 <img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="" style="display: inline-block;">
                                                 @if($item->product_images->count() >= 2)
@@ -361,8 +377,8 @@
                                           @endif
                                        </span>
                                        <div class="add-links-wrap">
-                                          <div class="add-links clearfix">
-                                             <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow">Thêm Vào Giỏ</a>
+                                          <div class="add-links clearfix bor-radius-1">
+                                             <a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button bor-radius-1" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow">Thêm Vào Giỏ</a>
                                              {{-- <div class="yith-wcwl-add-to-wishlist add-to-wishlist-1366  wishlist-fragment on-first-load" data-fragment-ref="1366" data-fragment-options="">
                                                 <!-- ADD TO WISHLIST -->
                                                 <div class="yith-wcwl-add-button">
@@ -494,6 +510,11 @@
       $("#filter_per").on('change', function(){
          $("#filterForm").submit();
       });
+
+      $('#select-beast').selectize({
+        create: true,
+        sortField: 'text'
+    });
    });
 </script>
 @endpush

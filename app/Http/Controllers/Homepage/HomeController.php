@@ -21,20 +21,41 @@ class HomeController extends Controller
     }
 
     public function home(){
-        $products = $this->product_m->with(['tags','product_images'])->orderBy('created_at','desc')->get();
-        $best_sell_products = $this->product_m->with(['tags','product_images'])->orderBy('created_at','desc')->get();
-    	$new_products = $this->product_m->with(['tags','product_images'])->orderBy('created_at','desc')->get();
         $dataImageOption = $this->option_m->getImageOption();
-        // $model = $this->product_m->with(['tags','product_images'])->get();
-        // $best_sell_products = $model->toQuery()->orderBy('created_at','asc')->get();
-        // dd($model);
+        $arr_incentive_options = $this->option_m->getOptionIncentive();
+        $use_birth_discount = null;
+        $use_free_ship = null;
+        $use_transfer_discount = null;
+        // số ưu đãi khách hàng
+        $ict_count = 0;
 
-    	return view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption'));
+        $models = $this->product_m->with(['tags','product_images']);
+        $products = $models->orderBy('created_at','desc')->get();
+        $best_sell_products = $models->orderBy('created_at','desc')->get();
+    	$new_products = clone $products->take(10);
+
+        if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount')){
+            $use_birth_discount = json_decode($arr_incentive_options['use_birth_discount'],true);
+            $ict_count += 1;
+        }
+        if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship')){
+            $use_free_ship = json_decode($arr_incentive_options['use_free_ship'],true);
+            $ict_count += 1;
+        }
+        if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount')){
+            $use_transfer_discount = json_decode($arr_incentive_options['use_transfer_discount'],true);
+            $ict_count += 1;
+        }
+
+        // dd($models,$products,$best_sell_products,$new_products);
+        // dd($use_birth_discount,$use_free_ship,$use_transfer_discount);
+
+    	return view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'));
     }
 
-    public function categories(Request $request,$code){	
+    public function categories(Request $request,$code){
         $orderby = request()->query('orderby','l_to_h');
-        $count = (int) request()->query('count',10);
+        $count = (int) request()->query('count',1);
         $param = [];
 
     	$category = $this->category_m->where('code',$code)->first();
@@ -49,7 +70,7 @@ class HomeController extends Controller
             }else{
                 $category_products = $category_products->orderBy('price','desc');
             }
-
+            
             $category_products = $category_products->paginate($count);
 
     		return view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','dataImageOption'));
@@ -58,7 +79,7 @@ class HomeController extends Controller
     	}
     }
 
-    public function productDetail(Request $request,$product_id){	
+    public function productDetail(Request $request,$product_id){
         $product_id_decode = base64_decode($product_id);
     	$product = $this->product_m->with(['tags','description','product_images'])->where('code',$product_id_decode)->first();
         $related_products = $this->product_m->with(['tags','product_images'])->where('category_id',$product->category_id)->orderBy('created_at','desc')->get();
@@ -67,8 +88,14 @@ class HomeController extends Controller
         $med_b_i = $dataImageOption['med_b_i'];
         $small_b_i = $dataImageOption['small_b_i'];
 
-    	return view('homepage.detail.index',compact('product','related_products','big_b_i','med_b_i','small_b_i'));
+        // dd($product);
+
+    	return view('homepage.detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'));
     }
-    
+
+    public function FunctionName($value='')
+    {
+        
+    }
 
 }

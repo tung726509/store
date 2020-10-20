@@ -29,6 +29,7 @@ Route::prefix('product')->name('product.')->group(function(){
 	
 	Route::post('/pick-star-ajax', 'ProductController@pickStarAjax')->name('pick_star_ajax');
 	Route::post('/delete-image-ajax', 'ProductController@deleteImageAjax')->name('delete_image_ajax');
+	Route::post('/upload-image-ajax', 'ProductController@uploadImageAjax')->name('upload_image_ajax');
 });
 
 Route::prefix('product_image')->name('product_image.')->group(function(){
@@ -111,12 +112,6 @@ Route::prefix('option')->name('option.')->group(function(){
 
 	Route::get('about-us', 'OptionController@getAboutUs')->name('aboutus');
 	Route::post('about-us', 'OptionController@aboutUs');
-
-	// Route::get('common', 'OptionController@getCommon')->name('common');
-	// Route::post('common', 'OptionController@common');
-
-	// Route::get('role', 'OptionController@getRole')->name('role');
-	// Route::post('role', 'OptionController@role');
 
 	// ajax
 	Route::post('bd-fs-save-val-ajax','OptionController@bdfsSaveValAjax')->name('bd_fs_save_val_ajax');

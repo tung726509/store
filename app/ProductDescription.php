@@ -9,7 +9,7 @@ class ProductDescription extends Model
 	protected $table = 'product_descriptions';
 
     protected $fillable = [
-        'product_id', 'origin', 'trademark','user_manual','note','description','preservation','created_by','updated_by','deleted_by','updated_at','deleted_at'
+        'product_id', 'origin', 'trademark','user_manual','note','description','preservation','size','created_by','updated_by','deleted_by','updated_at','deleted_at'
     ];
 
     public function product()

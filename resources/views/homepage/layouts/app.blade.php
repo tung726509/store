@@ -9,7 +9,7 @@
 	   	<script src="{{asset('homepage/js/webfont.js')}}" async=""></script>
 
 	   	<script>document.documentElement.className = document.documentElement.className + ' yes-js js_active js'</script>
-	   	<title>T-store | Cửa hàng tạp pí lù</title>
+	   	<title>T-store {{-- | Cửa hàng tạp pí lù --}}</title>
 
 	   	<style id="woocommerce-inline-inline-css">.woocommerce form .form-row .required { visibility: visible; }</style>
 

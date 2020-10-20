@@ -10,6 +10,7 @@ use Image;
 use Carbon\Carbon;
 use Response;
 use File;
+use Illuminate\Support\Facades\Storage;
 
 use App\Product;
 use App\ProductDescription;
@@ -79,8 +80,8 @@ class ProductController extends Controller
     }
 
     public function add(Request $request)
-    {
-    	// dd($request->all());
+    {   
+
 		$rules = [
             'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku'],
             'pretty_name' => ['required','string','min:1','max:100'],
@@ -216,6 +217,7 @@ class ProductController extends Controller
                 'user_manual' => ['nullable','string'],
                 'description' => ['nullable','string'],
                 'preservation' => ['nullable','string'],
+                'size' => ['nullable','string'],
             ];
 
             $messages = [
@@ -227,6 +229,7 @@ class ProductController extends Controller
                 'user_manual.string' => 'Chỉ được nhập chuỗi',
                 'description.string' => 'Chỉ được nhập chuỗi',
                 'preservation.string' => 'Chỉ được nhập chuỗi',
+                'size.string' => 'Chỉ được nhập chuỗi',
             ];
         }
 
@@ -279,13 +282,23 @@ class ProductController extends Controller
 
             // tạo mảng và update descriptionForm
             if($request->has('descriptionForm')){
+                $froala_default = '<p data-f-id="pbf" style="text-align: center; font-size: 14px; margin-top: 30px; opacity: 0.65; font-family: sans-serif;">Powered by <a href="https://www.froala.com/wysiwyg-editor?pb=1" title="Froala Editor">Froala Editor</a></p>';
+                $note = $request->input('note');
+                $user_manual = $request->input('user_manual');
+                $description = $request->input('description');
+                $preservation = $request->input('preservation');
+                $size = $request->input('size');
+
+                // dd($description,$size,$user_manual,$preservation,$note);
+
                 $data = [
                     'origin' => $request->input('origin'),
                     'trademark' => $request->input('trademark'),
-                    'note' => $request->input('note'),
-                    'user_manual' => $request->input('user_manual'),
-                    'description' => $request->input('description'),
-                    'preservation' => $request->input('preservation'),
+                    'description' => $request->input('description') == $froala_default ? null : $request->input('description'),
+                    'size' => $request->input('size') == $froala_default ? null : $request->input('size'),
+                    'user_manual' => $request->input('user_manual') == $froala_default ? null : $request->input('user_manual'),
+                    'preservation' => $request->input('preservation') == $froala_default ? null : $request->input('preservation'),
+                    'note' => $request->input('note') == $froala_default ? null : $request->input('note'),
                 ];
 
                 $updated_product = $this->pd_m->updateOrCreate(
@@ -385,5 +398,43 @@ class ProductController extends Controller
         }
 
         return false;
+    }
+
+    public function uploadImageAjax(Request $request){
+        $rules = [
+            'file' => ['required','file','image','mimetypes:image/jpeg,image/png,image/gif','mimes:jpeg,jpg,png,gif','max:5120']
+        ];
+
+        $messages = [
+            'file.required' => 'Vui lòng chọn ảnh cần upload',
+            'file.file' => 'Upload file không thành công',
+            'file.image' => 'Chỉ chấp nhận tập tin ảnh',
+            'file.mimetypes' => 'Chỉ chấp nhận tập tin ảnh jpg, png, gif',
+            'file.mimes' => 'Chỉ chấp nhận tập tin ảnh jpg, png, gif',
+            'file.max' => 'Dung lượng file tối đa 5Mb'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if($validator->fails()){
+            return Response::json(['success' => false,'message' => 'validate fail']);
+        }else{
+            if($request->hasFile('file')){
+                $now = strtotime(Carbon::now());
+                $image = $request->file('file');
+                $origin_name = $image->getClientOriginalName();
+                $type = $image->extension();
+                $location = public_path('admini/productImages/');
+                $name = $now.'.'.$type;
+                $move = $image->move($location,$name);
+
+                return Response::json([
+                    'link' => asset('admini/productImages/'.$name),
+                ]);
+            }
+            
+            return Response::json(['success' => false,'message' => 'have not file']);
+            
+        }
     }
 }
