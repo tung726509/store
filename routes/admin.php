@@ -115,6 +115,7 @@ Route::prefix('option')->name('option.')->group(function(){
 
 	// ajax
 	Route::post('bd-fs-save-val-ajax','OptionController@bdfsSaveValAjax')->name('bd_fs_save_val_ajax');
+	Route::post('del-banner-ajax','OptionController@delBannerAjax')->name('del_banner_ajax');
 });
 
 Route::prefix('user')->name('user.')->group(function(){

@@ -2,8 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
       <meta charset="utf-8">
-      {{-- <title>Tstore | Hệ Thống Quản Lý Bán Hàng</title> --}}
-      <title>Quản Lý Đại Lý</title>
+      <title>Quản Lý Đại Lý 123</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
       <meta content="Coderthemes" name="author">
@@ -29,7 +28,6 @@
       
       {{-- animate --}}
       <link rel="stylesheet" href="{{ asset('admini/css/animate.min.css') }}"/>
-      
   </head>
 
   @include('admin.includes.animate-loading') 
@@ -62,7 +60,6 @@
     <script src="{{asset('admini/js/vendor.min.js')}}"></script>
     {{-- alert --}}
     <script src="{{ asset('admini/js/sweetalert2@9.js') }}"></script>
-    <script src="{{ asset('admini/js/alertia.js') }}"></script>
     <script src="{{ asset('admini/js/alertify.min.js') }}"></script>
     {{-- auto number --}}
     <script src="{{asset('admini/js/autoNumeric.min.js')}}"></script>
@@ -80,7 +77,7 @@
         $(".direct-link").click(function(){
           $('#preloader').css('display', '');
         });
-        
+
       });   
     </script>
 

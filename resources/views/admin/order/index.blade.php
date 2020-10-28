@@ -223,7 +223,6 @@
                       <p class="mb-0">{{ $item->status_at->format('H:i d/m/Y') }}</p>
                     </a>
                   </td>
-                  {{-- nếu con đuwnggd --}}
                   <td class="text-center">
                     <p class="mb-0">{{ $item->price / 1000 }}k VNĐ</p>
                     @php
@@ -233,7 +232,7 @@
                         if(Arr::has($types_of_fee,"ufs")){
                           $ship_fee = 'Freeship';
                         }else{
-                          $ship_fee = 'Phí ship : '.($item->ship_fee/1000).'k';
+                          $ship_fee = 'Ship : '.($item->ship_fee/1000).'k';
                         }
                       }
                     @endphp

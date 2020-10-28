@@ -136,6 +136,7 @@
 	 .add-to-cart{
 	 	background-color: #2b2b2d;
 	 	border: 1px solid #2b2b2d;
+	 	padding: 7px 12px;
 	 }
 	 .bor-radius-1{
 	 	border-radius: 8px;
@@ -335,19 +336,19 @@
 		                                    	<input type="number" id="product_amount" class="input-text qty text" step="1" min="1" max="" name="quantity" value="1" size="4" placeholder="" inputmode="numeric">
 		                                    	<button type="button" value="+" class="plus">+</button>
 		                                 	</div>
-		                                 	<button type="" name="add_to_cart" value="" class="button add-to-cart bor-radius-1">Thêm vào giỏ hàng</button>
+		                                 	<button type="" name="add_to_cart" value="" class="button add-to-cart bor-radius-1"><i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng</button>
 			                              	<div class="product-share">
 			                                 	<div class="share-links">
-			                                 		<a href="#" target="_blank" rel="nofollow" data-tooltip="" data-placement="bottom" title="" class="share-facebook social-icon" data-original-title="Facebook">Facebook</a>
-			                                    	<a href="#" target="_blank" rel="nofollow" data-tooltip="" data-placement="bottom" title="" class="share-twitter social-icon" data-original-title="Twitter">Twitter</a>
-			                                    	<a href="#" target="_blank" rel="nofollow" data-tooltip="" data-placement="bottom" title="" class="share-linkedin social-icon" data-original-title="LinkedIn">LinkedIn</a>
-			                                    	<a href="#" target="_blank" rel="nofollow" data-tooltip="" data-placement="bottom" title="" class="share-googleplus social-icon" data-original-title="Google +">Google +</a>
-			                                    	<a href="#" target="_blank" rel="nofollow" data-tooltip="" data-placement="bottom" title="" class="share-email social-icon" data-original-title="Email">Email</a>
+			                                 		<a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank" class="share-facebook social-icon" data-original-title="Facebook">Facebook</a>
+			                                    	<a href="https://twitter.com/intent/tweet?url={{ url()->current() }}" target="_blank" class="share-twitter social-icon" data-original-title="Twitter">Twitter</a>
+			                                    	<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url()->current() }}" target="_blank" class="share-linkedin social-icon" data-original-title="LinkedIn">LinkedIn</a>
+
 			                                 </div>
 			                              </div>
 			                           	</div>
 			                        </div>
 		                     	</div>
+		                     	{{-- neeu --}}
 		                     	@if($product->description != null)
 			                     	<div class="woocommerce-tabs resp-htabs fr-view" id="product_accordion" style="display: block; width: 100%;">
 				                        <ul class="resp-tabs-list">
@@ -512,7 +513,7 @@
 			                                        </span>
 			                                        <div class="add-links-wrap">
 			                                           	<div class="add-links clearfix bor-radius-1">
-			                                              	<a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button bor-radius-1" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow">Thêm Vào Giỏ</a>
+			                                              	<a href="#" data-quantity="1" class="viewcart-style-2 button product_type_variable add_to_cart_button bor-radius-1" data-product_id="1368" data-product_sku="" aria-label="Select options for “Brown Women Casual HandBag”" rel="nofollow"><i class="fas fa-cart-plus"></i> Thêm Vào Giỏ</a>
 			                                              	<div class="yith-wcwl-add-to-wishlist add-to-wishlist-1368  wishlist-fragment on-first-load" >
 			                                                 {{-- <div class="yith-wcwl-add-button"> 
 			                                                    <a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4?add_to_wishlist=1368" rel="nofollow" data-product-id="1368" data-product-type="variable" data-original-product-id="1368" class="add_to_wishlist single_add_to_wishlist" data-title="Add to Wishlist"> <span>Add to Wishlist</span> 

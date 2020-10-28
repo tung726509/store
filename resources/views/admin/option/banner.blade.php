@@ -3,7 +3,6 @@
 @push('libs-styles')
     <link rel="stylesheet" href="{{asset('admini/css/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('admini/css/owl.theme.default.min.css')}}">
-    <link rel="stylesheet" href="{{asset('admini/css/dropzone.min.css')}}"  type="text/css" />
 @endpush
 
 @push('page-styles')
@@ -17,8 +16,31 @@
       border: 1px solid #645F5F;
     }
     .img-fg-t{
-      /*border: 1px solid #F3EEEE;*/
-      /*border-radius: 20px;*/    
+      position: relative;
+      border: 1px solid #F3EEEE;
+      border-radius: 20px;    
+    }
+    .btn-del{
+      position: absolute;
+      border: 3px solid #b0abab;
+      background-color: white;
+      color: #b0abab;
+      font-weight: bold;
+      padding: 5px 15px 6px 15px;
+      border-radius: 13px;
+      right: 0%;
+      margin-top:15px;
+    }
+    .btn-del:hover{
+      background-color: #b0abab;
+      color: white;
+      border: 3px solid white;
+    }
+    .card-bigbanner{
+      overflow: hidden;
+    }
+    .owl-carousel .owl-stage-outer{
+      overflow: inherit;
     }
   </style>
 @endpush
@@ -43,29 +65,33 @@
   {{-- Banner lớn đầu trang --}}
   <div class="col-12">
     <div class="card animate__animated animate__rollIn animate__faster">
-      <div class="card-body p-2">
+      <div class="card-body p-2 card-bigbanner">
           <h3 class="header-title">1 . Big banner đầu trang web</h3>
-          <form method="post" action="{{ url()->current()}}" id="bbiForm" name="bbiForm" enctype="multipart/form-data">
+          <form method="post" action="{{ url()->current() }}" id="bbiForm" name="bbiForm" enctype="multipart/form-data">
             @csrf
             <div class="m-b-20 font-13 position-relative small text-secondary mb-2"> - Kích thước khuyến nghị 1000x300 pixel , ảnh </div>
             {{-- input chọn Ảnh --}}
             <div class="row mb-2">
                 <div class="col-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-                  <div class="form-group">
-                    <input type="file" class="filestyle @error('big_banner') is-invalid @enderror" name="big_banner" data-buttonBefore="true" data-size="sm" >
-                    @error('big_banner')
-                      <div class="text-danger small"><strong>{{ $message }}</strong></div>
-                    @enderror
+                  <div class="input-group">
+                    <input type="file" class="form-control form-control-sm @error('big_banner') is-invalid @enderror" name="big_banner" data-size="sm">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-dark waves-effect waves-light btn-sm direct-link" name="bbi_save">Lưu ảnh</button>
+                    </div>
                   </div>
+                  @error('big_banner')
+                    <div class="text-danger small"><strong>{{ $message }}</strong></div>
+                  @enderror
                 </div>
             </div>
             {{-- bannner --}}
             <div class="row mb-2">
               <div class="col-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-                <div class="owl-carousel owl-theme big-banner-owl">
+                <div class="owl-carousel owl-theme" id="big-banner-owl">
                   @forelse(collect($big_b_i['name']) as $item)
                     <div class="item img-fg-t text-center">
-                      <img class="img-bigbanner" src="{{ asset('homepage/images/'.$item) }}" alt="placeholder+image" width="100%" height="auto">
+                      <img class="img-bigbanner" src="{{ asset('homepage/images/'.$item) }}" alt="placeholder+image" {{-- width="100%" --}} height="auto">
+                      <div class="btn-del res-btn-del" data-id ="{{ $item }}"><i class="far fa-trash-alt"></i> xóa ảnh</div>
                     </div>
                   @empty
                     <div class="item img-fg-t text-center">
@@ -76,7 +102,7 @@
               </div>
             </div>
             {{-- chữ trong banner --}}
-            <div class="row">
+            <div class="row mt-3">
               {{-- 1.1 --}}
               <div class="form-group col-sm-6 col-xl-3">
                 <label for="bbi_text_1" class="col-form-label">1.1 <span class="text-danger">*</span></label>
@@ -112,7 +138,7 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-sm text-center float-right" name="bbi_save" id="bbi_save">Lưu ảnh</button>
+                <button type="submit" class="btn btn-primary btn-sm text-center float-right direct-link" name="bbi_save" id="bbi_save">Cập nhật</button>
               </div>
             </div>
           </form>
@@ -125,7 +151,7 @@
     <div class="card animate__animated animate__rollIn animate__faster">
       <div class="card-body p-2">
           <h3 class="header-title">2 . Medium banner giữa trang web</h3>
-          <form method="post" action="{{ url()->current()}}" id="mbiForm" name="mbiForm" enctype="multipart/form-data">
+          <form method="post" action="{{ url()->current() }}" id="mbiForm" name="mbiForm" enctype="multipart/form-data">
             @csrf
             <div class="m-b-20 font-13 position-relative small text-secondary mb-2"> - Kích thước khuyến nghị 1000x300 pixel , ảnh </div>
             {{-- input chọn Ảnh --}}
@@ -176,7 +202,7 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-sm text-center float-right" name="mbi_save" id="mbi_save">Lưu ảnh</button>
+                <button type="submit" class="btn btn-primary btn-sm text-center float-right direct-link" name="mbi_save" id="mbi_save">Cập nhật</button>
               </div>
             </div>
           </form>
@@ -189,7 +215,7 @@
     <div class="card animate__animated animate__rollIn animate__faster">
       <div class="card-body p-2">
           <h3 class="header-title">3 . Small banner cuối trang</h3>
-          <form method="post" action="{{ url()->current()}}" id="sbiForm" name="sbiForm" enctype="multipart/form-data">
+          <form method="post" action="{{ url()->current() }}" id="sbiForm" name="sbiForm" enctype="multipart/form-data">
             @csrf
             <div class="m-b-20 font-13 position-relative small text-secondary mb-2"> - Kích thước khuyến nghị 1000x300 pixel , ảnh </div>
             {{-- input chọn Ảnh --}}
@@ -240,7 +266,7 @@
             </div>
             <div class="row">
               <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-sm text-center float-right" name="sbi_save" id="sbi_save">Lưu ảnh</button>
+                <button type="submit" class="btn btn-primary btn-sm text-center float-right direct-link" name="sbi_save" id="sbi_save">Cập nhật</button>
               </div>
             </div>
           </form>
@@ -258,24 +284,25 @@
 
 @push('page-scripts')
   <script type="text/javascript">
-    $(function() {
+      
+
+    $(document).ready(function(){
       $.ajaxSetup({
           headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
       });
 
-      $(".big-banner-owl").owlCarousel({
+      $("#big-banner-owl").owlCarousel({
         items:1,
-        // loop:true,
         margin:10,
-        autoplay:true,
         autoplayTimeout:2000,
         autoplayHoverPause:true
-      });
+      }); 
 
-      $(".delete-image").click(function(event){
-        let id = $(this).data('id'); 
+      $(".btn-del").click(function(event){
+        var _this = $(this);
+        let id = _this.data('id'); 
         Swal.fire({
             title: 'Bạn chắc chưa ?',
             text: "Xóa rồi không khôi phục được đâu !",
@@ -285,24 +312,23 @@
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Xóa đi !'
         }).then((result) => {
-            if (result.value) {
+            if(result.value){
               $.ajax({
-                url: '{{ route('administrator.product.delete_image_ajax') }}',
+                url: '{{ route('administrator.option.del_banner_ajax') }}',
                 type: 'post',
                 data: {id:id},
               })
               .done(function(res) {
                 if(res.success){
-                  $(`#product_image_of_${id}`).remove();
-                  Swal.fire(
-                      'Đã xóa !',
-                      'Ảnh của bạn đã được xóa .',
-                      'success'
-                  )
+                  location.reload();
                 }
               })
               .fail(function() {
-                console.log("error");
+                Swal.fire(
+                  'Error !',
+                  'Lỗi hệ thống , vui lòng thử lại !',
+                  'error'
+                  )
               })
 
               

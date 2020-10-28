@@ -119,6 +119,7 @@ class OptionController extends Controller
 
             // big_banner
             if($request->has('bbi_save')){
+                // dd(1);
             	$arr_img_name = $dataImageOption['big_b_i']['name'];
                 $text['1'] = $request->input('bbi_text_1');
                 $text['2'] = $request->input('bbi_text_2');
@@ -128,7 +129,7 @@ class OptionController extends Controller
                 $content['text'] = $text;
 
                 if($request->hasFile('big_banner')){
-                    $info_return = $this->_m->saveBannerReturnInfo('homepage/images/',$request->file('big_banner'),1000,300);
+                    $info_return = $this->_m->saveBannerReturnInfo('homepage/images/',$request->file('big_banner'),1500,400);
 
                     array_push($arr_img_name,$info_return['name']);
 
@@ -178,6 +179,8 @@ class OptionController extends Controller
                 $form_id = 's_b_i';
             }
 
+            // dd($request->all(),$content);
+
             $updated = $this->_m->where('slug',$form_id)->update(['content' => $content]);
 
             if($updated){
@@ -188,6 +191,31 @@ class OptionController extends Controller
             }
         }
 	}
+
+    public function delBannerAjax(Request $request)
+    {
+        if($request->ajax()){
+            $bbi = $this->_m->where('slug','b_b_i')->first();
+            $arr_bbi_img = json_decode($bbi->content,true)['name'];
+            $img_deling = $request->id;
+            $content = json_decode($bbi->content,true);
+            // dd($arr_bbi_img);
+            if(in_array($img_deling, $arr_bbi_img)){
+                $new_arr_bbi_img = array_diff($arr_bbi_img,[$img_deling]);
+                $content['name'] = $new_arr_bbi_img;
+                $bbi->content = json_encode($content);
+                $updated = $bbi->save();
+                // dd($updated);
+                if($updated){
+                    return Response::json(['success'=>true,'message'=>'Ảnh đã được xóa !']);
+                }
+            }
+
+            return false;
+        }
+
+        return false;
+    }
 
 	public function getIncentive(){
 		$arr_options = $this->_m->get()->keyBy('slug')->toArray();
@@ -399,5 +427,7 @@ class OptionController extends Controller
     {
         return view('admin.option.index');
     }
+
+        
 }
 

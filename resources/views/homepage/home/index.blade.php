@@ -1,3 +1,4 @@
+
 @extends('homepage.layouts.app')
 
 @push('page-styles')
@@ -103,13 +104,6 @@
    }
     #porto-product-categories-3675 li.product-category .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0); }#porto-product-categories-3675 li.product-category:hover .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0.15); }
   </style>
-  <style type="text/css">
-    @media only screen and (min-width: 600px) {
-      .banner-height-image{
-        background-color: lightblue;
-      }
-    }
-  </style>
 @endpush
 
 @section('content')
@@ -122,55 +116,7 @@
                <div id="content" role="main">
                   <article class="post-143 page type-page status-publish hentry">
                      <div class="page-content">
-                        {{-- Big Banner --}}
-                        <div class="banner-height-image porto-carousel owl-carousel has-ccols ccols-1 mb-0 home-slider nav-pos-inside nav-style-4 show-nav-hover owl-drag" data-plugin-options="" style="">
-                          <div class="owl-stage-outer" style="margin-left: 0px; margin-right: 0px;" >
-                            <div class="owl-stage">
-                              @forelse(collect($dataImageOption['big_b_i']['name']) as $item)
-                                <div class="owl-item">
-                                    <div id="interactive-banner-wrap-7014" class="porto-ibanner mb-0" style="background:#f4f4f4;min-height:200px;">
-                                       <img width="80%" height="auto" src="{{asset('homepage/images/'.$item)}}" class="porto-ibanner-img">
-                                       <div class="porto-ibanner-desc no-padding d-flex">
-                                          <div class="container">
-                                            <div class="porto-ibanner-container">
-                                              <div class="porto-ibanner-layer pr-xl-5 bbi-text-0" style="">
-                                                @if($dataImageOption['big_b_i']['text'][1] != '')
-                                                  <h3 class="porto-heading mb-2 bbi-text-1" style="">{{ $dataImageOption['big_b_i']['text'][1] }}</h3>
-                                                @endif
-                                                @if($dataImageOption['big_b_i']['text'][2] != '')
-                                                  <h4 class="porto-heading mb-3 text-divider bbi-text-2" style="">{{ $dataImageOption['big_b_i']['text'][2] }}</h4>
-                                                @endif
-                                                @if($dataImageOption['big_b_i']['text'][3] != '')
-                                                  <h3 class="porto-heading custom-font4 mb-4 bbi-text-3" style="">{{ $dataImageOption['big_b_i']['text'][3] }}</h3>
-                                                @endif
-                                                @if($dataImageOption['big_b_i']['text'][4] != '')
-                                                  <a class="btn btn-xl btn-danger btn-modern btn-block bbi-text-4" href="#"><span>{{ $dataImageOption['big_b_i']['text'][4] }}</span></a>
-                                                @endif
-                                              </div>
-                                            </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                </div>
-                              @empty
-                                <div class="owl-item">
-                                    <div id="interactive-banner-wrap-7014" class="porto-ibanner mb-0" style="background:#f4f4f4;min-height:500px;">
-                                       <img width="1920" height="500" src="{{asset('homepage/images/big-banner-demo.jpg')}}" class="porto-ibanner-img">
-                                       <div class="porto-ibanner-desc no-padding d-flex">
-                                          <div class="container">
-                                             <div class="porto-ibanner-container">
-                                                <div class="porto-ibanner-layer pr-xl-5" style="right:5%;top: 50%;transform: translateY(-50%);">
-                                                </div>
-                                             </div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                </div>
-                              @endforelse
-                            </div>
-                          </div>
-                          <div class="owl-dots"></div>
-                        </div>
+                        @include('homepage.includes.bigbanner')
                         {{-- breadcrumb --}}
                         <section class="page-top page-header-6" style="">
                             <div class="container hide-title">
@@ -185,7 +131,8 @@
                                 </div>
                             </div>
                         </section>
-                        {{-- freeship and porto watches --}}
+
+                        {{-- ưu đãi khách hàng --}}
                         <section class="vc_section porto-section porto-inner-container p-t-md pb-0">
                           @if($ict_count > 0)
                             <div class="container">
@@ -248,8 +195,9 @@
                             </div>
                           @endif
                         </section>
+
                         {{-- bán chạy --}}
-                        <section class="vc_section porto-section porto-inner-container pb-4" style="padding-top: 0px">
+                        <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
                            <div class="container">
                               <div class="porto-products wpb_content_element mb-0">
                                  <h2 class="section-title slider-title"><span class="inline-title">BEST SELLING</span><span class="line"></span></h2>
@@ -375,42 +323,42 @@
                               </div>
                            </div>
                         </section>
+
                         {{-- NORMAL BANNER --}}
-                        @if($dataImageOption['med_b_i']['text'][1] != '' && $dataImageOption['med_b_i']['text'][2] != '' && $dataImageOption['med_b_i']['text'][3] != '')
-                          <section class="vc_section porto-section section-parallax porto-inner-container parallax-disabled mbi-1" data-image-src="" style="">
-                            <div class="container">
-                              <div class="wp-block-columns mb-0 align-items-center">
-                                  @if($dataImageOption['med_b_i']['text'][1] != '')
-                                  <div class="wp-block-column">
-                                    <h3 class="porto-heading mb-0 py-2 text-center mbi-text-1" style="">{{ $dataImageOption['med_b_i']['text'][1] }}</h3>
+                        <section class="vc_section porto-section section-parallax porto-inner-container parallax-disabled mbi-1" data-image-src="" style="">
+                          <div class="container">
+                            <div class="wp-block-columns mb-0 align-items-center">
+                                @if($dataImageOption['med_b_i']['text'][1] != '')
+                                <div class="wp-block-column">
+                                  <h3 class="porto-heading mb-0 py-2 text-center mbi-text-1" style="">{{ $dataImageOption['med_b_i']['text'][1] }}</h3>
+                                </div>
+                                @endif
+                                @if($dataImageOption['med_b_i']['text'][2] != '')
+                                <div class="wp-block-column col-xl-3">
+                                  <div class="porto-button text-center">
+                                    <a class="btn btn-lg btn-quaternary btn-modern my-3 mbi-text-2" href="#" style="border-radius: 5px">
+                                      <span>{{ $dataImageOption['med_b_i']['text'][2] }}</span>
+                                    </a>
                                   </div>
-                                  @endif
-                                  @if($dataImageOption['med_b_i']['text'][2] != '')
-                                  <div class="wp-block-column col-xl-3">
-                                    <div class="porto-button text-center">
-                                      <a class="btn btn-lg btn-quaternary btn-modern my-3 mbi-text-2" href="#" style="border-radius: 5px">
-                                        <span>{{ $dataImageOption['med_b_i']['text'][2] }}</span>
-                                      </a>
-                                    </div>
-                                  </div>
-                                  @endif
-                                  @if($dataImageOption['med_b_i']['text'][3] != '')
-                                  <div class="wp-block-column text-center py-2">
-                                    <h5 class="porto-heading coupon-sale-text coupon-sale-light-bg m-b-sm mbi-text-3" style=""><b>{{ $dataImageOption['med_b_i']['text'][3] }}</b></h5>
-                                  </div>
-                                  @endif
-                              </div>
+                                </div>
+                                @endif
+                                @if($dataImageOption['med_b_i']['text'][3] != '')
+                                <div class="wp-block-column text-center py-2">
+                                  <h5 class="porto-heading coupon-sale-text coupon-sale-light-bg m-b-sm mbi-text-3" style=""><b>{{ $dataImageOption['med_b_i']['text'][3] }}</b></h5>
+                                </div>
+                                @endif
                             </div>
-                          </section>
-                        @endif
-                        {{-- sản phẩm mới , small banner và danh mục  --}}
+                          </div>
+                        </section>
+
+                        {{-- sản phẩm mới  --}}
                         <section class="vc_section porto-section porto-inner-container pb-4">
                            <div class="container">
                               {{-- sản phẩm mới --}}
-                              <div id="porto-products-6081" class="porto-products wpb_content_element mb-4">
+                              <div class="porto-products wpb_content_element mb-4">
                                  <h2 class="section-title slider-title"><span class="inline-title">Sản Phẩm Mới</span><span class="line"></span></h2>
                                  <div class="slider-wrapper">
-                                    <div class="woocommerce columns-5 ">
+                                    <div class="woocommerce columns-5">
                                        <ul class="products products-container products-slider owl-carousel nav-center-images-only nav-pos-outside nav-style-4 show-nav-hover pcols-lg-5 pcols-md-4 pcols-xs-3 pcols-ls-2 pwidth-lg-5 pwidth-md-4 pwidth-xs-3 pwidth-ls-2 owl-loaded owl-drag" data-plugin-options="{&quot;themeConfig&quot;:true,&quot;lg&quot;:4,&quot;md&quot;:3,&quot;xs&quot;:3,&quot;ls&quot;:2,&quot;nav&quot;:false}" data-product_layout="product-default">
                                           <div class="owl-stage-outer owl-height" style="">
                                              <div class="owl-stage" style="">
@@ -529,6 +477,12 @@
                                     </div>
                                  </div>
                               </div>
+                            </div>
+                        </section>
+
+                        {{-- small banner và danh mục  --}}
+                        <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
+                           <div class="container">
                               {{-- small banner --}}
                               @if($dataImageOption['small_b_i']['text'][1] != '' && $dataImageOption['small_b_i']['text'][2] != '' && $dataImageOption['small_b_i']['text'][3] != '')
                                 <div class="vc_section porto-section section-parallax mx-0 py-3 mb-5 home-banner parallax-disabled sbi-1" data-plugin-parallax="" style="">

@@ -374,7 +374,7 @@ class OrderController extends Controller
                 'd_o_b' => ['nullable','date'],
                 'address' => ['required','min:1','max:255'],
                 'date' => ['required','date'],
-                'cost' => ['nullable','integer','min:1000'],
+                'cost' => ['nullable','integer'],
                 'note' => ['nullable','string','max:255'],
                 'warehouse_id' => ['required','integer','exists:warehouses,id'],
             ];
@@ -390,7 +390,7 @@ class OrderController extends Controller
                 'address.max' => 'Tối đa 255 kí tụ',
                 'd_o_b.date' => 'Không đúng định dạng ngày tháng',
                 'cost.integer' => 'Chỉ nhập số nguyên dương',
-                'cost.min' => 'Tối thiểu 1000đ',
+                // 'cost.min' => 'Tối thiểu 1000đ',
                 'note.string' => 'Chỉ được nhập chuỗi',
                 'note.max' => 'Tối đa 255 kí tự',
                 'warehouse_id.required' => 'Vui lòng chọn kho hàng',
@@ -409,12 +409,18 @@ class OrderController extends Controller
                 $d_o_b = $request->input('d_o_b_1');
                 $address = $request->input('address','');
                 $date = $request->input('date');
-                $cost = $request->input('cost',null);
+                $cost = (int) $request->input('cost',null);
                 $note = $request->input('note','');
                 $warehouse_id = $request->input('warehouse_id');
                 $status = $order->status;
                 $status_at = $order->status_at;
                 $data_order = [];
+
+                // get incentives option
+                $options = $this->option_m->get();
+                $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
+                $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
+                $types_of_fee = [];
 
                 if(in_array($status,[1,3])){
                     $status = 3;
@@ -424,18 +430,52 @@ class OrderController extends Controller
                 // chỉ update thông tin đơn hàng
                 if(Arr::has($request->all(),'btn_update_1')){
                     $t_o_f = json_decode($order->types_of_fee,true);
-                    $ship_fee = $order->ship_fee;
+                    $ship_fee = (int) $order->ship_fee;
+                    $original_order_price = 0;
+                    $old_price = (int) $order->price;
                     $order_price = 0;
 
-                    if(Arr::has($t_o_f, 'ufs')){
-                        $order_price = $order->price;
+
+                    // tính giá gốc của sản phẩm
+                        if(Arr::has($t_o_f, 'ufs')){
+                            $original_order_price = $old_price;
+                        }else{
+                            $original_order_price = $old_price - $ship_fee;
+                        }
+
+                        if(Arr::has($t_o_f, 'ubd')){
+                            $original_order_price = $original_order_price * ( 100 / (100 - (int) $t_o_f['ubd']) );
+                        }
+
+                    $order_price = $original_order_price;
+
+                    // giảm % sinh nhật
+                    if($d_o_b){
+                        $month = Carbon::now()->month;
+                        $m_o_b = (int) date('m',strtotime($d_o_b));
+                        if($use_birth_discount['key'] == 1){
+                            if($month == $m_o_b){   
+                                $order_price = $original_order_price*((100-$use_birth_discount['value'])/100);
+                                $types_of_fee['ubd'] =  $use_birth_discount['value'];
+                            }
+                        }
+                    }
+
+                    // bật freeship thì cộng cost ship
+                    if($use_free_ship['key'] == 1){
+                        if($original_order_price < (int) $use_free_ship['value']){
+                            $order_price = $order_price + $cost;
+                        }else{
+                            $types_of_fee['ufs'] =  $use_free_ship['value'];
+                        }
                     }else{
-                        $order_price = $order->price - $ship_fee + (int) $cost;
+                        $order_price = $order_price + $cost;
                     }
 
                     $data_order = [
                         'price' => $order_price,
                         'ship_fee' => $cost,
+                        'types_of_fee' => $types_of_fee,
                         'address' => $address,
                         'note' => $note,
                         'export_at' => date('Y-m-d H:i:s',strtotime($date)),
@@ -526,24 +566,22 @@ class OrderController extends Controller
 
                     $original_order_price = $order_price;
 
-                    $options = $this->option_m->get();
-                    $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
-                    $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
-                    $types_of_fee = [];
+                    
 
                     // giảm % sinh nhật
-                    $month = Carbon::now()->month;
-                    $m_o_b = (int)date('m',strtotime($d_o_b));
-                    if($use_birth_discount['key'] == 1){
-                        if($month == $m_o_b){   
-                            $order_price = $order_price*((100-$use_birth_discount['value'])/100);
-                            $types_of_fee['ubd'] =  $use_birth_discount['value'];
+                    if($d_o_b){
+                        $month = Carbon::now()->month;
+                        $m_o_b = (int)date('m',strtotime($d_o_b));
+                        if($use_birth_discount['key'] == 1){
+                            if($month == $m_o_b){   
+                                $order_price = $order_price*((100-$use_birth_discount['value'])/100);
+                                $types_of_fee['ubd'] =  $use_birth_discount['value'];
+                            }
                         }
                     }
 
                     // bật freeship thì cộng cost ship
                     if($cost != null && $cost != ""){
-                        $cost = (int)$cost;
                         // if(Arr::has($request->all(),'checkbox_freeship')){
                         if($use_free_ship['key'] == 1){
                             if($original_order_price < (int)$use_free_ship['value']){
@@ -860,6 +898,10 @@ class OrderController extends Controller
 
                     // xóa lịch sử
                     $this->wh_logs_m->where('reason',base64_encode($order->id))->delete();
+                    //trừ vào tổng tiền (total_money)
+                    if($order->customer){
+                        $order->customer()->update(['total_money' => (int) $order->customer->total_money - (int) $order->price]);
+                    }
                 }
 
                 $data['success'] = true;
@@ -918,7 +960,10 @@ class OrderController extends Controller
                         'action' => 3,
                     ];
                     $message = $this->wh_items_m->makeWarehouseLog($data_log);
-
+                }
+                //1 cộng vào tổng tiền (total_money)
+                if($order->customer){
+                    $order->customer()->update(['total_money' => (int) $order->customer->total_money + (int) $order->price]);
                 }
 
                 $data['success'] = true;

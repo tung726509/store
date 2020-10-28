@@ -32,6 +32,11 @@ class Customer extends Model
         ]);
     }
 
+    public function cookies()
+    {
+        return $this->hasMany('App\Cookie','customer_id');
+    }
+
     // filterable
 
     public function filterPhone($query, $value)

@@ -21,31 +21,33 @@ class HomeController extends Controller
     }
 
     public function home(){
-        $dataImageOption = $this->option_m->getImageOption();
-        $arr_incentive_options = $this->option_m->getOptionIncentive();
-        $use_birth_discount = null;
-        $use_free_ship = null;
-        $use_transfer_discount = null;
-        // số ưu đãi khách hàng
-        $ict_count = 0;
+        // ưu đãi khách hàng
+            $dataImageOption = $this->option_m->getImageOption();
+            $arr_incentive_options = $this->option_m->getOptionIncentive();
+            $use_birth_discount = null;
+            $use_free_ship = null;
+            $use_transfer_discount = null;
+            // số ưu đãi khách hàng
+            $ict_count = 0;
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount')){
+                $use_birth_discount = json_decode($arr_incentive_options['use_birth_discount'],true);
+                $ict_count += 1;
+            }
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship')){
+                $use_free_ship = json_decode($arr_incentive_options['use_free_ship'],true);
+                $ict_count += 1;
+            }
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount')){
+                $use_transfer_discount = json_decode($arr_incentive_options['use_transfer_discount'],true);
+                $ict_count += 1;
+            }
 
         $models = $this->product_m->with(['tags','product_images']);
         $products = $models->orderBy('created_at','desc')->get();
         $best_sell_products = $models->orderBy('created_at','desc')->get();
     	$new_products = clone $products->take(10);
 
-        if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount')){
-            $use_birth_discount = json_decode($arr_incentive_options['use_birth_discount'],true);
-            $ict_count += 1;
-        }
-        if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship')){
-            $use_free_ship = json_decode($arr_incentive_options['use_free_ship'],true);
-            $ict_count += 1;
-        }
-        if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount')){
-            $use_transfer_discount = json_decode($arr_incentive_options['use_transfer_discount'],true);
-            $ict_count += 1;
-        }
+        
 
         // dd($models,$products,$best_sell_products,$new_products);
         // dd($use_birth_discount,$use_free_ship,$use_transfer_discount);
@@ -54,8 +56,29 @@ class HomeController extends Controller
     }
 
     public function categories(Request $request,$code){
+        // ưu đãi khách hàng
+            $dataImageOption = $this->option_m->getImageOption();
+            $arr_incentive_options = $this->option_m->getOptionIncentive();
+            $use_birth_discount = null;
+            $use_free_ship = null;
+            $use_transfer_discount = null;
+            // số ưu đãi khách hàng
+            $ict_count = 0;
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount')){
+                $use_birth_discount = json_decode($arr_incentive_options['use_birth_discount'],true);
+                $ict_count += 1;
+            }
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship')){
+                $use_free_ship = json_decode($arr_incentive_options['use_free_ship'],true);
+                $ict_count += 1;
+            }
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount')){
+                $use_transfer_discount = json_decode($arr_incentive_options['use_transfer_discount'],true);
+                $ict_count += 1;
+            }
+
         $orderby = request()->query('orderby','l_to_h');
-        $count = (int) request()->query('count',1);
+        $count = (int) request()->query('count',10);
         $param = [];
 
     	$category = $this->category_m->where('code',$code)->first();
@@ -73,7 +96,7 @@ class HomeController extends Controller
             
             $category_products = $category_products->paginate($count);
 
-    		return view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','dataImageOption'));
+    		return view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'));
     	}else{
     		return $this->home();
     	}

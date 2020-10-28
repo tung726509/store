@@ -120,7 +120,7 @@
                 <p class="text-validate mb-1" id="t_valid_address">{{ $message }}</p>
               @enderror
             </div>
-
+            
             {{-- ngày xuất đơn --}}
             <div class="form-group col-12 col-sm-6 col-md-6">
               <label for="date" class="col-form-label">Ngày xuất đơn <span class="text-danger">*</span> <span class="small text-info">(tháng/ngày/năm)</span></label>
