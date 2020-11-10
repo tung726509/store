@@ -31,7 +31,7 @@ class CustomerController extends Controller
 
         $query = $query->filter($param);
 
-        $customers = $query->orderBy('total_money','desc')->paginate($per_page);
+        $customers = $query->orderBy('total_payed','desc')->paginate($per_page);
     	
     	return view('admin.customer.index',compact('customers','per_page','search'));
     }
@@ -50,7 +50,13 @@ class CustomerController extends Controller
         $success_orders = $orders1->where('status',4)->count();
         $fail_orders = $orders1->where('status',5)->count();
 
-        return view('admin.customer.detail',compact('customer','orders','total_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders'));
+        $total_orders_money_convert = $this->_m->modifierVnd($orders->sum('price'),' VNĐ');
+        $total_money_payed_convert = $this->_m->modifierVnd($customer->total_money,' VNĐ');
+        $total_money_payed_convert = $this->_m->modifierVnd($customer->total_money,' VNĐ');
+        $total_payed_convert = $this->_m->modifierVnd($customer->total_payed == null ? 0 : $customer->total_payed,' VNĐ');
+        $not_pay_convert = $this->_m->modifierVnd((int)$orders->sum('price') - (int)$customer->total_money,' VNĐ');
+
+        return view('admin.customer.detail',compact('customer','orders','total_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders','total_orders_money_convert','total_money_payed_convert','not_pay_convert','total_payed_convert'));
     }
 
     public function getAdd()

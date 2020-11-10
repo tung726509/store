@@ -131,10 +131,10 @@
                               <b>{{ $item->product->pretty_name }}</b>
                             </td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ $item->price/1000 }}k VNĐ</td>
+                            <td>{{ modifierVnd($item->price,' VNĐ') }}</td>
                             <td>{{ $item->discount }}</td>
                             <td class="text-right product-total text-info" data-product-total="{{ ($item->quantity * $item->price) * ((100-$item->discount)/100) }}">
-                              {{ (($item->quantity * $item->price) * ((100-$item->discount)/100))/1000 }}k VNĐ
+                              {{ modifierVnd(($item->quantity * $item->price) * ((100-$item->discount)/100),' VNĐ') }}
                             </td>
                           </tr>
                           @empty
@@ -147,23 +147,7 @@
         </div>
         {{-- note --}}
         <div class="row">
-          <div class="col-12 col-md-5 offset-md-7 col-xl-4 offset-xl-8 money-form">
-            @if($ubd != null)
-            <div class="form-row">
-              <div class="checkbox checkbox-success checkbox-circle">
-                <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
-                <label for="checkbox110">Giảm giá {{$ubd}}% trong tháng sinh nhật khách .</label>
-              </div>
-            </div>
-            @endif
-            @if($ufs != null)
-            <div class="form-row">
-              <div class="checkbox checkbox-success checkbox-circle">
-                <input class="checkbox-freeship" id="checkbox-10" type="checkbox" disabled="" checked="" data-status="on" name="checkbox_freeship">
-                <label for="checkbox-10">Đang bật FREESHIP cho đơn hàng trên {{ $ufs/1000 }}k</label>
-              </div>
-            </div>
-            @endif
+          <div class="col-12 col-md-6 offset-md-6 col-xl-4 offset-xl-8 money-form">
             <div class="form-row">
               <div class="col-4">
                 <div class="clearfix">
@@ -173,32 +157,59 @@
               </div>
               <div class="col-8 mt-2">
                 <div class="float-right">
-                  <p class="mb-0"><b>Tạm Tính : </b><span id="provisional" data-value=""></span>k VNĐ</p>
-                  @if($ubd != null && $ubd != '')
-                  <p class="mb-0"><b>Sinh Nhật : </b>giảm <span id="sale_d_o_b" data-value="{{$ubd}}">{{$ubd}}</span>%</p>
+                  {{-- tạm tính --}}
+                  <p class="mb-0"><b>Tạm Tính : </b><span id="provisional" data-value=""></span></p>
+                  {{-- sinh nhật giảm --}}
+                  @if($ubd)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Sinh nhật : giảm {{$ubd}}% .</label>
+                      </div>
+                    </div>
                   @endif
-                  @if($ufs != null && $ufs != '')
-                  <p class="mb-0"><b>Phí Ship : </b>
-                    <span id="ship_cost" data-value="{{$ship_fee != null ? $ship_fee : 0}}">
-                      @if($ship_fee != null && $ship_fee != "")
-                        <del class="text-muted">{{ $ship_fee/1000 }}k VNĐ</del>
-                      @else
-                        Free ship
-                      @endif
-                    </span>
-                  </p>
+                  {{-- chuyển khoản giảm --}}
+                  @if($utd)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Chuyển khoản : giảm {{$utd}}% .</label>
+                      </div>
+                    </div>
+                  @endif
+                  {{-- freeship cho đơn hàng --}}
+                  @if($ufs)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Phí ship : 
+                          <span id="ship_cost" data-value="{{$ship_fee != null ? $ship_fee : 0}}">
+                            @if($ship_fee != null && $ship_fee != "")
+                              <del class="text-muted">{{ modifierVnd($ship_fee,' VNĐ') }}</del>
+                            @else
+                              Free ship
+                            @endif
+                          </span>
+                        </label>
+                      </div>
+                    </div>
                   @else
-                  <p class="mb-0"><b>Phí Ship : </b>
-                    <span id="ship_cost" data-value="{{$ship_fee != null ? $ship_fee : 0}}">
-                      @if($ship_fee != null && $ship_fee != "")
-                        {{ $ship_fee/1000 }}k VNĐ
-                      @else
-                        Free ship
-                      @endif
-                    </span>
-                  </p>
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Phí ship : 
+                          <span id="ship_cost" data-value="{{$ship_fee != null ? $ship_fee : 0}}">
+                            @if($ship_fee != null && $ship_fee != "")
+                              {{ modifierVnd($ship_fee,' VNĐ') }}
+                            @else
+                              Free ship
+                            @endif
+                          </span>
+                        </label>
+                      </div>
+                    </div>
                   @endif
-                  <h4 class="text-info">Tổng : <span id="order_total"></span>k VNĐ</h4>
+                  <h4 class="text-info">Tổng : {{ modifierVnd($order->price,' VNĐ') }}</h4>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -224,29 +235,23 @@
 <script type="text/javascript">
   $(document).ready(function() {
     var update_money_form = () => {
-      let provisional = 0;
-      let sale_d_o_b = 0;
-      let ship_cost = {{ $ship_fee != null ? $ship_fee : 0 }};
-      $(".product-total").each(function(index,el){
-        provisional += parseInt($(this).data('product-total'));
-      });
-      $('#provisional').data('value',provisional).text(provisional/1000);
-      
-      @if($ubd != null && $ubd != '')
-        sale_d_o_b = parseInt($('#sale_d_o_b').data('value'));
-      @endif
+      // update tạm tính
+        let sum = 0;
+        $('.product-total').each(function(){
+          sum += parseInt($(this).data('product-total'));
+        });
 
-      @if($ufs != null && $ufs != '')
-        ship_cost = 0;
-      @else
-      @endif
-
-      let order_total = provisional * ((100 - sale_d_o_b) / 100) + ship_cost;
-      console.log(provisional,sale_d_o_b,ship_cost);
-      $("#order_total").text(order_total/1000);
+        $("#provisional").text(modifierVnd(sum));
     }
 
     update_money_form();
+
+    // convert to currency_vietnamese
+    function modifierVnd(number) {
+        var x = number;
+        x = x.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
+        return x;
+    }
   });
 </script>
 @endpush

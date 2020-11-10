@@ -3,7 +3,7 @@
 @push('libs-styles')
   <link href="{{asset('admini/css/select2.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('admini/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css">
-
+  <link href="{{asset('admini/css/switchery-text.min.css')}}" rel="stylesheet"/>
 @endpush
 
 @push('page-styles')
@@ -11,7 +11,7 @@
   .money-form{
     border-style: dotted;
     border-width: thick;
-  }
+  } 
   .order-icon{
     top: 15%;
     right: 10px;
@@ -36,6 +36,24 @@
   .text-validate{
     font-size: .75rem;
     color : #f1556c;
+  }
+  .switchery {
+
+    
+  }
+  .switchery:before {
+    content: 'Chưa thanh toán';
+    color: black;
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+  }
+  .js-switch:checked + .switchery:before {
+    color: white;
+    left: 43px;
+    content: 'Đã thanh toán';
   }
 }
 </style>
@@ -120,7 +138,7 @@
                 <p class="text-validate mb-1" id="t_valid_address">{{ $message }}</p>
               @enderror
             </div>
-            
+
             {{-- ngày xuất đơn --}}
             <div class="form-group col-12 col-sm-6 col-md-6">
               <label for="date" class="col-form-label">Ngày xuất đơn <span class="text-danger">*</span> <span class="small text-info">(tháng/ngày/năm)</span></label>
@@ -146,6 +164,41 @@
               @enderror
             </div>
 
+            {{-- hình thức chuyển khoản --}}
+            <div class="form-group col-12 col-sm-6 col-md-6">
+              <label for="cost" class="col-form-label">Hình thức thanh toán</label>
+              <select class="form-control select2 select-pay-type" data-style="btn-light" name="pay_type" data-type="{{ $utd == null ? 'cash' : 'transfer'}}" data-value="{{$utd != null ? $utd : '0'}}" required>
+                <option value="cash" {{ $utd == null ? 'selected' : '' }} data-value="0">Tiền mặt</option>
+                @if($use_transfer_discount['key'] == 1)
+                  <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
+                @else
+                  @if($utd != null)
+                    <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
+                  @else
+                    <option value="transfer" disabled>Chuyển 
+                     (khóa)</option>
+                  @endif
+                @endif
+              </select>
+            </div>
+
+            {{-- xác nhận thanh toán --}}
+            <div class="form-group col-12 col-sm-6 col-md-6">
+              <label for="cost" class="col-form-label">Xác nhận thanh toán</label>
+              <div class="row m-0 text-center">
+                <input type="checkbox" class="js-switch confirm-pay-checkbox" name="confirm-pay" {{ $order->payed_at != null ? 'checked' : ''}}>
+              </div>
+            </div>
+
+            {{-- note --}}
+            <div class="form-group col-12 col-sm-6 col-md-6">
+              <label for="note" class="col-form-label">Note </label>
+              <textarea class="form-control @error('note') is-invalid @enderror {{old('note',$order->note != null ? 'parsley-success':'')}}" rows="1" id="note" name="note">{{old('note',$order->note != null ? $order->note:'')}}</textarea>
+              @error('note')
+                <p class="text-validate mb-1" id="t_valid_note">{{ $message }}</p>
+              @enderror
+            </div>
+
             {{-- kho hàng --}}
             <div class="form-group col-12 col-sm-6 col-md-6">
               <label for="cost" class="col-form-label">Kho hàng <span class="text-danger">*</span> <span class="text-danger d-none alert-wh text-uppercase">Không đủ cho đơn hàng</span></label>
@@ -160,20 +213,11 @@
               </select>
             </div>
 
-            {{-- note --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="note" class="col-form-label">Note </label>
-              <textarea class="form-control @error('note') is-invalid @enderror {{old('note',$order->note != null ? 'parsley-success':'')}}" rows="1" id="note" name="note">{{old('note',$order->note != null ? $order->note:'')}}</textarea>
-              @error('note')
-                <p class="text-validate mb-1" id="t_valid_note">{{ $message }}</p>
-              @enderror
-            </div>
-
             {{-- thông báo kho hàng có phú hợp với đơn hàng --}}
             @if($order->status != 1)
-            <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
-              <button type="submit" class="btn btn-primary update-order text-center" name="btn_update_1">Cập nhật</button>
-            </div>
+              <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
+                <button type="submit" class="btn btn-primary update-order text-center" name="btn_update_1">Cập nhật</button>
+              </div>
             @endif
 
             {{-- phần sản phẩm trong đơn hàng --}}
@@ -246,6 +290,14 @@
                   </div>
                 </div>
               @endif
+              @if($use_transfer_discount['key'] == 1)
+                <div class="form-row">
+                  <div class="checkbox checkbox-success checkbox-circle">
+                    <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                    <label for="checkbox110">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
+                  </div>
+                </div>
+              @endif
               @if($use_free_ship['key'] == 1)
                 <div class="form-row">
                   <div class="checkbox checkbox-success checkbox-circle">
@@ -256,10 +308,11 @@
               @endif
             </div>
             <div class="form-group col-12 col-md-9 col-sm-12 money-form">
-              <p class="h5 text-center">Tạm Tính : <span id="provisional"></span>k</p>
+              <p class="h5 text-center">Tạm Tính : <span id="provisional"></span></p>
               <p class="h5 text-center d-none">Sinh Nhật : giảm <span id="sale_d_o_b" data-birth="false"></span>%</p>
+              <p class="h5 text-center d-none">Chuyển khoản : giảm <span id="sale_transfer" data-transfer="false"></span>%</p>
               <p class="h5 text-center">Phí Ship : <span id="ship_cost"></span></p>
-              <p class="h3 text-center text-info">Tổng Tiền : <span id="order_total"></span>k VNĐ</p>
+              <p class="h3 text-center text-info">Tổng Tiền : <span id="order_total"></span></p>
             </div>
             <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-center pt-3">
               <input type="hidden" name="arr_ois_origin" value="{{ $arr_ois_origin }}">
@@ -359,12 +412,12 @@
                         <tr>
                           <td class="text-center text-uppercase text-info p-1">
                             {{$item->product->pretty_name}}<br>
-                            <p class="text-muted mb-0">Giá : {{$item->product->price/1000}}k</p>
+                            {{-- <p class="text-muted mb-0">Giá : <span class="text-lowercase">{{ modifierVnd($item->product->price) }}</span></p> --}}
                           </td>
                           <td class="text-center">{{$item->quantity}}</td>
-                          <td class="text-center">{{$item->price/1000}}k</td>
+                          <td class="text-center">{{ modifierVnd($item->price) }}</td>
                           <td class="text-center">{{$item->discount}}%</td>
-                          <td class="text-center pl-1 pr-1">{{ (($item->quantity*$item->price)*((100-$item->discount)/100))/1000 }}k </td>
+                          <td class="text-center pl-1 pr-1">{{ modifierVnd(($item->quantity*$item->price)*((100-$item->discount)/100)) }}</td>
                         </tr>
                         @empty
                         <p>Đơn Hàng Trống</p>
@@ -379,7 +432,7 @@
             <h6 class="">Sinh nhật : giảm {{ $ubd }}% </h6>
             @endif
             <h6 class="">Phí ship : {{ $ufs != null ? 'Free ship':($order->ship_fee != null ? (($order->ship_fee/1000).'k VNĐ'):'Free ship') }} </h6>
-            <h4 class="text-info">Tổng : {{ $order->price/1000 }}k VNĐ</h4>
+            <h4 class="text-info">Tổng : {{ modifierVnd($order->price,' VNĐ') }}</h4>
           </div>
        </div>
    </div>
@@ -390,6 +443,7 @@
   <script src="{{asset('admini/js/select2.min.js')}}"></script>
   <script src="{{asset('admini/js/bootstrap-datepicker.min.js')}}"></script>
   <script src="{{asset('admini/js/jquery.validate.min.js')}}"></script>
+  <script src="{{asset('admini/js/switchery-text.min.js')}}"></script>
 @endpush
 
 @push('page-scripts')
@@ -401,11 +455,13 @@
       }
     });
 
-    // load giá trị max ccho input nhập số lượng của các sản phẩm đã cố trong đơn hàng
+    var elem = document.querySelector('.js-switch');
+    var init = new Switchery(elem);
+
+    // load giá trị max cho input nhập số lượng của các sản phẩm đã cố trong đơn hàng
     var setAttrMaxInputQuantity = () => {
       $('.quantity').each(function(index, el) {
         let max = $(this).parent().parent().find('.select-product option:selected').data('inventory');
-        console.log(max);
         $(this).attr('max',max);
       });
     }
@@ -490,64 +546,90 @@
 
     // update money form
     var update_money_form = () => {
-      // update tạm tính
-      let sum = 0;
-      $('.quantity').each(function(){
+        // update tạm tính
+        let sum = 0;
+        $('.quantity').each(function(){
           sum += parseInt($(this).data('total'));
-      });
-      $("#provisional").data('value',sum).text(sum/1000);
+        });
+        $("#provisional").data('value',sum).text(modifierVnd(sum));
 
-      // update phí ship
-      let cost = parseInt($("#cost").val());
-      let ship_cost = 'Free ship';
-      if(cost){
-        ship_cost = (cost/1000)+"k";
-      }else{
-        cost = 0;
-      }
-      
-      // freeship cho đơn hàng trên xxxk
-      @if($use_free_ship['key'] == 1)
-        let order_max = parseInt({{ $use_free_ship['value'] }});
-        let check_freeship_status = $(".checkbox-freeship").data('status');
-        if(check_freeship_status == "on"){
-            if(sum >= order_max){
-            ship_cost = 'Free ship';
+        // update phí ship
+          let cost = parseInt($("#cost").val());
+          let ship_cost = 'Free ship';
+          if(cost){
+            ship_cost = (cost/1000)+"k";
+          }else{
             cost = 0;
           }
-        }else if(check_freeship_status == "off"){
+        
+        // freeship cho đơn hàng trên xxxk
+          @if($use_free_ship['key'] == 1)
+            let order_max = parseInt({{ $use_free_ship['value'] }});
+            let check_freeship_status = $(".checkbox-freeship").data('status');
+            if(sum >= order_max){
+              ship_cost = 'Free ship';
+              cost = 0;
+            }
+          @endif
+          $("#ship_cost").data('value',cost).text(ship_cost);
 
+        // update sinh nhật
+          let status_birth = $("#sale_d_o_b").data('birth');
+          let birth_discount = 0;
+          if(status_birth == true){//là sinh nhật
+            @if($use_birth_discount['key'] == 1)// bật giảm giá sinh nhật
+              birth_discount = parseInt({{ $use_birth_discount['value'] }});
+              $("#sale_d_o_b").parent().removeClass('d-none');
+              {{-- $("#sale_d_o_b").data('birth-discount',{{$use_birth_discount['value']}}).text({{ $use_birth_discount['value'] }}); --}}
+              $("#sale_d_o_b").text(birth_discount);
+            @elseif($use_birth_discount['key'] == 0)//tắt giảm giá sinh nhật
+              $("#sale_d_o_b").parent().addClass('d-none');
+              {{-- $("#sale_d_o_b").data('birth-discount',0).text({{ $use_birth_discount['value'] }}); --}}
+              {{-- $("#sale_d_o_b").text({{ $use_birth_discount['value'] }}); --}}
+            @endif
+          }else if(status_birth == false){//ko là sinh nhật
+            $("#sale_d_o_b").parent().addClass('d-none');
+            {{-- $("#sale_d_o_b").data('birth-discount',0).text({{ $use_birth_discount['value'] }}); --}}
+            {{-- $("#sale_d_o_b").text({{ $use_birth_discount['value'] }}); --}}
+          }
+
+        // update chuyển khoản
+          let status_transfer = $(".select-pay-type").attr('data-type');
+          let transfer_discount = 0;
+          if(status_transfer == 'transfer'){//là chuyển khoản
+            @if($use_transfer_discount['key'] == 1)// bật giảm giá nếu chuyển khoản
+              transfer_discount = parseInt($('.select-pay-type').data('value'));
+              $("#sale_transfer").parent().removeClass('d-none');
+              $("#sale_transfer").text(transfer_discount);
+            @elseif($use_transfer_discount['key'] == 0)//tắt giảm giá chuyển khoản
+              $("#sale_transfer").parent().addClass('d-none');
+              // $("#sale_transfer").text(transfer_discount);
+            @endif
+          }else if(status_transfer == 'cash'){// tiền mặt
+            $("#sale_transfer").parent().addClass('d-none');
+            // $("#sale_transfer").text(transfer_discount);
+          }
+
+        // total money
+        let order_total = 0;
+        let money_bd = 0;
+        let money_td = 0;
+        // tính ra số tiền giảm sinh nhật
+        if(status_birth == true){
+          money_bd = sum * (birth_discount/100);
         }
-      @endif
-      $("#ship_cost").data('value',cost).text(ship_cost);
+        // tính ra số tiền giảm chuyển khoản
+        if(status_transfer == 'transfer'){
+          money_td = sum * (transfer_discount/100);
+        }
+        // tính tổng
+        order_total = sum - money_td - money_bd;
+        // cộng thêm phí ship
+        if(ship_cost != 'Free ship'){
+          order_total = order_total + cost;
+        }
 
-      // update sinh nhật
-      let status = $("#sale_d_o_b").data('birth');
-      let birth_discount = 0;
-      if(status == true){//là sinh nhật
-        @if($use_birth_discount['key'] == 1)// bật giảm giá sinh nhật
-          birth_discount = parseInt({{ $use_birth_discount['value'] }});
-          $("#sale_d_o_b").parent().removeClass('d-none');
-          $("#sale_d_o_b").data('birth-discount',{{$use_birth_discount['value']}}).text({{ $use_birth_discount['value'] }});
-        @elseif($use_birth_discount['key'] == 0)//tắt giảm giá sinh nhật
-          $("#sale_d_o_b").parent().addClass('d-none');
-          $("#sale_d_o_b").data('birth-discount',0).text({{ $use_birth_discount['value'] }});
-        @endif
-      }else if(status == false){//ko là sinh nhật
-        $("#sale_d_o_b").parent().addClass('d-none');
-        $("#sale_d_o_b").data('birth-discount',0).text({{ $use_birth_discount['value'] }});
-      }
-
-      // total money
-      let order_total = sum;
-      if(status == true){
-        order_total = order_total*((100-birth_discount)/100);
-      }
-
-      if(ship_cost != 'Free ship'){
-        order_total = order_total + cost;
-      }
-      $("#order_total").data('value',order_total).text(order_total/1000);
+        $("#order_total").data('value',order_total).text(modifierVnd(order_total));
     }
 
     // load danh sách sản phẩm theo id kho
@@ -699,12 +781,25 @@
       }
     });
 
+    // chọn hình thức thanh toán
+    $('.select-pay-type').change(function(event) {
+      let to_type = $(this).val();
+      let value = $(this).find('option:selected').data('value');
+      $(this).attr('data-type',to_type).attr('data-value',value);
+      update_money_form();
+    });
+
+    // bấm xác nhận thanh toán
+    $('.confirm-pay-checkbox').click(function(event) {
+      console.log($(this).val());
+    });
+
     //select kho hàng
     $(".select-warehouse").change(function(event){
       $(".update-order").removeClass('d-none');
       $('#products_wrapper').html('');
       let warehouse_id = $(this).val();
-      let order_id = {{$order->id}};
+      let order_id = {{ $order->id }};
       if(warehouse_id != null && warehouse_id != ""){
         $.ajax({
           url: '{{route('administrator.order.check_wh_ord')}}',
@@ -872,6 +967,14 @@
           })
         }
     });
+
+    // convert to currency_vietnamese
+    function modifierVnd(number) {
+        var x = number;
+        x = x.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
+
+        return x;
+    }
   });
 </script>
 @endpush

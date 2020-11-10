@@ -22,6 +22,7 @@ use App\Option;
 
 class OrderController extends Controller
 {
+
     function __construct(){
         $this->middleware('auth');
         $this->_m = new Order();
@@ -73,6 +74,7 @@ class OrderController extends Controller
         $types_of_fee = json_decode($order->types_of_fee,true);
         $ubd = null;
         $ufs = null;
+        $utd = null;
         $ship_fee = null;
 
         if(Arr::has($types_of_fee, 'ubd')){
@@ -83,11 +85,17 @@ class OrderController extends Controller
             $ufs = $types_of_fee['ufs'];
         }
 
+        if(Arr::has($types_of_fee, 'utd')){
+            $utd = $types_of_fee['utd'];
+        }
+
         if($order->ship_fee != null && $order->ship_fee != ""){
             $ship_fee = $order->ship_fee;
         }
 
-        return view('admin.order.detail',compact('order','order_items','ubd','ufs','ship_fee'));
+
+
+        return view('admin.order.detail',compact('order','order_items','ubd','ufs','utd','ship_fee'));
     }
 
     public function getAdd(){
@@ -98,9 +106,10 @@ class OrderController extends Controller
         $options = $this->option_m->get();
         $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
         $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
+        $use_transfer_discount = json_decode($options->where('slug','use_transfer_discount')->pluck('content')[0],true);
         // dd($use_birth_discount,$use_free_ship);      
 
-    	return view('admin.order.add',compact('now','products','warehouses','warehouse_main','use_birth_discount','use_free_ship'));
+    	return view('admin.order.add',compact('now','products','warehouses','warehouse_main','use_birth_discount','use_free_ship','use_transfer_discount'));
     }
 
     public function add(Request $request){
@@ -138,28 +147,35 @@ class OrderController extends Controller
         if($validator->fails()){
             return back()->withInput()->withErrors($validator);
         }else{
-            // dd($request->all());
-            $user_id = Auth::user()->id;
             //dữ liệu request
-            $phone = $request->input('phone');
-            $name = $request->input('name');
-            $address = $request->input('address',null);
-            $date = $request->input('date');
-            $cost = $request->input('cost',null);
-            $note = $request->input('note','');
-            $warehouse_id = $request->input('warehouse_id');
-            $d_o_b = null;
-            $m_o_b = null;
-            if($request->input('d_o_b') != null && $request->input('d_o_b') != ""){
-                $d_o_b = date('Y-m-d H:i:s',strtotime($request->input('d_o_b')));
-                $m_o_b = date('m',strtotime($request->input('d_o_b')));
-            }
-
-            // dd($d_o_b);
-
-            $m_o_b = (int)date('m',strtotime($d_o_b));
-
-            $data_order = [];
+                $user_id = Auth::user()->id;
+                $phone = $request->input('phone');
+                $name = $request->input('name');
+                $address = $request->input('address',null);
+                $date = $request->input('date');
+                $cost = (int) $request->input('cost',null);
+                $pay_type = $request->input('pay_type');
+                $note = $request->input('note','');
+                $warehouse_id = $request->input('warehouse_id');
+                $payed_at = null;
+                if( Arr::has($request->all(),'confirm-pay') ){
+                    $payed_at = Carbon::now();
+                }
+                $d_o_b = null;
+                $m_o_b = null;
+                if($request->input('d_o_b') != null && $request->input('d_o_b') != ""){
+                    $d_o_b = (int) date('Y-m-d H:i:s',strtotime($request->input('d_o_b')));
+                    $m_o_b = (int) date('m',strtotime($request->input('d_o_b')));
+                }
+                $m_o_b = (int)date('m',strtotime($d_o_b));
+                $data_order = [];
+                
+            // get settings discount
+            $options = $this->option_m->get();
+                $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
+                $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
+                $use_transfer_discount = json_decode($options->where('slug','use_transfer_discount')->pluck('content')[0],true);
+                $types_of_fee = [];
 
             // tìm hoặc tạo customer
             $customer = $this->customer_m->firstOrCreate(
@@ -172,10 +188,10 @@ class OrderController extends Controller
             $make_code = 'U'.$user_id.'CD'.$randomString;
 
             // request arrays các products
-            $arr_product_id = $request->input('product_id');
-            $arr_quantity = $request->input('quantity');
-            $arr_discount = $request->input('discount');
-            $arr_price = $request->input('price');
+                $arr_product_id = $request->input('product_id');
+                $arr_quantity = $request->input('quantity');
+                $arr_discount = $request->input('discount');
+                $arr_price = $request->input('price');
 
             $arr_products = [];
 
@@ -188,39 +204,43 @@ class OrderController extends Controller
             }
 
             // collect sản phẩm từ request
-            $coll_products = collect($arr_products)->keyBy('product_id')->filter(function($value,$key){
-                return $value['quantity'] >= 1;
-            });
+                $coll_products = collect($arr_products)->keyBy('product_id')->filter(function($value,$key){
+                    return $value['quantity'] >= 1;
+                });
                 $arr_coll_products = $coll_products->toArray();
                 $arr_products_id = $coll_products->pluck('product_id')->all();
 
             //tổng đơn hàng
-            $order_price = 0;
+            $original_order_price = 0;
                 $tempo = $coll_products->values()->all();
                 for ($i=0; $i < count($tempo) ; $i++){
-                    $order_price = $order_price + $tempo[$i]['quantity']*$tempo[$i]['price']*((100-$tempo[$i]['discount'])/100);
+                    $original_order_price = $original_order_price + $tempo[$i]['quantity']*$tempo[$i]['price']*((100-$tempo[$i]['discount'])/100);
                 }
 
-            // get settings discount
-            $options = $this->option_m->get();
-                $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
-                $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
-                $types_of_fee = [];
+            $order_price = $original_order_price;
 
             // giảm % sinh nhật
             $month = Carbon::now()->month;
                 if($request->input('d_o_b') != null && $request->input('d_o_b') != ""){
                     if($use_birth_discount['key'] == 1){
                         if($month == $m_o_b){
-                            $order_price = $order_price*((100-$use_birth_discount['value'])/100);
+                            $money_bd = $original_order_price * ($use_birth_discount['value']/100);
+                            $order_price = $order_price - $money_bd;
                             $types_of_fee['ubd'] =  $use_birth_discount['value'];
                         }
                     }
                 }
 
+           // giảm % chuyển khoản
+            if($pay_type == 'transfer'){
+                if($use_transfer_discount['key'] == 1){
+                    $money_td = $original_order_price * ($use_transfer_discount['value']/100);
+                    $order_price = $order_price - $money_td;
+                    $types_of_fee['utd'] =  $use_transfer_discount['value'];
+                }
+            } 
+
             // bật freeship thì cộng cost ship
-            if($cost != null && $cost != ""){
-                $cost = (int)$cost;
                 if($use_free_ship['key'] == 1){
                     if($order_price < $use_free_ship['value']){
                         $order_price = $order_price + $cost;
@@ -230,7 +250,6 @@ class OrderController extends Controller
                 }else{
                     $order_price = $order_price + $cost;
                 }
-            }
 
             $types_of_fee = json_encode($types_of_fee);
 
@@ -244,6 +263,7 @@ class OrderController extends Controller
                 'price' => $order_price,
                 'types_of_fee' => $types_of_fee,
                 'ship_fee' => $cost,
+                'payed_at' => $payed_at,
                 'note' => $note,
                 'address' => $address,
                 'status' => 3,
@@ -266,19 +286,6 @@ class OrderController extends Controller
                         'items_origin' => 'false',
                         'created_at' => Carbon::now(),  
                     ]);
-                    // TẠO LOG TRONG KHO HÀNG
-                    // $wh_item = $this->wh_items_m->where('product_id',$arr_products[$i]['product_id'])->where('warehouse_id',$warehouse_id)->first();
-                    // $old_quantity = $wh_item->quantity;
-                    // $updated = $wh_item->decrement('quantity',$arr_products[$i]['quantity']);
-                    // $data_log = [
-                    //     'warehouse_item_id' => $wh_item->id,
-                    //     'product_id' => $wh_item->product_id,
-                    //     'quantity' => $arr_products[$i]['quantity'],
-                    //     'old_quantity' => $old_quantity,
-                    //     'reason' => base64_encode($create_order->id),
-                    //     'action' => 3,
-                    // ];
-                    // $message = $this->wh_items_m->makeWarehouseLog($data_log);
                 }
             }else{
                 $this->_m->where('id',$create_order->id)->delete();
@@ -314,20 +321,19 @@ class OrderController extends Controller
 
             $now = Carbon::now();
             $warehouses = $this->warehouse_m->with(['wh_items'])->get();
-            $warehouse_main = $warehouses->where('main',1)->first();
+            // $warehouse_main = $warehouses->where('main',1)->first();
             $warehouse_selected = null;
 
             // khác null là order đã sử lý và đã chọn kho hàng
             if($order->warehouse_id != null){
                 $warehouse_selected = $warehouses->where('id',$order->warehouse_id)->first();
-                // dd($warehouse_selected);
             }else{
-                $warehouse_selected = $warehouse_main;
+                // $warehouse_selected = $warehouse_main;
             }
-            $options = $this->option_m->get();
-            $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
-            $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
-            // $product = Product::where('id',$product_id)
+            $options = $this->option_m->getOptionIncentive();
+            $use_birth_discount = json_decode($options['use_birth_discount'],true);
+            $use_free_ship = json_decode($options['use_free_ship'],true);
+            $use_transfer_discount = json_decode($options['use_transfer_discount'],true);
 
             $m_o_b = '';
             if($order->customer->d_o_b != null){
@@ -341,22 +347,24 @@ class OrderController extends Controller
             $types_of_fee = json_decode($order->types_of_fee,true);
             $ubd = null;
             $ufs = null;
+            $utd = null;
             $ship_fee = null;
 
-            if(Arr::has($types_of_fee, 'ubd')){
+            if(Arr::has($types_of_fee, 'ubd'))
                 $ubd = $types_of_fee['ubd'];
-            }
 
-            if(Arr::has($types_of_fee, 'ufs')){
+            if(Arr::has($types_of_fee, 'ufs'))
                 $ufs = $types_of_fee['ufs'];
-            }
 
-            if($order->ship_fee != null && $order->ship_fee != ""){
+            if(Arr::has($types_of_fee, 'utd'))
+                $utd = $types_of_fee['utd'];
+
+            if($order->ship_fee != null && $order->ship_fee != "")
                 $ship_fee = $order->ship_fee;
-            }
-            // dd($order_items->where('quantity','>',0)->load(['product']));
 
-            return view('admin.order.edit',compact('now','products','order','warehouses','warehouse_selected','use_birth_discount','use_free_ship','m_o_b','arr_ois_origin','ubd','ufs','order_items'));
+            // dd($use_transfer_discount);
+
+            return view('admin.order.edit',compact('now','products','order','warehouses','warehouse_selected','use_birth_discount','use_free_ship','use_transfer_discount','m_o_b','arr_ois_origin','ubd','ufs','utd','order_items'));
         }else{
             $messages = 'Không tìm thấy gì cả =((';
             return view('admin.alertpages.404',compact('messages'));
@@ -390,7 +398,6 @@ class OrderController extends Controller
                 'address.max' => 'Tối đa 255 kí tụ',
                 'd_o_b.date' => 'Không đúng định dạng ngày tháng',
                 'cost.integer' => 'Chỉ nhập số nguyên dương',
-                // 'cost.min' => 'Tối thiểu 1000đ',
                 'note.string' => 'Chỉ được nhập chuỗi',
                 'note.max' => 'Tối đa 255 kí tự',
                 'warehouse_id.required' => 'Vui lòng chọn kho hàng',
@@ -404,23 +411,29 @@ class OrderController extends Controller
                 return back()->withInput()->withErrors($validator);
             }else{
                 //dữ liệu request
-                $phone = $request->input('phone');
-                $name = $request->input('name');
-                $d_o_b = $request->input('d_o_b_1');
-                $address = $request->input('address','');
-                $date = $request->input('date');
-                $cost = (int) $request->input('cost',null);
-                $note = $request->input('note','');
-                $warehouse_id = $request->input('warehouse_id');
-                $status = $order->status;
-                $status_at = $order->status_at;
-                $data_order = [];
+                    $phone = $request->input('phone');
+                    $name = $request->input('name');
+                    $d_o_b = $request->input('d_o_b_1');
+                    $address = $request->input('address','');
+                    $date = $request->input('date');
+                    $cost = (int) $request->input('cost',null);
+                    $pay_type = $request->input('pay_type');
+                    $note = $request->input('note','');
+                    $warehouse_id = $request->input('warehouse_id');
+                    $status = $order->status;
+                    $status_at = $order->status_at;
+                    $payed_at = null;
+                    $data_order = [];
+                    if( Arr::has($request->all(),'confirm-pay') ){
+                        $payed_at = Carbon::now();
+                    }
 
                 // get incentives option
                 $options = $this->option_m->get();
-                $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
-                $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
-                $types_of_fee = [];
+                    $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
+                    $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
+                    $use_transfer_discount = json_decode($options->where('slug','use_transfer_discount')->pluck('content')[0],true);
+                    $types_of_fee = [];
 
                 if(in_array($status,[1,3])){
                     $status = 3;
@@ -433,8 +446,7 @@ class OrderController extends Controller
                     $ship_fee = (int) $order->ship_fee;
                     $original_order_price = 0;
                     $old_price = (int) $order->price;
-                    $order_price = 0;
-
+                    $total_percent_discount = 0;
 
                     // tính giá gốc của sản phẩm
                         if(Arr::has($t_o_f, 'ufs')){
@@ -444,8 +456,13 @@ class OrderController extends Controller
                         }
 
                         if(Arr::has($t_o_f, 'ubd')){
-                            $original_order_price = $original_order_price * ( 100 / (100 - (int) $t_o_f['ubd']) );
+                            $total_percent_discount += (int) $t_o_f['ubd'];
                         }
+
+                        if(Arr::has($t_o_f, 'utd')){
+                            $total_percent_discount += (int) $t_o_f['utd'];
+                        }
+                        $original_order_price = ($old_price / (100 - $total_percent_discount)) *100;
 
                     $order_price = $original_order_price;
 
@@ -455,10 +472,20 @@ class OrderController extends Controller
                         $m_o_b = (int) date('m',strtotime($d_o_b));
                         if($use_birth_discount['key'] == 1){
                             if($month == $m_o_b){   
-                                $order_price = $original_order_price*((100-$use_birth_discount['value'])/100);
+                                $money_bd = $original_order_price * ($use_birth_discount['value']/100);
+                                $order_price = $order_price - $money_bd;
                                 $types_of_fee['ubd'] =  $use_birth_discount['value'];
                             }
                         }
+                    }
+
+                    // giảm % chuyển khoản
+                    if($pay_type == 'transfer'){
+                        // if($use_transfer_discount['key'] == 1){
+                            $money_td = $original_order_price * ($use_transfer_discount['value']/100);
+                            $order_price = $order_price - $money_td;
+                            $types_of_fee['utd'] =  $use_transfer_discount['value'];
+                        // }
                     }
 
                     // bật freeship thì cộng cost ship
@@ -480,6 +507,7 @@ class OrderController extends Controller
                         'note' => $note,
                         'export_at' => date('Y-m-d H:i:s',strtotime($date)),
                         'export_by' => Auth::user()->id,
+                        'payed_at' => $payed_at,
                         'status' => $status ,
                         'status_at' => $status_at
                     ];
@@ -515,28 +543,28 @@ class OrderController extends Controller
                     $arr_products_id = $coll_products->pluck('product_id')->all();
 
                     // collect order-items gốc mà khách đặt
-                    $order_items1 = $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true']);
-                    $order_items2 = clone $order_items1;
-                    $coll_ois_in_cps = $order_items1->whereIn('product_id',$arr_products_id)->get()->keyBy('product_id')->toArray();
-                    [$keys_in, $values_in] = Arr::divide($coll_ois_in_cps);
-                    $coll_ois_out_cps = $order_items2->whereNotIn('product_id',$arr_products_id)->get()->keyBy('product_id')->toArray();
-                    [$keys_out, $values_out] = Arr::divide($coll_ois_out_cps);
-                        // update order-items có trong collect sản phẩm từ request --> updated_1
-                        if(count($keys_in) >= 1){
-                            for ($i = 0; $i < count($keys_in); $i++){
-                                $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true'])->where('product_id',$keys_in[$i])->update([
-                                    'quantity' => $arr_coll_products[$keys_in[$i]]['quantity'],
-                                ]);
+                        $order_items1 = $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true']);
+                        $order_items2 = clone $order_items1;
+                        $coll_ois_in_cps = $order_items1->whereIn('product_id',$arr_products_id)->get()->keyBy('product_id')->toArray();
+                        [$keys_in, $values_in] = Arr::divide($coll_ois_in_cps);
+                        $coll_ois_out_cps = $order_items2->whereNotIn('product_id',$arr_products_id)->get()->keyBy('product_id')->toArray();
+                        [$keys_out, $values_out] = Arr::divide($coll_ois_out_cps);
+                            // update order-items có trong collect sản phẩm từ request --> updated_1
+                            if(count($keys_in) >= 1){
+                                for ($i = 0; $i < count($keys_in); $i++){
+                                    $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true'])->where('product_id',$keys_in[$i])->update([
+                                        'quantity' => $arr_coll_products[$keys_in[$i]]['quantity'],
+                                    ]);
+                                }
                             }
-                        }
-                        // update order-items ko có trong collect sản phẩm từ request --> updated_2
-                        if(count($keys_out) >= 1){
-                            for ($i = 0; $i < count($keys_out); $i++){
-                                $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true'])->where('product_id',$keys_out[$i])->update([
-                                    'quantity' => 0,
-                                ]);
+                            // update order-items ko có trong collect sản phẩm từ request --> updated_2
+                            if(count($keys_out) >= 1){
+                                for ($i = 0; $i < count($keys_out); $i++){
+                                    $this->oi_m->where(['order_id'=>$id,'items_origin'=>'true'])->where('product_id',$keys_out[$i])->update([
+                                        'quantity' => 0,
+                                    ]);
+                                }
                             }
-                        }
 
                     // collect product mới từ request
                     $arr_new_products_id = collect($arr_products_id)->diff($arr_ois_origin)->values()->all();
@@ -558,40 +586,45 @@ class OrderController extends Controller
                         }
 
                     //tổng đơn hàng
-                    $order_price = 0;
-                    $tempo = $coll_products->values()->all();
-                    for ($i=0; $i < count($tempo) ; $i++){
-                        $order_price = $order_price + $tempo[$i]['quantity']*$tempo[$i]['price']*((100-$tempo[$i]['discount'])/100);
-                    }
+                        $original_order_price = 0;
+                        $tempo = $coll_products->values()->all();
+                        for ($i=0; $i < count($tempo) ; $i++){
+                            $original_order_price = $original_order_price + $tempo[$i]['quantity']*$tempo[$i]['price']*((100-$tempo[$i]['discount'])/100);
+                        }
 
-                    $original_order_price = $order_price;
-
-                    
+                    $order_price = $original_order_price;
 
                     // giảm % sinh nhật
                     if($d_o_b){
                         $month = Carbon::now()->month;
-                        $m_o_b = (int)date('m',strtotime($d_o_b));
+                        $m_o_b = (int) date('m',strtotime($d_o_b));
                         if($use_birth_discount['key'] == 1){
                             if($month == $m_o_b){   
-                                $order_price = $order_price*((100-$use_birth_discount['value'])/100);
+                                $money_bd = $original_order_price * ($use_birth_discount['value']/100);
+                                $order_price = $order_price - $money_bd;
                                 $types_of_fee['ubd'] =  $use_birth_discount['value'];
                             }
                         }
                     }
 
-                    // bật freeship thì cộng cost ship
-                    if($cost != null && $cost != ""){
-                        // if(Arr::has($request->all(),'checkbox_freeship')){
-                        if($use_free_ship['key'] == 1){
-                            if($original_order_price < (int)$use_free_ship['value']){
-                                $order_price = $order_price + $cost;
-                            }else{
-                                $types_of_fee['ufs'] =  $use_free_ship['value'];
-                            }
-                        }else{
-                            $order_price = $order_price + $cost;
+                    // giảm % chuyển khoản
+                    if($pay_type == 'transfer'){
+                        if($use_transfer_discount['key'] == 1){
+                            $money_td = $original_order_price * ($use_transfer_discount['value']/100);
+                            $order_price = $order_price - $money_td;
+                            $types_of_fee['utd'] =  $use_transfer_discount['value'];
                         }
+                    }
+
+                    // bật freeship thì cộng cost ship
+                    if($use_free_ship['key'] == 1){
+                        if($original_order_price < (int) $use_free_ship['value']){
+                            $order_price = $order_price + $cost;
+                        }else{
+                            $types_of_fee['ufs'] =  $use_free_ship['value'];
+                        }
+                    }else{
+                        $order_price = $order_price + $cost;
                     }
 
                     $types_of_fee = json_encode($types_of_fee);
@@ -605,6 +638,7 @@ class OrderController extends Controller
                         'note' => $note,
                         'export_at' => date('Y-m-d H:i:s',strtotime($date)),
                         'export_by' => Auth::user()->id,
+                        'payed_at' => $payed_at,
                         'status' => $status,
                         'status_at' => $status_at,
                     ];
@@ -825,7 +859,7 @@ class OrderController extends Controller
             $order = $this->_m->with(['order_items'])->find($order_id);
             if(!is_null($order)){
                 $status = $order->status;
-                if(in_array($type,['back','delivery','success','fail'])){
+                if(in_array($type,['back','delivery','success','fail','cancel'])){
                     switch ($type) {
                         case 'back':
                             $data = $this->toBack($order,$status);
@@ -839,16 +873,52 @@ class OrderController extends Controller
                         case 'fail':
                             $data = $this->toFail($order,$status);
                             break;
+                        case 'cancel':
+                            if($order->payed_at != null){
+                                return Response::json(['success'=>true,'message'=>'cancel','error'=>'refuse action']);
+                            }
+                            $data = $this->toCancel($order,$status);
+                            break;
                         default:
                             break;
                     }
                 }else{
-                    return Response::json(['success'=>true,'message'=>'type này không tồn order ko tồn tại !']);
+                    return Response::json(['success'=>true,'message'=>'type này không tồn tại !']);
                 }
                 $data['now'] = Carbon::now()->format('H:i d/m/Y');
                 return Response::json($data);
             }else{
                 return Response::json(['success'=>true,'message'=>'đơn hàng ko tồn tại !']);
+            }
+        }
+
+        return false;
+    }
+
+    public function confirmPayAjax(Request $request){
+        if($request->ajax()){
+            $order_id = $request->order_id;
+            $order = $this->_m->find($order_id);
+
+            if($order){
+                if($order->payed_at == null){
+                    $order->payed_at = Carbon::now();
+
+                }else{
+                    $order->payed_at = null;
+
+                }
+                $updated = $order->save();
+                if($updated){
+                    $customer = $this->customer_m->find($order->customer_id);
+                    if($order->payed_at == null){
+                        $customer->total_payed = (int)$customer->total_payed - (int)$order->price;
+                    }else{
+                        $customer->total_payed = (int)$customer->total_payed + (int)$order->price;
+                    }
+                    $customer->save();
+                    return Response::json(['success'=>true,'message'=>'thành công !']);
+                }
             }
         }
 
@@ -872,9 +942,16 @@ class OrderController extends Controller
                 case 5:
                     $order->status = 6;
                     $order->reason = null;
+                    $data['payed_at'] = $order->payed_at != null ? 'yes' : 'no';
                     break;
                 case 2:
                     $order->status = 1;
+                    $data['export_at'] = null;
+                    if($order->export_at != null){
+                        $order->status = 3;
+                        $data['export_at'] = $order->export_at;
+                    }
+                    $data['payed_at'] = $order->payed_at != null ? 'yes' : 'no';
                     break;
                 default:
                     break;
@@ -985,6 +1062,32 @@ class OrderController extends Controller
             if($updated){
                 $data['success'] = true;
                 $data['message'] = 'fail';
+            }
+        }
+
+        return $data;
+    }
+
+    function toCancel($order,$status){
+        $updated = null;
+        $data = $this->res_status_mess_default;
+        $data['status'] = $status;
+
+        if(in_array($status,[1,3])){
+            switch ($status) {
+                case 1:
+                    $order->status = 2;
+                    break;
+                case 3:
+                    $order->status = 2;
+                    break;
+                default:
+                    break;
+            }
+            $updated = $order->save();
+            if($updated){
+                $data['success'] = true;
+                $data['message'] = 'cancel';
             }
         }
 

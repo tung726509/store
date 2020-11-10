@@ -101,6 +101,7 @@ Route::prefix('order')->name('order.')->group(function(){
 	Route::post('check-wh-ord', 'OrderController@checkOrderWhouse')->name('check_wh_ord');
 	Route::post('customer-edit', 'OrderController@customerEdit')->name('customer_edit');
 	Route::post('order-change-status-ajax', 'OrderController@orderChangeStatusAjax')->name('order_change_status_ajax');
+	Route::post('confirm-pay-ajax', 'OrderController@confirmPayAjax')->name('confirm_pay_ajax');
 });
 
 Route::prefix('option')->name('option.')->group(function(){

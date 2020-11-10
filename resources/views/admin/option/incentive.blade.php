@@ -96,6 +96,7 @@
 <script src="{{asset('admini/js/switchery.min.js')}}"></script>
 <script src="{{asset('admini/js/select2.min.js')}}"></script>
 <script src="{{asset('admini/js/bootstrap-maxlength.min.js')}}"></script>
+
 <script src="{{asset('admini/js/form-advanced.init.js')}}"></script>
 @endpush
 

@@ -5,7 +5,7 @@
 	<link href="{{ asset('admini/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
 	<link href="{{ asset('admini/css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('admini/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('admini/css/dropzone.min.css') }}" rel="stylesheet" type="text/css" />
+    {{-- <link href="{{ asset('admini/css/dropzone.min.css') }}" rel="stylesheet" type="text/css" /> --}}
     <link href="{{ asset('admini/css/froala_editor.pkgd.min.css') }}" rel="stylesheet" type="text/css" />
     <link  href="{{ asset('admini/css/table.min.css') }}" rel="stylesheet" type="text/css">
 @endpush
@@ -296,7 +296,7 @@
 
     <script src="{{ asset('admini/js/bootstrap-datepicker.min.js')}}"></script>
 
-    <script src="{{ asset('admini/js/dropzone.min.js') }}"></script>
+    {{-- <script src="{{ asset('admini/js/dropzone.min.js') }}"></script> --}}
 
     <script src="{{ asset('admini/js/froala_editor.pkgd.min.js') }}"></script>
     <script src="{{ asset('admini/js/table.min.js') }}"></script>

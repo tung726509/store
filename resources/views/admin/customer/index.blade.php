@@ -141,7 +141,7 @@
                         @default
                       @endswitch
                       <span>( {{ $item->orders->count() }} đơn )</span>
-                      <p class="mb-0">{{ $item->total_money/1000 }}k VNĐ</p>
+                      <p class="mb-0">{{ modifierVnd($item->total_payed != null ? $item->total_payed : 0,' VNĐ') }}</p>
                     </td>
                     <td class="text-center">{{ $item->address }}</td>
                     <td class="text-center">

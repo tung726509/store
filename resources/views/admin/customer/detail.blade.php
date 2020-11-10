@@ -132,6 +132,9 @@
                   <tbody>
                     @forelse($orders->load(['user','customer']) as $item)
                     <tr>
+                      @php
+                        $types_of_fee = json_decode($item->types_of_fee,true);
+                      @endphp
                       <td>{{$loop->iteration}}</td>
                       <td>
                         @php
@@ -159,7 +162,22 @@
                         </a>
                         <P>{{ $item->status_at->format('H:i:s d-m-Y') }}</P>
                       </td>
-                      <td class="product-total" data-value="{{$item->price}}">{{$item->price/1000}}k VNĐ</td>
+                      <td class="product-total" data-value="{{$item->price}}">
+                        {{ modifierVnd($item->price != null ? $item->price : 0,' VNĐ') }}
+                        @php
+                          if(Arr::has($types_of_fee,"utd"))
+                            $text = 'Chuyển khoản';
+                          else
+                            $text = 'Tiền mặt';
+
+                          if($item->payed_at != null)
+                            $time = $item->payed_at;
+                          else
+                            $time = '';
+                        @endphp
+                        <p class="pay-type-text {{ $time == '' ? 'text-secondary' : 'text-success' }}">{!! $time == '' ? '' : '<i class="fas fa-check-circle"></i>' !!} {{ $text }}</p>
+
+                      </td>
                       <td>
                         @if($item->user_id != null)
                           <p class="text-info mb-0 text-uppercase">{{$item->user->name}}</p>
@@ -170,7 +188,7 @@
                       </td>
                     </tr>
                     @empty
-                      nếu con đường đó mang e quá xa
+                      
                     @endforelse
                   </tbody>
               </table>
@@ -189,12 +207,14 @@
           <div class="col-12 col-md-5 offset-md-7 col-xl-4 offset-xl-8 money-form">
             <div class="form-row">
               <div class="col-12 col-md-12">
-                <h3 class="text-info">Tổng : <span id="order_total">{{-- {{$orders->sum('price')/1000}}</span>k VNĐ --}}</h3>
+                <h5 class=""><i class="fe-tag"></i> Tổng : {{ $total_orders_money_convert }}</h5>
+                <h5 class=""><i class="fas fa-check-double icon-action text-success"></i> Thành công : {{ $total_money_payed_convert }}</h5>
+                <h5 class=""><i class="fas fa-check icon-action text-warning"></i> Còn lại : {{ $not_pay_convert }}</h5>
+                <h4 class=""><i class="fas fa-hand-holding-usd icon-action" style="color: #4f50d6"></i> Thực nhận : {{ $total_payed_convert }}</h4>
               </div>
             </div>
           </div>
         </div>
-        {{-- nếu con đường đó mang  --}}
       </div>
     </div>
  	</div>
@@ -207,9 +227,6 @@
 
 @push('page-scripts')
   <script type="text/javascript">
-    $(document).ready(function() {
-      let total_price = new AutoNumeric({{$orders->sum('price')}});
-      $('#order_total').text(total_price+' VNĐ');
-    });
+
   </script>
 @endpush
