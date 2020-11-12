@@ -38,8 +38,7 @@
     color : #f1556c;
   }
   .switchery {
-
-    
+    width: 200px;    
   }
   .switchery:before {
     content: 'Chưa thanh toán';
@@ -222,7 +221,9 @@
 
             {{-- phần sản phẩm trong đơn hàng --}}
             <div class="form-group col-12 btn-add-pf">
-              <p class="mb-1 mt-3 font-weight-bold text-uppercase">Thêm sản phẩm vào đơn hàng</p>
+              @if($order->status != 6)
+                <p class="mb-1 mt-3 font-weight-bold text-uppercase">Thêm sản phẩm vào đơn hàng</p>
+              @endif
               {{-- column title --}}
               <div class="form-row colunm-title-product d-none">
                 <div class="form-group col-5">
@@ -272,13 +273,16 @@
                 @endif
               </div>
               {{-- thêm mới trường sản phẩm --}}
-              <div class="form-row">
-                <div class="form-group col-12">
-                  <button type="button" class="btn btn-info waves-light waves-effect mt-35 add-product-field pl-3 pr-3"><i class="fas fa-plus"></i></button>
+              @if($order->status != 6)
+                <div class="form-row">
+                  <div class="form-group col-12">
+                    <button type="button" class="btn btn-info waves-light waves-effect mt-35 add-product-field pl-3 pr-3"><i class="fas fa-plus"></i></button>
+                  </div>
                 </div>
-              </div>
+              @endif
             </div>
           </div>
+
           {{-- thành tiền --}}
           <div class="form-row pl-2 pr-2 create-order d-none">
             <div class="form-group col-12 col-md-12 col-sm-12">
@@ -324,9 +328,12 @@
     @endif
   </div>
 </div>
+
+{{-- icon mở thông tin đơn hàng --}}
 <div class="order-icon-parent">
   <img src="{{asset('admini/images/order-icon.png')}}" id="fixed_order" class="order-icon">
 </div>
+
 {{-- modal chỉnh sửa thông tin khách hàng --}}
 <div class="modal fade" id="customerEditModal" role="dialog">
    <div class="modal-dialog">
@@ -455,8 +462,8 @@
       }
     });
 
-    var elem = document.querySelector('.js-switch');
-    var init = new Switchery(elem);
+    var ele = document.querySelector('.confirm-pay-checkbox');
+    var init = new Switchery(ele);
 
     // load giá trị max cho input nhập số lượng của các sản phẩm đã cố trong đơn hàng
     var setAttrMaxInputQuantity = () => {

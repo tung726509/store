@@ -304,8 +304,12 @@ class OrderController extends Controller
         $id = base64_decode($id);
         $order = $this->_m->with(['customer','order_items'])->find($id);
         if($order){
+            // đơn hàng :đã hủy,thành công ,thất bại thì ko sửa đc
+            if(in_array($order->status,[2,4,5])){
+                return $this->index();
+            }
+
             $order_items = $order->order_items;
-            // test
             $products = $this->product_m->with(['wh_items'])->get();
             $arr_products_out_order = $products->whereNotIn('id',$order_items->pluck('product_id'))->keyBy('id')->toArray();
             $arr_products_in_order = $products->whereIn('id',$order_items->pluck('product_id'))->keyBy('id')->toArray();
@@ -317,11 +321,9 @@ class OrderController extends Controller
                 $new_arr_products_in_order[$key] = $value;
             }
             $products = collect(Arr::collapse([ $new_arr_products_in_order,$arr_products_out_order])); 
-            // end test
 
             $now = Carbon::now();
             $warehouses = $this->warehouse_m->with(['wh_items'])->get();
-            // $warehouse_main = $warehouses->where('main',1)->first();
             $warehouse_selected = null;
 
             // khác null là order đã sử lý và đã chọn kho hàng
@@ -375,7 +377,14 @@ class OrderController extends Controller
         $id = base64_decode($id);
         $order = $this->_m->where('id',$id)->first();
 
+
+
         if($order){
+            // đơn hàng :đã hủy,thành công ,thất bại thì ko sửa đc
+            if(in_array($order->status,[2,4,5])){
+                return $this->index();
+            }
+            
             $rules = [
                 'phone' => ['required',new VietnamesePhone,'exists:customers,phone'],
                 'name' => ['required','min:1','max:255'],
@@ -1015,7 +1024,6 @@ class OrderController extends Controller
             return $value > 0;
         })->toArray();
         $wh_items = $this->warehouse_m->where('id',$order->warehouse_id)->first()->wh_items->pluck('quantity','product_id')->toArray();
-
         // dd($order_items,count($order_items),$wh_items,count($wh_items));
 
         if($status == 6){// 6 : đang giao hàng
