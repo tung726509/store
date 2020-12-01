@@ -4,51 +4,51 @@
   <link href="{{asset('admini/css/select2.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('admini/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('admini/css/switchery-text.min.css')}}" rel="stylesheet"/>
+  <link href="{{asset('admini/css/jquery-ui.min.css')}}" rel="stylesheet"/>
 @endpush
 
 @push('page-styles')
-<style type="text/css">
-  .money-form{
-    border-style: dotted;
-    border-width: thick;
-  }
-  .order-icon{
-    top: 15%;
-    right: 10px;
-    background-color: white;
-    border-radius: 50%;
-    z-index: 1000;
-    position: fixed;
-  }
-  .block{
-    display: inline-block;
-  }
-  .hoverine:hover{
-    text-decoration: underline;
-  }
-  .text-validate{
-    font-size: .75rem;
-    color : #f1556c;
-  }
-  .switchery {
-    width: 200px;
-  }
-  .switchery:before {
-    content: 'Chưa thanh toán';
-    color: black;
-    position: absolute;
-    left: 60px;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-  }
-  .js-switch:checked + .switchery:before {
-    color: white;
-    left: 43px;
-    content: 'Đã thanh toán';
-  }
-}
-</style>
+  <style type="text/css">
+    .money-form{
+      border-style: dotted;
+      border-width: thick;
+    }
+    .order-icon{
+      top: 15%;
+      right: 10px;
+      background-color: white;
+      border-radius: 50%;
+      z-index: 1000;
+      position: fixed;
+    }
+    .block{
+      display: inline-block;
+    }
+    .hoverine:hover{
+      text-decoration: underline;
+    }
+    .text-validate{
+      font-size: .75rem;
+      color : #f1556c;
+    }
+    .switchery {
+      width: 200px;
+    }
+    .switchery:before {
+      content: 'Chưa thanh toán';
+      color: black;
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+    }
+    .js-switch:checked + .switchery:before {
+      color: white;
+      left: 43px;
+      content: 'Đã thanh toán';
+    }
+  </style>
 @endpush
 
 @section('breadcrumb')
@@ -188,7 +188,7 @@
               <select class="form-control select-warehouse" name="warehouse_id" required>
                 <option value="">-- Chọn --</option>
                 @forelse($warehouses as $item)
-                <option value="{{ $item->id }}" {{-- {{$warehouse_main->id == $item->id ? 'selected':''}} --}}>
+                <option value="{{ $item->id }}">
                   <span class="text-uppercase">{{ $item->name }}
                 </option>
                 @empty
@@ -279,6 +279,8 @@
   <script src="{{asset('admini/js/jquery.validate.min.js')}}"></script>
   <script src="{{asset('admini/js/switchery-text.min.js')}}"></script>
   <script src="{{asset('admini/js/form-advanced.init.js')}}"></script>
+  <script src="{{asset('admini/js/form-advanced.init.js')}}"></script>
+  <script src="{{asset('admini/js/jquery-ui.min.js')}}"></script>
 @endpush
 
 @push('page-scripts')
@@ -292,6 +294,16 @@
 
     var elem = document.querySelector('.js-switch');
     var init = new Switchery(elem);
+    var phone_list = [];
+
+    @if($phone_list != null)
+      var phone_list_string = '{{ $phone_list }}';
+      var phone_list = phone_list_string.split(',');
+    @endif
+
+    $( "#phone" ).autocomplete({
+      source: phone_list
+    });
 
     // bỏ submit form khi click enter
     $('#addForm').on('keyup keypress', function(e) {
@@ -515,7 +527,7 @@
     @endif
 
     // focus out ô nhập số đt
-    $("#phone").focusout(function(){
+    $("#phone").on('focusout keyup',function(){
       let val = $(this).val();
       if(val != null && val != ""){
         checkPhoneAjax(val);

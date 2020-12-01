@@ -144,3 +144,7 @@ Route::prefix('role')->name('role.')->group(function(){
 
 });
 
+// tiện ích
+Route::prefix('utility')->name('utility.')->group(function(){
+	Route::get('/convert-to-address-ajax', 'DashboardController@convertToAddressAjax')->name('convert_to_address_ajax');
+});

@@ -37,6 +37,9 @@ class OrderController extends Controller
     }
 
     public function index(){
+        // $now = Carbon::now();
+        // dd(strtotime('2020-11-13 15:22:16'));
+        // dd(date('Y-m-d H:i:s',1605260474));
         $per_page = request()->query('per', 10);
         $search = request()->query('s','');
         $o_status = request()->query('o_status','');
@@ -70,46 +73,54 @@ class OrderController extends Controller
     public function detail(Request $request,$id){
     	$id = base64_decode($id);
         $order = $this->_m->with(['customer','order_items','user'])->find($id);
-        $order_items = $order->order_items;
-        $types_of_fee = json_decode($order->types_of_fee,true);
-        $ubd = null;
-        $ufs = null;
-        $utd = null;
-        $ship_fee = null;
+        if($order){
+            $order_items = $order->order_items;
+            $types_of_fee = json_decode($order->types_of_fee,true);
+            $ubd = null;
+            $ufs = null;
+            $utd = null;
+            $ship_fee = null;
 
-        if(Arr::has($types_of_fee, 'ubd')){
-            $ubd = $types_of_fee['ubd'];
+            if(Arr::has($types_of_fee, 'ubd')){
+                $ubd = $types_of_fee['ubd'];
+            }
+
+            if(Arr::has($types_of_fee, 'ufs')){
+                $ufs = $types_of_fee['ufs'];
+            }
+
+            if(Arr::has($types_of_fee, 'utd')){
+                $utd = $types_of_fee['utd'];
+            }
+
+            if($order->ship_fee != null && $order->ship_fee != ""){
+                $ship_fee = $order->ship_fee;
+            }
+
+            return view('admin.order.detail',compact('order','order_items','ubd','ufs','utd','ship_fee'));
+
+        }else{
+            $messages = 'Không tìm thấy gì cả =((';
+            return view('admin.alertpages.404',compact('messages'));
         }
-
-        if(Arr::has($types_of_fee, 'ufs')){
-            $ufs = $types_of_fee['ufs'];
-        }
-
-        if(Arr::has($types_of_fee, 'utd')){
-            $utd = $types_of_fee['utd'];
-        }
-
-        if($order->ship_fee != null && $order->ship_fee != ""){
-            $ship_fee = $order->ship_fee;
-        }
-
-
-
-        return view('admin.order.detail',compact('order','order_items','ubd','ufs','utd','ship_fee'));
     }
 
     public function getAdd(){
-        $products = $this->product_m->with(['wh_items'])->get();
     	$now = Carbon::now();
+        $products = $this->product_m->with(['wh_items'])->get();
+        $customers = $this->customer_m->with([])->get();
+        $phone_list = null;
+        if($customers->pluck('phone')->count() > 0){
+            $phone_list = implode(",",$customers->pluck('phone')->toArray());
+        }
         $warehouses = $this->warehouse_m->get();
-        $warehouse_main = $warehouses->where('main',1)->first();
         $options = $this->option_m->get();
         $use_birth_discount = json_decode($options->where('slug','use_birth_discount')->pluck('content')[0],true);
         $use_free_ship = json_decode($options->where('slug','use_free_ship')->pluck('content')[0],true);
         $use_transfer_discount = json_decode($options->where('slug','use_transfer_discount')->pluck('content')[0],true);
-        // dd($use_birth_discount,$use_free_ship);      
+        // dd($phone_list);
 
-    	return view('admin.order.add',compact('now','products','warehouses','warehouse_main','use_birth_discount','use_free_ship','use_transfer_discount'));
+    	return view('admin.order.add',compact('now','products','customers','phone_list','warehouses','use_birth_discount','use_free_ship','use_transfer_discount'));
     }
 
     public function add(Request $request){
@@ -309,6 +320,12 @@ class OrderController extends Controller
                 return $this->index();
             }
 
+            $customers = $this->customer_m->with([])->get();
+            $phone_list = null;
+            if($customers->pluck('phone')->count() > 0){
+                $phone_list = implode(",",$customers->pluck('phone')->toArray());
+            }
+
             $order_items = $order->order_items;
             $products = $this->product_m->with(['wh_items'])->get();
             $arr_products_out_order = $products->whereNotIn('id',$order_items->pluck('product_id'))->keyBy('id')->toArray();
@@ -364,9 +381,13 @@ class OrderController extends Controller
             if($order->ship_fee != null && $order->ship_fee != "")
                 $ship_fee = $order->ship_fee;
 
-            // dd($use_transfer_discount);
+            // $ois_pluck_id = implode(',',$order_items->filter(function($value,$key){
+                // return $value->quantity > 0;
+            // })->pluck('id')->toArray());
 
-            return view('admin.order.edit',compact('now','products','order','warehouses','warehouse_selected','use_birth_discount','use_free_ship','use_transfer_discount','m_o_b','arr_ois_origin','ubd','ufs','utd','order_items'));
+            // dd($ois_pluck_id);
+
+            return view('admin.order.edit',compact('now','products','order','warehouses','customers','phone_list','warehouse_selected','use_birth_discount','use_free_ship','use_transfer_discount','m_o_b','arr_ois_origin','ubd','ufs','utd','order_items','ois_pluck_id'));
         }else{
             $messages = 'Không tìm thấy gì cả =((';
             return view('admin.alertpages.404',compact('messages'));
@@ -377,8 +398,6 @@ class OrderController extends Controller
         $id = base64_decode($id);
         $order = $this->_m->where('id',$id)->first();
 
-
-
         if($order){
             // đơn hàng :đã hủy,thành công ,thất bại thì ko sửa đc
             if(in_array($order->status,[2,4,5])){
@@ -386,7 +405,7 @@ class OrderController extends Controller
             }
             
             $rules = [
-                'phone' => ['required',new VietnamesePhone,'exists:customers,phone'],
+                'phone' => ['required',new VietnamesePhone],
                 'name' => ['required','min:1','max:255'],
                 'd_o_b' => ['nullable','date'],
                 'address' => ['required','min:1','max:255'],
@@ -419,10 +438,11 @@ class OrderController extends Controller
             if($validator->fails()){
                 return back()->withInput()->withErrors($validator);
             }else{
+                // dd($request->all());
                 //dữ liệu request
                     $phone = $request->input('phone');
                     $name = $request->input('name');
-                    $d_o_b = $request->input('d_o_b_1');
+                    $d_o_b = $request->input('d_o_b');
                     $address = $request->input('address','');
                     $date = $request->input('date');
                     $cost = (int) $request->input('cost',null);
@@ -449,6 +469,12 @@ class OrderController extends Controller
                     $status_at = Carbon::now();
                 }
 
+                // tìm hoặc tạo customer
+                $customer = $this->customer_m->firstOrCreate(
+                    ['phone' => $phone],
+                    ['name' => $name,'d_o_b'=>$d_o_b,'address'=>$address,'created_at'=>Carbon::now(),'created_by'=>Auth::user()->id]
+                );
+
                 // chỉ update thông tin đơn hàng
                 if(Arr::has($request->all(),'btn_update_1')){
                     $t_o_f = json_decode($order->types_of_fee,true);
@@ -457,7 +483,7 @@ class OrderController extends Controller
                     $old_price = (int) $order->price;
                     $total_percent_discount = 0;
 
-                    // tính giá gốc của sản phẩm
+                    // tính giá ban đầu đơn hàng chưa incentive
                         if(Arr::has($t_o_f, 'ufs')){
                             $original_order_price = $old_price;
                         }else{
@@ -509,6 +535,7 @@ class OrderController extends Controller
                     }
 
                     $data_order = [
+                        'customer_id' => $customer->id,
                         'price' => $order_price,
                         'ship_fee' => $cost,
                         'types_of_fee' => $types_of_fee,
@@ -520,7 +547,6 @@ class OrderController extends Controller
                         'status' => $status ,
                         'status_at' => $status_at
                     ];
-
                 }else{// update toàn bộ đơn hàng
                     // arr request products
                     $arr_product_id = $request->input('product_id');
@@ -639,6 +665,7 @@ class OrderController extends Controller
                     $types_of_fee = json_encode($types_of_fee);
 
                     $data_order = [
+                        'customer_id' => $customer->id,
                         'price' => $order_price,
                         'warehouse_id' => $warehouse_id,
                         'types_of_fee' => $types_of_fee,
@@ -912,11 +939,10 @@ class OrderController extends Controller
             if($order){
                 if($order->payed_at == null){
                     $order->payed_at = Carbon::now();
-
                 }else{
                     $order->payed_at = null;
-
                 }
+
                 $updated = $order->save();
                 if($updated){
                     $customer = $this->customer_m->find($order->customer_id);
@@ -926,7 +952,7 @@ class OrderController extends Controller
                         $customer->total_payed = (int)$customer->total_payed + (int)$order->price;
                     }
                     $customer->save();
-                    return Response::json(['success'=>true,'message'=>'thành công !']);
+                    return Response::json(['success'=>true,'message'=>'thành công !','payed_at'=>$order->payed_at]);
                 }
             }
         }

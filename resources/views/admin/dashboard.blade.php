@@ -23,11 +23,10 @@
 				<div class="form-group">
 					<label for="code" class="col-form-label">Tọa độ</label>
 		         	<div class="input-group">
-		         		<input type="text" class="form-control" id="code" name="code" placeholder="kinh độ" value="">
-		         		<input type="text" class="form-control" id="code1" name="code1" placeholder="vĩ độ" value="">
+		         		<input type="text" class="form-control" id="code" name="code" placeholder="kinh độ và vĩ độ" value="">
 		         		<div class="input-group-append">
-                            <button class="btn btn-dark waves-effect waves-light random-string" type="button">Check</button>
-
+                            <button class="btn btn-dark waves-effect waves-light convert-address-1ajax" type="button">Convert with 1 ajax</button>
+                            <button class="btn btn-dark waves-effect waves-light convert-address-multi-ajax" type="button">Convert with multi ajax</button>
                         </div>
 		         	</div>
 				</div>
@@ -36,7 +35,7 @@
 				<div class="form-group">
 					<label for="code" class="col-form-label">RETURN</label>
 		         	<div class="input-group">
-		         		<textarea id="api_return"></textarea>
+		         		<textarea id="api_return" rows="30" cols="150"></textarea>
 		         	</div>
 				</div>
 			</div>
@@ -54,17 +53,24 @@
 		    }
 		});
 
-		
-		$('.random-string').click(function(event){
-			let long = $('input[name="code"]').val();
-			let lat = $('input[name="code1"]').val();
+		$('.convert-address-1ajax').click(function(event) {
+			let value = $('#code').val();
+			let arr = value.split('/');
 			$.ajax({
-				url: '{{route('administrator.tag.ajaxreturn')}}',
-				type: 'post',
-				data: {long:long,lat:lat},
+				url: '{{route('administrator.utility.convert_to_address_ajax')}}',
+				type: 'get',
+				data: {arr: arr},
 			})
 			.done(function(res) {
-				$('#api_return').html(res);
+				if(res.success){
+					let string = '';
+					$.each(res.arr,function(index,val){
+						string += val+'\n';
+					});
+					$('#api_return').html(string);
+					$('#code').val('').focus();
+					console.log(string);
+				}
 			})
 		});
 

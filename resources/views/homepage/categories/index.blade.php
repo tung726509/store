@@ -6,107 +6,107 @@
 @endpush
 
 @push('page-styles')
-<style type="text/css">
-  #count-down-wrap-9815 .porto_countdown-amount {  } #count-down-wrap-9815 .porto_countdown-period, #count-down-wrap-9815 .porto_countdown-row:before {}
-  .title-t{
-     font-weight:700;
-     font-size:14px;
+  <style type="text/css">
+    #count-down-wrap-9815 .porto_countdown-amount {  } #count-down-wrap-9815 .porto_countdown-period, #count-down-wrap-9815 .porto_countdown-row:before {}
+    .title-t{
+       font-weight:700;
+       font-size:14px;
+       line-height:1;
+    }
+    .bgc-white{
+     background-color: white;
+   }
+   .link-black{
+     color: black;
+   }
+   .brcr-icon-lr{
+     padding-left: 5px;
+     padding-right: 5px;
+   }
+   .bbi-text-0{
+     right:5%;top: 50%;
+     transform: translateY(-50%);
+   }
+   .bbi-text-1{
+     font-size:4.3125em;
      line-height:1;
-  }
-  .bgc-white{
-   background-color: white;
- }
- .link-black{
-   color: black;
- }
- .brcr-icon-lr{
-   padding-left: 5px;
-   padding-right: 5px;
- }
- .bbi-text-0{
-   right:5%;top: 50%;
-   transform: translateY(-50%);
- }
- .bbi-text-1{
-   font-size:4.3125em;
-   line-height:1;
- }
- .bbi-text-2{
-   font-size:2.125em;
-   line-height:1;
- }
- .bbi-text-3{
-   font-size:2.875em;
-   line-height:1;
- }
- .mbi-text-1{
-   font-size:2.25rem;
-   line-height:1.15;
-   color:#ffffff;
- }
- .mbi-text-2{
-   background-color: #ff7272 !important;
-   border-color: #ff7272 !important
- }
- .mbi-text-3{
-   font-size:.7rem;
-   font-weight:700;
-   line-height:1.4;
-   text-align:center;
- }
- .mbi-1{
-   background-image: url(/homepage/images/{{ $dataImageOption['med_b_i']['name'][0] != '' ? $dataImageOption['med_b_i']['name'][0] : 'med-banner1.jpg' }});
-   background-position: center center;
-   background-size: cover;
-   background-color: rgb(34, 37, 41);
-   position: relative;
-   overflow:
- }
- .mbi-2{
-   background-image: url(/homepage/images/{{ $dataImageOption['med_b_i']['name'][0] != '' ? $dataImageOption['med_b_i']['name'][0] : 'med-banner1.jpg' }});
-   background-size: cover;
-   background-position: 50% 0%;
-   position: absolute;
-   top: 0px;
-   left: 0px;
-   width: 100%;
-   height: 100%;
- }
- .sbi-1{
-   background-position: center center;
-   background-size: cover;
-   background-color: rgb(0, 136, 204);
-   position: relative;
-   overflow: hidden;
- }
- .sbi-2{
-   background-image: url(/homepage/images/{{ $dataImageOption['small_b_i']['name'][0] != '' ? $dataImageOption['small_b_i']['name'][0] : 'small-banner.jpg' }});
-   background-size: cover;
-   background-position: 50% 0%;
-   position: absolute;
-   top: 0px;
-   left: 0px;
-   width: 100%;
-   height: 150%;
- }
- .star-rating span:before{
-    color: #ffea30;
    }
-   .add-to-cart{
-    background-color: #2b2b2d;
-    border: 1px solid #2b2b2d;
+   .bbi-text-2{
+     font-size:2.125em;
+     line-height:1;
    }
-   .bor-radius-1{
-    border-radius: 8px;
+   .bbi-text-3{
+     font-size:2.875em;
+     line-height:1;
    }
-   .sale-product-daily-deal{
-    padding: 5px;
+   .mbi-text-1{
+     font-size:2.25rem;
+     line-height:1.15;
+     color:#ffffff;
    }
-   .sale-product-daily-deal:before{
-    border-radius: 7px;
+   .mbi-text-2{
+     background-color: #ff7272 !important;
+     border-color: #ff7272 !important
    }
- #porto-product-categories-3675 li.product-category .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0); }#porto-product-categories-3675 li.product-category:hover .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0.15); }
-</style>
+   .mbi-text-3{
+     font-size:.7rem;
+     font-weight:700;
+     line-height:1.4;
+     text-align:center;
+   }
+   .mbi-1{
+     background-image: url(/homepage/images/{{ $dataImageOption['med_b_i']['name'][0] != '' ? $dataImageOption['med_b_i']['name'][0] : 'med-banner1.jpg' }});
+     background-position: center center;
+     background-size: cover;
+     background-color: rgb(34, 37, 41);
+     position: relative;
+     overflow:
+   }
+   .mbi-2{
+     background-image: url(/homepage/images/{{ $dataImageOption['med_b_i']['name'][0] != '' ? $dataImageOption['med_b_i']['name'][0] : 'med-banner1.jpg' }});
+     background-size: cover;
+     background-position: 50% 0%;
+     position: absolute;
+     top: 0px;
+     left: 0px;
+     width: 100%;
+     height: 100%;
+   }
+   .sbi-1{
+     background-position: center center;
+     background-size: cover;
+     background-color: rgb(0, 136, 204);
+     position: relative;
+     overflow: hidden;
+   }
+   .sbi-2{
+     background-image: url(/homepage/images/{{ $dataImageOption['small_b_i']['name'][0] != '' ? $dataImageOption['small_b_i']['name'][0] : 'small-banner.jpg' }});
+     background-size: cover;
+     background-position: 50% 0%;
+     position: absolute;
+     top: 0px;
+     left: 0px;
+     width: 100%;
+     height: 150%;
+   }
+   .star-rating span:before{
+      color: #ffea30;
+     }
+     .add-to-cart{
+      background-color: #2b2b2d;
+      border: 1px solid #2b2b2d;
+     }
+     .bor-radius-1{
+      border-radius: 8px;
+     }
+     .sale-product-daily-deal{
+      padding: 5px;
+     }
+     .sale-product-daily-deal:before{
+      border-radius: 7px;
+     }
+   #porto-product-categories-3675 li.product-category .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0); }#porto-product-categories-3675 li.product-category:hover .thumb-info-wrapper:after { background-color: rgba(27, 27, 23, 0.15); }
+  </style>
 @endpush
 
 @section('content')
@@ -120,7 +120,7 @@
                   <article class="post-143 page type-page status-publish hentry">
                      <div class="page-content">
                         {{-- big banner --}}
-                        @include('homepage.includes.bigbanner') 
+                        @include('homepage.includes.bigbanner')
 
                         {{-- breadcrumb --}}
                         <section class="page-top page-header-6"> 

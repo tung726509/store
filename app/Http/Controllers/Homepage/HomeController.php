@@ -6,21 +6,41 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cookie;
+use App\Traits\GenerateRandomString;
 
 use App\Category;
 use App\Product;
 use App\Option;
+use App\Customer;
 
 
 class HomeController extends Controller
 {
+    use GenerateRandomString;
+
     function __construct(){
         $this->product_m = new Product();
         $this->category_m = new Category();
         $this->option_m = new Option();
+        $this->customer_m = new Customer();
+        $new_ck_val = strtotime(Carbon::now()).$this->generateRandomString(4);
+        $this->new_cookie = cookie('cookie_string', $new_ck_val ,14400);
     }
 
     public function home(){
+        $customer = null;
+        $cart_items = null;
+        $current_cookie = Cookie::get('cookie_string');
+        
+        // lấy thông tin khách từ cookie
+        if($current_cookie){
+            // $customer = $this->customer_m->
+           // dd($current_cookie);
+        }else{
+            // nếu con đường đó mang
+        }
+
         // ưu đãi khách hàng
             $dataImageOption = $this->option_m->getImageOption();
             $arr_incentive_options = $this->option_m->getOptionIncentive();
@@ -47,12 +67,7 @@ class HomeController extends Controller
         $best_sell_products = $models->orderBy('created_at','desc')->get();
     	$new_products = clone $products->take(10);
 
-        
-
-        // dd($models,$products,$best_sell_products,$new_products);
-        // dd($use_birth_discount,$use_free_ship,$use_transfer_discount);
-
-    	return view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'));
+    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'))->withCookie($this->new_cookie);
     }
 
     public function categories(Request $request,$code){
@@ -96,7 +111,7 @@ class HomeController extends Controller
             
             $category_products = $category_products->paginate($count);
 
-    		return view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'));
+    		return response()->view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'))->withCookie($this->new_cookie);
     	}else{
     		return $this->home();
     	}
@@ -113,7 +128,7 @@ class HomeController extends Controller
 
         // dd($product);
 
-    	return view('homepage.detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'));
+    	return response()->view('homepage.detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'))->withCookie($this->new_cookie);
     }
 
     public function FunctionName($value='')

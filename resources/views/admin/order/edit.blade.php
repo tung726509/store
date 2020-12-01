@@ -4,58 +4,58 @@
   <link href="{{asset('admini/css/select2.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('admini/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('admini/css/switchery-text.min.css')}}" rel="stylesheet"/>
+  <link href="{{asset('admini/css/jquery-ui.min.css')}}" rel="stylesheet"/>
 @endpush
 
 @push('page-styles')
-<style type="text/css">
-  .money-form{
-    border-style: dotted;
-    border-width: thick;
-  } 
-  .order-icon{
-    top: 15%;
-    right: 10px;
-    background-color: white;
-    border-radius: 50%;
-    z-index: 1000;
-    position: fixed;
-  }
-  .order-icon:hover {
-    border: 2px solid;
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
-    outline-color: rgba(255, 255, 255, 0);
-    outline-offset: 15px;
-    text-shadow: 1px 1px 2px #427388;
-  }
-  .block{
-    display: inline-block;
-  }
-  .hoverine:hover{
-    text-decoration: underline;
-  }
-  .text-validate{
-    font-size: .75rem;
-    color : #f1556c;
-  }
-  .switchery {
-    width: 200px;    
-  }
-  .switchery:before {
-    content: 'Chưa thanh toán';
-    color: black;
-    position: absolute;
-    left: 60px;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-  }
-  .js-switch:checked + .switchery:before {
-    color: white;
-    left: 43px;
-    content: 'Đã thanh toán';
-  }
-}
-</style>
+  <style type="text/css">
+    .money-form{
+      border-style: dotted;
+      border-width: thick;
+    } 
+    .order-icon{
+      top: 15%;
+      right: 10px;
+      background-color: white;
+      border-radius: 50%;
+      z-index: 1000;
+      position: fixed;
+    }
+    .order-icon:hover {
+      border: 2px solid;
+      box-shadow: inset 0 0 20px rgba(255, 255, 255, .5), 0 0 20px rgba(255, 255, 255, .2);
+      outline-color: rgba(255, 255, 255, 0);
+      outline-offset: 15px;
+      text-shadow: 1px 1px 2px #427388;
+    }
+    .block{
+      display: inline-block;
+    }
+    .hoverine:hover{
+      text-decoration: underline;
+    }
+    .text-validate{
+      font-size: .75rem;
+      color : #f1556c;
+    }
+    .switchery {
+      width: 200px;    
+    }
+    .switchery:before {
+      content: 'Chưa thanh toán';
+      color: black;
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+              transform: translateY(-50%);
+    }
+    .js-switch:checked + .switchery:before {
+      color: white;
+      left: 43px;
+      content: 'Đã thanh toán';
+    }
+  </style>
 @endpush
 
 @section('breadcrumb')
@@ -80,9 +80,8 @@
     @else
     <div class="card pl-1 pr-1 pt-3 pb-3 animate__animated animate__rollIn animate__faster">
         <h4 class="header-title">
-          <span class="pl-2 pt-1"><i class="fas fa-print" aria-hidden="true"></i> CHỈNH SỬA ĐƠN HÀNG {{$order->id}}</span>
+          <i class="fas fa-print" aria-hidden="true"></i> CHỈNH SỬA ĐƠN HÀNG {{$order->id}}
           <a href="{{route('administrator.order.detail',['id'=>base64_encode($order->id)])}}"><span class="text-info pl-2 pt-1 hoverine direct-link">#{{$order->code}}</span></a>
-          {{-- <a href="{{route('administrator.customer.edit',['id'=>base64_encode($order->customer_id)])}}"><span class="text-info pl-2 pt-1 hoverine"><i class="fas fa-pencil-alt"></i> {{$order->customer->name}}</span></a> --}}
           <span class="text-info pl-2 pt-1 hoverine" id="customer_edit"><i class="fas fa-pencil-alt"></i> {{$order->customer->name}}</span>
         </h4>
         <div class="text-muted m-b-20 font-13 position-relative">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</div>
@@ -90,11 +89,10 @@
          @csrf
           {{-- nhập thông tin đơn hàng --}}
           <div class="form-row">
-
             {{-- phone --}}
             <div class="form-group col-6 col-sm-6 col-md-6">
               <label for="phone" class="col-form-label">Số đt <span class="text-danger">*</span></label>
-              <input type="text" class="form-control @error('phone') is-invalid @enderror {{$order->customer->phone != null ? 'parsley-success':''}}" id="phone" name="phone" placeholder="Nhập sđt" value="{{old('phone',$order->customer->phone != null ? $order->customer->phone:'')}}" required readonly>
+              <input type="text" class="form-control @error('phone') is-invalid @enderror {{$order->customer->phone != null ? 'parsley-success':''}}" id="phone" name="phone" placeholder="Nhập sđt" value="{{old('phone',$order->customer->phone != null ? $order->customer->phone:'')}}" required>
               @error('phone')
                 <p class="text-validate mb-1" id="t_valid_phone">{{ $message }}</p>
               @enderror
@@ -320,7 +318,7 @@
             </div>
             <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-center pt-3">
               <input type="hidden" name="arr_ois_origin" value="{{ $arr_ois_origin }}">
-              <button type="submit" class="btn btn-primary create-order d-none text-center p-3" name="btn_update_2">Cập nhật</button>
+              <button type="submit" class="btn btn-primary create-order d-none text-center p-3 update-order" name="btn_update_2">Cập nhật</button>
             </div>
           </div>
         </form>
@@ -341,7 +339,7 @@
        <div class="modal-content">
           <div class="modal-body">
             <div class="card-box">
-              <h4 class="header-title">CHỈNH SỬA KHÁCH HÀNG <span class="text-info">#{{ $order->customer->name }}</span></h4>
+              <h4 class="header-title">CHỈNH SỬA KHÁCH HÀNG <span class="text-info modal-header-customer-name">#{{ $order->customer->name }}</span></h4>
               <div class="text-muted m-b-20 font-13 position-relative">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</div>
                 <div class="form-row">
                       {{-- ten kh --}}
@@ -352,7 +350,7 @@
                       </div>
 
                       {{-- sđt --}}
-                      <div class="form-group col-12 col-sm-6 col-md-6 mb-1">
+                      <div class="form-group col-12 col-sm-6 col-md-6 mb-1">  
                         <label for="phone" class="col-form-label">Số điện thoại <span class="text-danger">*</span></label>
                         <input type="text" class="form-control {{$order->customer->phone != null ? 'parsley-success':''}}" id="phone_m" name="phone_m" placeholder="Nhập sđt" value="{{old('phone',$order->customer->phone != null ? $order->customer->phone:'')}}" required>
                         <p class="text-validate mb-0" id="tv_phone_m"></p>
@@ -451,6 +449,7 @@
   <script src="{{asset('admini/js/bootstrap-datepicker.min.js')}}"></script>
   <script src="{{asset('admini/js/jquery.validate.min.js')}}"></script>
   <script src="{{asset('admini/js/switchery-text.min.js')}}"></script>
+  <script src="{{asset('admini/js/jquery-ui.min.js')}}"></script>
 @endpush
 
 @push('page-scripts')
@@ -464,6 +463,16 @@
 
     var ele = document.querySelector('.confirm-pay-checkbox');
     var init = new Switchery(ele);
+    var phone_list = [];
+
+    @if($phone_list != null)
+      var phone_list_string = '{{ $phone_list }}';
+      var phone_list = phone_list_string.split(',');
+    @endif
+
+    $( "#phone" ).autocomplete({
+      source: phone_list
+    });
 
     // load giá trị max cho input nhập số lượng của các sản phẩm đã cố trong đơn hàng
     var setAttrMaxInputQuantity = () => {
@@ -517,7 +526,7 @@
             if(res.message == 'exist'){
               // Swal.fire(`Khách ${res.info['name']}`);
               $("input[name=name]").val(res.info['name']).addClass('parsley-success').attr('readonly', true);
-              $("input[name=address]").val(res.info['address']).addClass('parsley-success').attr('readonly', false);
+              $("input[name=address]").val(res.info['address']).attr('data-address',res.info['address']).addClass('parsley-success').attr('readonly', false);
               $("input[name=d_o_b]").val(res.info['d_o_b']).addClass('parsley-success').attr('disabled', true);
               $("input[name=phone]").addClass('parsley-success');
               let now = new Date();
@@ -532,10 +541,6 @@
                 $("#sale_d_o_b").data("birth",false);
               }
             }else if(res.message == 'null'){
-              // Swal.fire({
-              //   title: 'Khách mới !',
-              //   text: 'Nhớ nhập tên và địa chỉ nhé =))',
-              // });
               $("input[name=name]").val('').removeClass('parsley-success').attr('readonly', false);
               $("input[name=address]").val('').data('address','').removeClass('parsley-success').attr('readonly', false);
               $("input[name=d_o_b]").val('').removeClass('parsley-success').attr('disabled', false);
@@ -720,9 +725,9 @@
     @endif
 
     // focus out ô nhập số đt
-    $("#phone").focusout(function(){
+    $("#phone").on('focusout keyup',function(){
       let val = $(this).val();
-      if(val != null && val != ""){
+      if(val){
         checkPhoneAjax(val);
         $(this).addClass('parsley-success');
       }else{
@@ -758,7 +763,7 @@
 
     // sử dụng button địa chỉ mặc định
     $(".btn-address-default").click(function(event) {
-      let address_default = $("input[name=address]").data('address');
+      let address_default = $("input[name=address]").attr('data-address');
       $("input[name=address]").val(address_default);
       if(address_default){
         $("input[name=address]").addClass('parsley-success');
@@ -796,11 +801,6 @@
       update_money_form();
     });
 
-    // bấm xác nhận thanh toán
-    $('.confirm-pay-checkbox').click(function(event) {
-      console.log($(this).val());
-    });
-
     //select kho hàng
     $(".select-warehouse").change(function(event){
       $(".update-order").removeClass('d-none');
@@ -833,18 +833,32 @@
 
     // thêm 1 trường sản phẩm
     $('.add-product-field').click(function(event){
-      let warehouse_id = $(".select-warehouse").val();
-      if(warehouse_id == null || warehouse_id == "" || warehouse_id == undefined){
-        Swal.fire({
-          icon: 'info',
-          title: 'Oops...',
-          text: 'Bạn chưa chọn kho hàng !',
-        })
-      }else{
-        addNewFieldProductAjax(warehouse_id);
-        update_money_form();
-      }
+        let warehouse_id = $(".select-warehouse").val();
+        if(warehouse_id){
+          @if($order->payed_at)
+            Swal.fire({
+              icon: 'info',
+              title: 'Đơn hàng đã thanh toán !',
+              text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
+            })
+          @else
+            addNewFieldProductAjax(warehouse_id);
+            update_money_form();
+          @endif
+        }else{
+          Swal.fire({
+            icon: 'info',
+            title: 'Oops...',
+            text: 'Bạn chưa chọn kho hàng !',
+          })
+        }
     });
+
+    // nếu 
+
+    var countInArray = (array, what) => {
+      return array.filter(item => item == what).length;
+    }
 
     // chọn sản phẩm xong thì set  các thuộc tính
     $("#products_wrapper").on('change','.select-product',function(event){
@@ -854,20 +868,31 @@
       let inventory = $('option:selected', this).data('inventory'); 
       let price = $('option:selected', this).data('price');
       $(this).parent().next().next().find(".discount").val(discount);
-      $(this).parent().next().find(".quantity").attr("max",inventory);
-      $(this).parent().next().find(".quantity").data("discount",discount);
-      $(this).parent().next().find(".quantity").data("price",price);
       $(this).parent().next().next().find(".price").val(price);
-      $(this).parent().next().find(".quantity").data('total',0);
-
-      if(product_id != null && product_id != ""){
-        $(this).parent().next().next().find(".discount").val(discount);
-        $(this).parent().next().find(".quantity").val('');  
-        $(this).parent().next().find(".quantity").attr('readonly', false);
+      $(this).parent().next().find(".quantity").attr("max",inventory).data("discount",discount).data("price",price).data('total',0);
+      if(product_id){
+        // test
+        let product_selected = [];
+        $('.select-product').each(function( index, value ) {
+          product_selected.push($(this).val());
+        });
+        if(countInArray(product_selected,product_id) > 1){
+          $('.add-product-field').trigger('click');
+          $(this).parent().parent().remove();
+          Swal.fire({ 
+              icon: 'info',
+              title: 'Trùng !',
+              text: 'Sản phẩm đã được chọn.',
+          })
+          console.log(product_selected);
+        }else{
+          console.log(product_selected);
+          $(this).parent().next().next().find(".discount").val(discount);
+          $(this).parent().next().find(".quantity").val('').attr('readonly', false);  
+        }
       }else{
         $(this).parent().next().next().find(".discount").val(0);
-        $(this).parent().next().find(".quantity").val(0);
-        $(this).parent().next().find(".quantity").attr('readonly', true);
+        $(this).parent().next().find(".quantity").val(0).attr('readonly', true);
       }
 
       update_money_form();
@@ -955,24 +980,53 @@
                     text: 'Thông tin chưa chuẩn lắm =(( ',
                 })
               }else if(res.message == "update success"){
+                $('.modal-header-customer-name').text(`#${name}`);
+                $('#customer_edit').html(`<i class="fas fa-pencil-alt"></i> ${name}`);
+                $('#customerEditModal').modal('hide');
+                $('#phone').val(phone).trigger('focusout');
                 Swal.fire({ 
                     icon: 'success',
                     title: 'Thành Công !',
                     text: 'TT khách hàng đã cập nhật.',
                 })
-                location.reload();
               }
-
             }
           })
-          
         }else{
           Swal.fire({
-              icon: 'warning',
-              title: 'Oops...',
-              text: 'Các trường đánh dấu sao là bắt buộc !',
+            icon: 'warning',
+            title: 'Oops...',
+            text: 'Các trường đánh dấu sao là bắt buộc !',
           })
         }
+    });
+
+    // thay đổi trạng thái thanh toán
+    $(".confirm-pay-checkbox").change(function(event) {
+          let order_id = {{ $order->id }};
+          if(order_id){
+            $.ajax({
+              url: '{{ route('administrator.order.confirm_pay_ajax') }}',
+              type: 'post',
+              data: {order_id: order_id},
+            })
+            .done(function(res) {
+              if(res.success){
+                if(res.payed_at){
+                  alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
+                }else{
+                  alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');      
+                }
+              }
+            })
+          }
+        // }
+      // })
+    });
+
+    // submit form thì bỏ disabled d_o_b đi
+    $(".update-order").click(function(){
+      $("#d_o_b").removeAttr('disabled');
     });
 
     // convert to currency_vietnamese
@@ -982,6 +1036,9 @@
 
         return x;
     }
-  });
+
+    ajax
+
+9999  });
 </script>
 @endpush

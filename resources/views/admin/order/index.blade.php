@@ -307,8 +307,6 @@
 </div>
 @endsection
 
-{{-- nếu con  --}}
-
 @push('libs-scripts')
   <script src="{{asset('admini/js/jquery-ui.min.js')}}"></script>
 @endpush
@@ -519,16 +517,26 @@
           })
           .done(function(res) {
             if(res.success){
-              if(payed == 'yes'){
-                _this.attr('data-payed','no');
-                $(`#order_${order_id}`).find('.pay-type-text').removeClass('text-success').addClass('text-secondary');
-                $(`#order_${order_id}`).find('.fa-check-circle').remove();
-                alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');
-              }else if(payed == 'no'){
-                _this.attr('data-payed','yes');
-                $(`#order_${order_id}`).find('.pay-type-text').prepend('<i class="fas fa-check-circle icon-action"></i>').removeClass('text-secondary').addClass('text-success');
-                alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
-              }
+                // if(payed == 'yes'){
+                //   _this.attr('data-payed','no');
+                //   $(`#order_${order_id}`).find('.pay-type-text').removeClass('text-success').addClass('text-secondary');
+                //   $(`#order_${order_id}`).find('.fa-check-circle').remove();
+                //   alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');
+                // }else if(payed == 'no'){
+                //   _this.attr('data-payed','yes');
+                //   $(`#order_${order_id}`).find('.pay-type-text').prepend('<i class="fas fa-check-circle icon-action"></i>').removeClass('text-secondary').addClass('text-success');
+                //   alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
+                // }
+                if(res.payed_at){
+                  _this.attr('data-payed','yes');
+                  $(`#order_${order_id}`).find('.pay-type-text').prepend('<i class="fas fa-check-circle icon-action"></i>').removeClass('text-secondary').addClass('text-success');
+                  alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
+                }else{
+                  _this.attr('data-payed','no');
+                  $(`#order_${order_id}`).find('.pay-type-text').removeClass('text-success').addClass('text-secondary');
+                  $(`#order_${order_id}`).find('.fa-check-circle').remove();
+                  alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');
+                }
             }
           })
         }

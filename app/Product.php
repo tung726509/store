@@ -58,6 +58,10 @@ class Product extends Model
         return $this->hasMany('App\OrderItem','product_id');
     }
 
+    public function cart_items(){
+        return $this->hasMany('App\CartItem','product_id');
+    }
+
     // filterable
      
     public function filterSku($query, $value)

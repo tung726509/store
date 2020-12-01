@@ -1,5 +1,5 @@
 <style type="text/css">
-  #preloader{position:fixed;z-index:1800;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background-color:#5ea1e5}
+  #preloader{position:fixed;z-index:1800;top:0;right:0;bottom:0;left:0;width:100%;height:100%;background-color:#252731}/*5ea1e5*/
   .no-js #preloaders,.oldie #preloaders{display:none}
   #loader{position:absolute;top:calc(50% - 1.25em);left:calc(50% - 1.25em)}
   .loader{display:inline-block;width:30px;height:30px;position:relative;border:4px solid #Fff;top:50%;animation:loader 2s infinite ease}
@@ -27,4 +27,3 @@
       </span>
     </div>
 </div>
-

@@ -35,6 +35,10 @@ class Customer extends Model
         return $this->hasMany('App\Cookie','customer_id');
     }
 
+    public function cart_items(){
+        return $this->hasMany('App\CartItem','customer_id');
+    }
+
     // filterable
 
     public function filterPhone($query, $value){

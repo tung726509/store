@@ -6,18 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Filterable;
 use Carbon\Carbon;
 
-class Cookie extends Model
+class CartItem extends Model
 {
-    protected $table = 'cookies';
+    protected $table = 'cart_items';
 
     use Filterable;
 
     protected $fillable = [
-        'cookie_string', 'customer_id', 'ip_address', 'created_at'
+        'product_id', 'quantity', 'customer_id', 'created_at'
     ];
 
     public function customer()
     {
         return $this->belongsTo('App\Customer','customer_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo('App\Product','product_id');
     }
 }
