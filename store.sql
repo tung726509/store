@@ -1,19 +1,40 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local E
+Source Server         : local E1
 Source Server Version : 50505
 Source Host           : localhost:3306
-Source Database       : store1
+Source Database       : store
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2020-10-21 08:28:29
+Date: 2020-12-05 08:14:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for cart_items
+-- ----------------------------
+DROP TABLE IF EXISTS `cart_items`;
+CREATE TABLE `cart_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of cart_items
+-- ----------------------------
+INSERT INTO `cart_items` VALUES ('1', '4', '2', '1', '2020-11-13 15:24:22', null);
+INSERT INTO `cart_items` VALUES ('2', '5', '10', '1', '2020-11-13 15:24:46', null);
+INSERT INTO `cart_items` VALUES ('3', '1', '1', '1', '2020-11-13 15:25:08', null);
 
 -- ----------------------------
 -- Table structure for categories
@@ -120,6 +141,25 @@ INSERT INTO `cities` VALUES ('63', 'Yên Bái', '15', '2019-06-26 00:18:21', nul
 INSERT INTO `cities` VALUES ('64', 'Khác', '000', '2019-06-26 00:18:21', null);
 
 -- ----------------------------
+-- Table structure for cookies
+-- ----------------------------
+DROP TABLE IF EXISTS `cookies`;
+CREATE TABLE `cookies` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `cookie_string` varchar(255) DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `ip_address` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of cookies
+-- ----------------------------
+INSERT INTO `cookies` VALUES ('1', '1605255320', '1', null, '2020-11-13 15:15:20');
+INSERT INTO `cookies` VALUES ('2', '1605255736', '1', null, '2020-11-13 15:22:16');
+
+-- ----------------------------
 -- Table structure for customers
 -- ----------------------------
 DROP TABLE IF EXISTS `customers`;
@@ -130,6 +170,7 @@ CREATE TABLE `customers` (
   `address` varchar(255) DEFAULT NULL,
   `d_o_b` timestamp NULL DEFAULT NULL,
   `total_money` decimal(10,0) DEFAULT NULL,
+  `total_payed` decimal(10,0) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -137,15 +178,16 @@ CREATE TABLE `customers` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of customers
 -- ----------------------------
-INSERT INTO `customers` VALUES ('1', 'khách tùng', '0329585709', 'ngã tư sở', '1995-08-16 00:00:00', '705500', '2020-06-11 10:17:51', '1', '2020-08-14 08:52:53', null, null, null);
-INSERT INTO `customers` VALUES ('2', 'hà an cute', '0329585706', '140 đường láng', '2020-10-13 00:00:00', '637220', '2020-06-11 10:17:53', null, '2020-10-10 08:55:23', null, null, null);
-INSERT INTO `customers` VALUES ('3', 'hà an 12', '0329585705', 'láng hạ ahi', '2020-06-30 00:00:00', '300000', '2020-06-11 10:17:53', null, '2020-07-17 11:39:59', null, null, null);
-INSERT INTO `customers` VALUES ('14', 'tùng nạnh nùng', '0329585700', 'gôc đề', '2020-10-24 00:00:00', null, '2020-10-11 15:16:52', '1', '2020-10-11 15:16:52', null, null, null);
+INSERT INTO `customers` VALUES ('1', 'khách tùng a', '0329585709', 'ngã tư sở chỗ fafim nhes', '2020-11-18 00:00:00', null, '0', '2020-06-11 10:17:51', '1', '2020-11-19 15:53:52', null, null, null);
+INSERT INTO `customers` VALUES ('2', 'hà an cute', '0329585706', '140 đường láng', '2020-10-13 00:00:00', '229950', null, '2020-06-11 10:17:53', null, '2020-11-17 08:26:46', null, null, null);
+INSERT INTO `customers` VALUES ('3', 'hà an 12', '0329585705', 'láng hạ ahi', '2020-06-30 00:00:00', null, null, '2020-06-11 10:17:53', null, '2020-11-06 13:43:23', null, null, null);
+INSERT INTO `customers` VALUES ('14', 'tùng nạnh nùng', '0329585700', 'gôc đề', null, null, null, '2020-10-11 15:16:52', '1', '2020-10-11 15:16:52', null, null, null);
+INSERT INTO `customers` VALUES ('15', 'fuckboy', '0329585702', 'nguyễn trãi', null, null, null, '2020-11-15 16:30:56', '1', '2020-11-15 16:30:56', null, null, null);
 
 -- ----------------------------
 -- Table structure for failed_jobs
@@ -213,7 +255,7 @@ INSERT INTO `migrations` VALUES ('5', '2020_08_06_161446_create_permission_table
 DROP TABLE IF EXISTS `model_has_permissions`;
 CREATE TABLE `model_has_permissions` (
   `permission_id` bigint(20) unsigned NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
   KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`),
@@ -230,7 +272,7 @@ CREATE TABLE `model_has_permissions` (
 DROP TABLE IF EXISTS `model_has_roles`;
 CREATE TABLE `model_has_roles` (
   `role_id` bigint(20) unsigned NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `model_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`role_id`,`model_id`,`model_type`),
   KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`),
@@ -261,12 +303,12 @@ CREATE TABLE `options` (
 -- ----------------------------
 -- Records of options
 -- ----------------------------
-INSERT INTO `options` VALUES ('1', 'use_birth_discount', 'công tắc sinh nhật', '{\"key\":1,\"value\":10}', '2020-06-19 09:01:38', '2020-10-18 17:52:10');
-INSERT INTO `options` VALUES ('2', 'use_free_ship', 'công tắc freeship đơn hàng trên xxxk', '{\"key\":1,\"value\":200000}', '2020-06-19 09:15:13', '2020-10-18 17:46:22');
-INSERT INTO `options` VALUES ('3', 'use_transfer_discount', 'chuyển khỏa giảm xx%', '{\"key\":1,\"value\":5}', '2020-08-13 09:12:18', '2020-10-18 17:42:12');
-INSERT INTO `options` VALUES ('4', 'b_b_i', 'big banner', '{\"name\":[\"1598426544.jpg\",\"1598426500.jpg\",\"1599194392.png\",\"1599194656.png\",\"1599204679.png\"],\"text\":{\"1\":\"Finds\",\"2\":\"Summer Sale\",\"3\":\"70% OFF\",\"4\":\"Shop Now!\"}}', '2020-08-26 14:44:40', '2020-09-04 14:31:20');
-INSERT INTO `options` VALUES ('5', 'm_b_i', 'medium banner', '{\"name\":[\"1599203759.jpeg\"],\"text\":{\"1\":\"TOP FASHION\",\"2\":\"VIEW SALE\",\"3\":\"Exclusive COUPON\",\"4\":null}}', '2020-08-26 14:44:40', '2020-09-04 14:15:59');
-INSERT INTO `options` VALUES ('6', 's_b_i', 'small banner', '{\"name\":[\"1599203629.jpeg\"],\"text\":{\"1\":\"BIG SALE\",\"2\":\"ALL NEW FASHION BRANDS ITEMS UP TO 70% OFF\",\"3\":\"Online Purchases\",\"4\":null}}', '2020-08-26 14:44:40', '2020-09-04 14:13:49');
+INSERT INTO `options` VALUES ('1', 'use_birth_discount', 'công tắc sinh nhật', '{\"key\":1,\"value\":10}', '2020-06-19 09:01:38', '2020-11-06 14:52:13');
+INSERT INTO `options` VALUES ('2', 'use_free_ship', 'công tắc freeship đơn hàng trên xxxk', '{\"key\":1,\"value\":200000}', '2020-06-19 09:15:13', '2020-10-28 15:37:09');
+INSERT INTO `options` VALUES ('3', 'use_transfer_discount', 'chuyển khỏa giảm xx%', '{\"key\":1,\"value\":5}', '2020-08-13 09:12:18', '2020-10-31 09:44:18');
+INSERT INTO `options` VALUES ('4', 'b_b_i', 'big banner', '{\"name\":[\"1603531775.jpeg\"],\"text\":{\"1\":\"Finds\",\"2\":\"Summer Sale\",\"3\":\"OFF 70%\",\"4\":\"Shop Now!\"}}', '2020-08-26 14:44:40', '2020-10-26 14:31:30');
+INSERT INTO `options` VALUES ('5', 'm_b_i', 'medium banner', '{\"name\":[\"1599203759.jpeg\"],\"text\":{\"1\":\"TOP FASHION\",\"2\":\"VIEW SALE\",\"3\":\"Exclusive COUPON\",\"4\":null}}', '2020-08-26 14:44:40', '2020-10-25 16:29:49');
+INSERT INTO `options` VALUES ('6', 's_b_i', 'small banner', '{\"name\":[\"1603526438.jpeg\"],\"text\":{\"1\":\"BIG SALE\",\"2\":\"ALL NEW FASHION BRANDS ITEMS UP TO 70% OFF\",\"3\":\"Online Purchases\",\"4\":null}}', '2020-08-26 14:44:40', '2020-10-24 15:00:39');
 INSERT INTO `options` VALUES ('7', 'fb', 'facebook', 'https://www.facebook.com/tung726509', '2020-09-06 15:33:55', '2020-09-07 15:03:23');
 INSERT INTO `options` VALUES ('8', 'ins', 'instagram', 'https://www.instagram.com/tung.encode.97/?hl=vi', '2020-09-06 15:33:55', '2020-09-07 15:03:23');
 INSERT INTO `options` VALUES ('9', 'twt', 'twitter', 'https://www.twitter.com/tung726509', '2020-09-06 15:33:55', '2020-09-07 15:03:23');
@@ -288,6 +330,7 @@ CREATE TABLE `orders` (
   `price` decimal(20,0) DEFAULT NULL,
   `types_of_fee` varchar(255) DEFAULT '',
   `ship_fee` decimal(30,0) DEFAULT NULL,
+  `payed_at` timestamp NULL DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
   `reason` varchar(255) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
@@ -302,17 +345,18 @@ CREATE TABLE `orders` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `deleted_by` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES ('1', 'C2CDNGAFPD3FFVC1', null, '2', null, '105040', '{\"ubd\":10}', '10000', '140 đường láng hạ đang sửa', null, '1', '2020-10-11 16:10:00', 'khách nhận vào chủ nhật , ahihi đồ chó =))', null, null, '2020-06-14 09:16:28', null, '2020-10-11 16:17:57', null, null, null);
-INSERT INTO `orders` VALUES ('2', 'C3CDDEPV101S4RU4', null, '3', '1', '340000', '[]', '200000', 'láng hạ ahi', null, '6', '2020-10-06 16:42:57', 'khách chỉ nhận trong giờ hành chính thôi nhé', '2020-07-16 00:00:00', '1', '2020-06-15 09:17:55', null, '2020-10-06 17:03:55', null, null, null);
-INSERT INTO `orders` VALUES ('3', 'U1CDS03D6N51ARM9', '1', '1', '1', '256000', '{\"ufs\":200000}', '2000', 'ngã tư sở', null, '2', '2020-10-06 17:02:06', null, '2020-10-06 00:00:00', '1', '2020-10-06 17:02:06', null, '2020-10-11 17:50:35', null, null, null);
-INSERT INTO `orders` VALUES ('34', 'U1CDV5A99TVRL6DG', '1', '2', '1', '229950', '{\"ubd\":10,\"ufs\":200000}', '1000', '140 đường láng', null, '4', '2020-10-11 15:15:35', null, '2020-10-07 00:00:00', '1', '2020-10-07 10:11:53', null, '2020-10-11 17:35:25', null, null, null);
-INSERT INTO `orders` VALUES ('35', 'U1CD1DRYYQR2Y3BW', '1', '14', '1', '82000', '{\"ubd\":10}', '1000', 'gôc đề', null, '5', '2020-10-11 17:48:02', null, '2020-10-11 00:00:00', '1', '2020-10-11 15:16:52', null, '2020-10-11 17:48:06', null, null, null);
-INSERT INTO `orders` VALUES ('36', 'U1CDDSSGPZ5ULOGP', '1', '1', '1', '4500000', '{\"ufs\":200000}', '100000', 'ngã tư sở', null, '3', '2020-10-16 11:41:56', null, '2020-10-11 00:00:00', '1', '2020-10-11 16:04:33', null, '2020-10-16 11:43:12', null, null, null);
+INSERT INTO `orders` VALUES ('1', 'C2CDNGAFPD3FFVC1', null, '2', null, '105040', '{\"ubd\":10}', '10000', null, '140 đường láng hạ đang sửa', null, '1', '2020-10-11 16:10:00', 'khách nhận vào chủ nhật , ahihi đồ chó =))', null, null, '2020-06-14 09:16:28', null, '2020-11-05 17:23:40', null, null, null);
+INSERT INTO `orders` VALUES ('2', 'C3CDDEPV101S4RU4', null, '3', '1', '340000', '[]', '200000', null, 'láng hạ ahi', null, '6', '2020-10-06 16:42:57', 'khách chỉ nhận trong giờ hành chính thôi nhé', '2020-07-16 00:00:00', '1', '2020-06-15 09:17:55', null, '2020-11-06 13:43:23', null, null, null);
+INSERT INTO `orders` VALUES ('3', 'U1CDS03D6N51ARM9', '1', '1', '1', '256000', '{\"ufs\":200000}', '2000', null, 'ngã tư sở', null, '2', '2020-10-06 17:02:06', null, '2020-10-06 00:00:00', '1', '2020-10-06 17:02:06', null, '2020-11-05 11:50:55', null, null, null);
+INSERT INTO `orders` VALUES ('34', 'U1CDV5A99TVRL6DG', '1', '2', '1', '229950', '{\"ubd\":10,\"ufs\":200000}', '1000', null, '140 đường láng', null, '4', '2020-10-11 15:15:35', null, '2020-10-07 00:00:00', '1', '2020-10-07 10:11:53', null, '2020-11-17 08:26:46', null, null, null);
+INSERT INTO `orders` VALUES ('35', 'U1CD1DRYYQR2Y3BW', '1', '14', '1', '82000', '{\"ubd\":10}', '1000', null, 'gôc đề', null, '5', '2020-10-11 17:48:02', null, '2020-10-11 00:00:00', '1', '2020-10-11 15:16:52', null, '2020-11-05 11:49:30', null, null, null);
+INSERT INTO `orders` VALUES ('36', 'U1CDDSSGPZ5ULOGP', null, '1', '1', '4275000', '{\"utd\":5,\"ufs\":200000}', '0', null, 'ngã tư sở', null, '3', '2020-11-06 15:18:30', 'khách hàng chỉ nhận hàng vào thứ bảy', '2020-11-05 00:00:00', '1', '2020-10-11 16:04:33', null, '2020-11-06 15:19:06', null, null, null);
+INSERT INTO `orders` VALUES ('39', 'U1CDQTCAJ9SBMIBZ', null, '1', '1', '50900', '{\"ubd\":10,\"utd\":5}', '5000', null, 'ngã tư sở', null, '3', '2020-11-19 15:06:02', null, '2020-11-05 00:00:00', '1', '2020-11-05 14:22:21', null, '2020-11-19 15:53:52', null, null, null);
 
 -- ----------------------------
 -- Table structure for order_items
@@ -333,7 +377,7 @@ CREATE TABLE `order_items` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of order_items
@@ -346,7 +390,8 @@ INSERT INTO `order_items` VALUES ('5', '3', '1', '2', '20', '160000', 'false', '
 INSERT INTO `order_items` VALUES ('126', '34', '1', '1', '20', '160000', 'false', '2020-10-10 11:07:07', null, '2020-10-10 11:07:07', null, null, null);
 INSERT INTO `order_items` VALUES ('127', '34', '2', '1', '15', '150000', 'false', '2020-10-10 11:07:07', null, '2020-10-10 11:07:07', null, null, null);
 INSERT INTO `order_items` VALUES ('128', '35', '5', '2', '10', '50000', 'false', '2020-10-11 15:16:52', null, '2020-10-11 15:16:52', null, null, null);
-INSERT INTO `order_items` VALUES ('129', '36', '5', '100', '10', '50000', 'false', '2020-10-11 16:04:33', null, '2020-10-11 16:04:33', null, null, null);
+INSERT INTO `order_items` VALUES ('133', '36', '5', '100', '10', '50000', 'true', '2020-10-27 15:37:13', null, '2020-11-05 14:16:01', null, null, null);
+INSERT INTO `order_items` VALUES ('156', '39', '3', '2', '10', '30000', 'false', '2020-11-19 15:06:02', null, '2020-11-19 15:06:02', null, null, null);
 
 -- ----------------------------
 -- Table structure for password_resets
@@ -657,7 +702,7 @@ INSERT INTO `role_has_permissions` VALUES ('47', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `sessions`;
 CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL,
   `user_id` bigint(20) unsigned DEFAULT NULL,
   `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_agent` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -699,9 +744,9 @@ INSERT INTO `tags` VALUES ('6', 'shFnDMH57h', 'Lạ', '2020-05-19 09:14:44', '1'
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `lock` tinyint(4) DEFAULT NULL,
   `social_network` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -741,8 +786,8 @@ CREATE TABLE `warehouses` (
 -- ----------------------------
 -- Records of warehouses
 -- ----------------------------
-INSERT INTO `warehouses` VALUES ('1', 'kho ngã tư sở 1', '19 nguyễn trãi 1', '1', '2020-06-23 11:09:23', '1', '2020-06-23 11:09:23', null, null, null);
-INSERT INTO `warehouses` VALUES ('2', 'kho minh khai', 'gốc đề , minh khai', null, '2020-05-28 09:26:35', '1', null, null, null, null);
+INSERT INTO `warehouses` VALUES ('1', 'kho ngã tư sở 1', '19 nguyễn trãi 1', '1', '2020-11-05 14:19:47', '1', '2020-11-05 14:19:47', null, null, null);
+INSERT INTO `warehouses` VALUES ('2', 'kho minh khai', 'gốc đề , minh khai', null, '2020-11-05 14:19:49', '1', '2020-11-05 14:19:49', null, null, null);
 INSERT INTO `warehouses` VALUES ('4', 'kho 1', null, null, '2020-05-29 10:50:15', '1', '2020-05-29 10:50:15', null, null, null);
 INSERT INTO `warehouses` VALUES ('5', 'kho 2', 'kho 2 ngã tư sở', null, '2020-05-29 10:50:17', '1', '2020-05-29 10:50:17', null, null, null);
 
@@ -767,12 +812,12 @@ CREATE TABLE `warehouse_items` (
 -- ----------------------------
 -- Records of warehouse_items
 -- ----------------------------
-INSERT INTO `warehouse_items` VALUES ('12', '1', '1', '49', '2020-10-11 17:35:25', '1', '2020-10-11 17:35:25', null, null, null);
-INSERT INTO `warehouse_items` VALUES ('13', '2', '1', '29', '2020-10-11 17:35:25', '1', '2020-10-11 17:35:25', null, null, null);
+INSERT INTO `warehouse_items` VALUES ('12', '1', '1', '49', '2020-11-05 17:24:05', '1', '2020-11-05 17:24:05', null, null, null);
+INSERT INTO `warehouse_items` VALUES ('13', '2', '1', '29', '2020-11-05 17:24:06', '1', '2020-11-05 17:24:06', null, null, null);
 INSERT INTO `warehouse_items` VALUES ('14', '4', '2', '150', '2020-06-10 15:25:02', '1', '2020-06-10 15:25:02', null, null, null);
 INSERT INTO `warehouse_items` VALUES ('15', '3', '1', '150', '2020-07-24 16:56:56', '1', '2020-07-24 16:56:56', null, null, null);
-INSERT INTO `warehouse_items` VALUES ('16', '4', '1', '200', '2020-06-23 14:35:35', '1', '2020-06-23 14:35:35', null, null, null);
-INSERT INTO `warehouse_items` VALUES ('17', '5', '1', '300', '2020-10-16 11:42:59', '1', '2020-10-16 11:42:59', null, null, null);
+INSERT INTO `warehouse_items` VALUES ('16', '4', '1', '200', '2020-11-06 13:43:23', '1', '2020-11-06 13:43:23', null, null, null);
+INSERT INTO `warehouse_items` VALUES ('17', '5', '1', '300', '2020-11-12 13:42:43', '1', '2020-11-12 13:42:43', null, null, null);
 
 -- ----------------------------
 -- Table structure for warehouse_logs
@@ -792,7 +837,7 @@ CREATE TABLE `warehouse_logs` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of warehouse_logs
@@ -800,5 +845,5 @@ CREATE TABLE `warehouse_logs` (
 INSERT INTO `warehouse_logs` VALUES ('31', '12', '1', '50', '10', '1', '1', 'nhập thêm', '2020-10-06 15:05:14', null, '2020-10-06 15:05:14', null);
 INSERT INTO `warehouse_logs` VALUES ('32', '13', '2', '10', '20', '1', '1', 'nhập thêm hàng', '2020-10-06 15:05:48', null, '2020-10-06 15:05:48', null);
 INSERT INTO `warehouse_logs` VALUES ('33', '12', '1', '50', '60', '2', '1', 'cho mượn 10', '2020-10-06 15:06:23', null, '2020-10-06 15:06:23', null);
-INSERT INTO `warehouse_logs` VALUES ('59', '12', '1', '1', '50', '3', '1', 'MzQ=', '2020-10-11 17:35:25', null, '2020-10-11 17:35:25', null);
-INSERT INTO `warehouse_logs` VALUES ('60', '13', '2', '1', '30', '3', '1', 'MzQ=', '2020-10-11 17:35:25', null, '2020-10-11 17:35:25', null);
+INSERT INTO `warehouse_logs` VALUES ('76', '12', '1', '1', '50', '3', '1', 'MzQ=', '2020-11-05 17:24:05', null, '2020-11-05 17:24:05', null);
+INSERT INTO `warehouse_logs` VALUES ('77', '13', '2', '1', '30', '3', '1', 'MzQ=', '2020-11-05 17:24:06', null, '2020-11-05 17:24:06', null);
