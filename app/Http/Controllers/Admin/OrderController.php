@@ -931,6 +931,23 @@ class OrderController extends Controller
         return false;
     }
 
+    public function checkOrderPayedAjax(Request $request)
+    {
+        if($request->ajax()){
+            $order_id = $request->order_id;
+            if($order_id){
+                $order = $this->_m->find($order_id);
+                if($order){
+                    return Response::json(['success'=>true,'order'=>$order]);
+                }
+            }else{
+                return Response::json(['success'=>false,'message'=>'Dữ liệu gửi lên ko chính xác !']);
+            }
+        }
+
+        return false;
+    }
+
     public function confirmPayAjax(Request $request){
         if($request->ajax()){
             $order_id = $request->order_id;

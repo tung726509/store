@@ -835,16 +835,23 @@
     $('.add-product-field').click(function(event){
         let warehouse_id = $(".select-warehouse").val();
         if(warehouse_id){
-          @if($order->payed_at)
-            Swal.fire({
-              icon: 'info',
-              title: 'Đơn hàng đã thanh toán !',
-              text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
-            })
-          @else
-            addNewFieldProductAjax(warehouse_id);
-            update_money_form();
-          @endif
+          $.ajax({
+            url: '{{ route('administrator.order.check_order_payed_ajax') }}',
+            type: 'get',
+            data: {order_id: {{$order->id}} },
+          })
+          .done(function(res){
+              if(res.order.payed_at){
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Đơn hàng đã thanh toán !',
+                    text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
+                  })
+              }else{
+                  addNewFieldProductAjax(warehouse_id);
+                  update_money_form();
+              }
+          })
         }else{
           Swal.fire({
             icon: 'info',
@@ -1003,25 +1010,23 @@
 
     // thay đổi trạng thái thanh toán
     $(".confirm-pay-checkbox").change(function(event) {
-          let order_id = {{ $order->id }};
-          if(order_id){
-            $.ajax({
-              url: '{{ route('administrator.order.confirm_pay_ajax') }}',
-              type: 'post',
-              data: {order_id: order_id},
-            })
-            .done(function(res) {
-              if(res.success){
-                if(res.payed_at){
-                  alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
-                }else{
-                  alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');      
-                }
+        let order_id = {{ $order->id }};
+        if(order_id){
+          $.ajax({
+            url: '{{ route('administrator.order.confirm_pay_ajax') }}',
+            type: 'post',
+            data: {order_id: order_id},
+          })
+          .done(function(res){
+            if(res.success){
+              if(res.payed_at){
+                alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
+              }else{
+                alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');      
               }
-            })
-          }
-        // }
-      // })
+            }
+          })
+        }
     });
 
     // submit form thì bỏ disabled d_o_b đi

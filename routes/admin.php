@@ -86,7 +86,6 @@ Route::prefix('customer')->name('customer.')->group(function(){
 
 Route::prefix('order')->name('order.')->group(function(){
 	Route::get('/', 'OrderController@index')->name('index');
-	
 	Route::get('detail/{id}', 'OrderController@detail')->name('detail');
 
 	Route::get('add', 'OrderController@getAdd')->name('add');
@@ -102,6 +101,7 @@ Route::prefix('order')->name('order.')->group(function(){
 	Route::post('customer-edit', 'OrderController@customerEdit')->name('customer_edit');
 	Route::post('order-change-status-ajax', 'OrderController@orderChangeStatusAjax')->name('order_change_status_ajax');
 	Route::post('confirm-pay-ajax', 'OrderController@confirmPayAjax')->name('confirm_pay_ajax');
+	Route::get('check-order-payed-ajax', 'OrderController@checkOrderPayedAjax')->name('check_order_payed_ajax');
 });
 
 Route::prefix('option')->name('option.')->group(function(){
