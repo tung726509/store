@@ -13,7 +13,7 @@ use App\Category;
 use App\Product;
 use App\Option;
 use App\Customer;
-
+use App\Cookiee;
 
 class HomeController extends Controller
 {
@@ -24,22 +24,22 @@ class HomeController extends Controller
         $this->category_m = new Category();
         $this->option_m = new Option();
         $this->customer_m = new Customer();
+        $this->cookiee_m = new Cookiee();
         $new_ck_val = strtotime(Carbon::now()).$this->generateRandomString(4);
-        $this->new_cookie = cookie('cookie_string', $new_ck_val ,14400);
+        $this->new_ck_val = $new_ck_val;
+        $this->new_cookie = cookie('cookie_string', $new_ck_val ,7200);
     }
 
     public function home(){
         $customer = null;
         $cart_items = null;
-        $current_cookie = Cookie::get('cookie_string');
+        $get_cookie = Cookie::get('cookie_string');
+
+        // dd($get_cookie);
         
-        // lấy thông tin khách từ cookie
-        if($current_cookie){
-            // $customer = $this->customer_m->
-           // dd($current_cookie);
-        }else{
-            // nếu con đường đó mang
-        }
+        // có cookie
+        $customer = null;
+        $this->getCreateCookie($get_cookie);
 
         // ưu đãi khách hàng
             $dataImageOption = $this->option_m->getImageOption();
@@ -126,14 +126,29 @@ class HomeController extends Controller
         $med_b_i = $dataImageOption['med_b_i'];
         $small_b_i = $dataImageOption['small_b_i'];
 
-        // dd($product);
-
-    	return response()->view('homepage.detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'))->withCookie($this->new_cookie);
+    	return response()->view('homepage.product-detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'))->withCookie($this->new_cookie);
     }
 
-    public function FunctionName($value='')
+    public function getCreateCookie($get_cookie)
     {
+        $data = [];
+        $customer = null;
         
+        if($get_cookie != null){
+            $cookie = $this->cookiee_m->where('cookie_string',$get_cookie)->first();
+            if($cookie){
+                if($cookie->customer_id){
+                    $customer = $this->customer_m->with([])->find($cookie->customer_id);
+                }
+                $cookie->update(['cookie_string'=>$this->new_ck_val]);              
+            }
+        }else{//ko có cookie
+            $this->cookiee_m->create(['cookie_string'=>$this->new_ck_val,'created_at'=>Carbon::now(),'updated'=>null]);        
+        }
+
+        $data['customer'] = $customer;
+
+        return $data;
     }
 
 }

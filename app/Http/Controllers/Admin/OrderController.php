@@ -931,8 +931,7 @@ class OrderController extends Controller
         return false;
     }
 
-    public function checkOrderPayedAjax(Request $request)
-    {
+    public function checkOrderPayedAjax(Request $request){
         if($request->ajax()){
             $order_id = $request->order_id;
             if($order_id){
@@ -972,6 +971,7 @@ class OrderController extends Controller
                     return Response::json(['success'=>true,'message'=>'thành công !','payed_at'=>$order->payed_at]);
                 }
             }
+            
         }
 
         return false;

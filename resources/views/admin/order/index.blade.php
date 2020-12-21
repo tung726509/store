@@ -172,7 +172,7 @@
                   @php
                     $types_of_fee = json_decode($item->types_of_fee,true);
                   @endphp
-                  <td class="text-center">
+                  <td class="text-center">{{-- chức năng thao tác với đơn hàng --}}
                     <div class="btn-group">
                       <button type="button" class="btn btn-light dropdown-toggle waves-effect" data-toggle="dropdown" aria-expanded="true"> <i class="fas fa-cog"></i> </button>
                       <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start">
@@ -209,7 +209,7 @@
                       </div>
                     </div>
                   </td>
-                  <td class="text-center click-underline">
+                  <td class="text-center click-underline">{{-- mã đơn và trạng thái --}}
                     <a class="" href="{{route('administrator.order.detail',['id' => base64_encode( $item->id )])}}">
                       @switch($item->status)
                         @case(1)
@@ -241,7 +241,7 @@
                       <p class="mb-0">{{ $item->status_at->format('H:i d/m/Y') }}</p>
                     </a>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center">{{-- trạng thái thanh toán --}}
                     @php
                       if(Arr::has($types_of_fee,"utd"))
                         $text = 'Chuyển khoản';
@@ -255,7 +255,7 @@
                     @endphp
                     <p class="mb-0 pay-type-text {{ $item->payed_at != null ? 'text-success' : ''}}">{!! $item->payed_at != null ? '<i class="fas fa-check-circle icon-action"></i>' : ''!!}{{ $text }}</p>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center">{{-- thành tiền --}}
                     <p class="mb-0">{{ modifierVnd($item->price != null ? $item->price : 0,'đ') }}</p>
                     @php
                       $ship_fee = 'Freeship';
@@ -269,7 +269,7 @@
                     @endphp
                     <p class="mb-0 {{ $ship_fee == 'Freeship' ? 'badge badge-success p-1' : ''}}">{{ $ship_fee }}</p>
                   </td>
-                  <td class="text-center click-underline">
+                  <td class="text-center click-underline">{{-- khách hàng --}}
                     <a class="hover_link direct-link" style="color:#f9bc0b!important" href="{{route('administrator.customer.detail',['id'=>base64_encode($item->customer->id)])}}">
                       @if($item->customer_id != null && $item->customer_id != "")
                         <p class="text-warning mb-0 text-uppercase">
@@ -279,7 +279,7 @@
                       @endif
                     </a>
                   </td>
-                  <td class="text-center">
+                  <td class="text-center">{{-- người tạo --}}
                     @if($item->user_id != null && $item->user_id != "")
                       <p class="text-info mb-0 text-uppercase">{{ $item->user->name }}</p>
                     @else
@@ -515,20 +515,13 @@
             type: 'post',
             data: {order_id: order_id},
           })
-          .done(function(res) {
+          .done(function(res){
             if(res.success){
-                // if(payed == 'yes'){
-                //   _this.attr('data-payed','no');
-                //   $(`#order_${order_id}`).find('.pay-type-text').removeClass('text-success').addClass('text-secondary');
-                //   $(`#order_${order_id}`).find('.fa-check-circle').remove();
-                //   alertify.success('<i class="fas fa-times animate__animated animate__infinite animate__tada"></i> Xác nhận chưa thanh toán !');
-                // }else if(payed == 'no'){
-                //   _this.attr('data-payed','yes');
-                //   $(`#order_${order_id}`).find('.pay-type-text').prepend('<i class="fas fa-check-circle icon-action"></i>').removeClass('text-secondary').addClass('text-success');
-                //   alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
-                // }
+                // test
+                // end test
                 if(res.payed_at){
                   _this.attr('data-payed','yes');
+                  $(`#order_${order_id}`).find('.fa-check-circle').remove();
                   $(`#order_${order_id}`).find('.pay-type-text').prepend('<i class="fas fa-check-circle icon-action"></i>').removeClass('text-secondary').addClass('text-success');
                   alertify.success('<i class="fas fa-check animate__animated animate__infinite animate__tada"></i> Xác nhận đã thanh toán !');
                 }else{

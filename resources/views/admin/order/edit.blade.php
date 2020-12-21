@@ -762,7 +762,7 @@
     });
 
     // sử dụng button địa chỉ mặc định
-    $(".btn-address-default").click(function(event) {
+    $(".btn-address-default").click(function(event){
       let address_default = $("input[name=address]").attr('data-address');
       $("input[name=address]").val(address_default);
       if(address_default){
@@ -794,7 +794,7 @@
     });
 
     // chọn hình thức thanh toán
-    $('.select-pay-type').change(function(event) {
+    $('.select-pay-type').change(function(event){
       let to_type = $(this).val();
       let value = $(this).find('option:selected').data('value');
       $(this).attr('data-type',to_type).attr('data-value',value);
@@ -860,8 +860,6 @@
           })
         }
     });
-
-    // nếu 
 
     var countInArray = (array, what) => {
       return array.filter(item => item == what).length;
@@ -1030,20 +1028,31 @@
     });
 
     // submit form thì bỏ disabled d_o_b đi
-    $(".update-order").click(function(){
-      $("#d_o_b").removeAttr('disabled');
+    $(".update-order").click(function(event){
+      event.preventDefault();
+      let confirm_pay_btn = $('.confirm-pay-checkbox').is(":checked");
+      if(confirm_pay_btn){
+          Swal.fire({
+            icon: 'info',
+            title: 'Đơn hàng đã thanh toán !',
+            text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
+          })
+      }else{
+        // test
+        
+        // end test
+          $("#editForm").submit();
+          $("#d_o_b").removeAttr('disabled');
+      }
     });
 
     // convert to currency_vietnamese
-    function modifierVnd(number) {
+    function modifierVnd(number){
         var x = number;
         x = x.toLocaleString('en-US', {style : 'currency', currency : 'VND'});
 
         return x;
     }
-
-    ajax
-
-9999  });
+  });
 </script>
 @endpush
