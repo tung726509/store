@@ -30,7 +30,7 @@ class HomeController extends Controller
         $this->new_cookie = cookie('cookie_string', $new_ck_val ,7200);
     }
 
-    public function home(){
+    public function home(Request $request){
         $customer = null;
         $cart_items = null;
         $get_cookie = Cookie::get('cookie_string');
@@ -39,7 +39,15 @@ class HomeController extends Controller
         
         // có cookie
         $customer = null;
-        $this->getCreateCookie($get_cookie);
+        $customer_from_ck = $this->getCreateCookie($get_cookie);
+        $customer = $customer_from_ck['customer'];
+        $request->session()->push('user', 'lechihuy');
+        dd($request->session()->get('user'));
+        if($customer){
+            $request->session()->push('user.username', 'lechihuy');
+        }else{
+            // $card_items = 
+        }
 
         // ưu đãi khách hàng
             $dataImageOption = $this->option_m->getImageOption();
@@ -47,27 +55,28 @@ class HomeController extends Controller
             $use_birth_discount = null;
             $use_free_ship = null;
             $use_transfer_discount = null;
-            // số ưu đãi khách hàng
+
+            // số chương trình ưu đãi khách hàng
             $ict_count = 0;
-            if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount')){
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_birth_discount'))
                 $use_birth_discount = json_decode($arr_incentive_options['use_birth_discount'],true);
                 $ict_count += 1;
-            }
-            if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship')){
+
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_free_ship'))
                 $use_free_ship = json_decode($arr_incentive_options['use_free_ship'],true);
                 $ict_count += 1;
-            }
-            if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount')){
+            
+            if($this->option_m->checkIncentive($arr_incentive_options,'use_transfer_discount'))
                 $use_transfer_discount = json_decode($arr_incentive_options['use_transfer_discount'],true);
                 $ict_count += 1;
-            }
 
-        $models = $this->product_m->with(['tags','product_images']);
-        $products = $models->orderBy('created_at','desc')->get();
-        $best_sell_products = $models->orderBy('created_at','desc')->get();
-    	$new_products = clone $products->take(10);
+        // các thể loại sản phẩm
+            $models = $this->product_m->with(['tags','product_images']);
+            $products = $models->orderBy('created_at','desc')->get();
+            $best_sell_products = $models->orderBy('created_at','desc')->get();
+	        $new_products = clone $products->take(10);
 
-    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count'))->withCookie($this->new_cookie);
+    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','dataImageOption','use_birth_discount','use_free_ship','use_transfer_discount','ict_count','customer'))->withCookie($this->new_cookie);
     }
 
     public function categories(Request $request,$code){
@@ -129,21 +138,33 @@ class HomeController extends Controller
     	return response()->view('homepage.product-detail.index',compact('product','related_products','dataImageOption','big_b_i','med_b_i','small_b_i'))->withCookie($this->new_cookie);
     }
 
+    public function myCart(Request $request)
+    {
+        $dataImageOption = $this->option_m->getImageOption();
+        $big_b_i = $dataImageOption['big_b_i'];
+        $med_b_i = $dataImageOption['med_b_i'];
+        $small_b_i = $dataImageOption['small_b_i'];
+
+        return response()->view('homepage.mycart.index',compact('dataImageOption','big_b_i','med_b_i','small_b_i'))->withCookie($this->new_cookie);
+    }
+
     public function getCreateCookie($get_cookie)
     {
         $data = [];
         $customer = null;
         
-        if($get_cookie != null){
+        if($get_cookie){
             $cookie = $this->cookiee_m->where('cookie_string',$get_cookie)->first();
             if($cookie){
                 if($cookie->customer_id){
                     $customer = $this->customer_m->with([])->find($cookie->customer_id);
                 }
                 $cookie->update(['cookie_string'=>$this->new_ck_val]);              
+            }else{
+                $this->cookiee_m->create(['cookie_string'=>$this->new_ck_val,'created_at'=>Carbon::now(),'updated'=>null]);   
             }
         }else{//ko có cookie
-            $this->cookiee_m->create(['cookie_string'=>$this->new_ck_val,'created_at'=>Carbon::now(),'updated'=>null]);        
+            $this->cookiee_m->create(['cookie_string'=>$this->new_ck_val,'created_at'=>Carbon::now(),'updated'=>null]);   
         }
 
         $data['customer'] = $customer;

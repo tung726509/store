@@ -508,10 +508,11 @@ class ComposerStaticInitb771bf5df41fee0b3bd046f150b262e4
     );
 
     public static $classMap = array (
+        'App\\CartItem' => __DIR__ . '/../..' . '/app/CartItem.php',
         'App\\Category' => __DIR__ . '/../..' . '/app/Category.php',
         'App\\CodeInfo' => __DIR__ . '/../..' . '/app/CodeInfo.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
-        'App\\Cookie' => __DIR__ . '/../..' . '/app/Cookie.php',
+        'App\\Cookiee' => __DIR__ . '/../..' . '/app/Cookiee.php',
         'App\\Customer' => __DIR__ . '/../..' . '/app/Customer.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/Auth/ConfirmPasswordController.php',
@@ -522,6 +523,7 @@ class ComposerStaticInitb771bf5df41fee0b3bd046f150b262e4
         'App\\Http\\Controllers\\Admin\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Admin\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CategoryController.php',
         'App\\Http\\Controllers\\Admin\\CustomerController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/CustomerController.php',
+        'App\\Http\\Controllers\\Admin\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DashboardController.php',
         'App\\Http\\Controllers\\Admin\\OptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OptionController.php',
         'App\\Http\\Controllers\\Admin\\OrderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OrderController.php',
         'App\\Http\\Controllers\\Admin\\OrderItemController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/OrderItemController.php',
@@ -562,6 +564,7 @@ class ComposerStaticInitb771bf5df41fee0b3bd046f150b262e4
         'App\\Tag' => __DIR__ . '/../..' . '/app/Tag.php',
         'App\\Traits\\CurrencyUnitVn' => __DIR__ . '/../..' . '/app/Traits/CurrencyUnitVn.php',
         'App\\Traits\\Filterable' => __DIR__ . '/../..' . '/app/Traits/Filterable.php',
+        'App\\Traits\\GenerateRandomString' => __DIR__ . '/../..' . '/app/Traits/GenerateRandomString.php',
         'App\\Traits\\PhoneExistable' => __DIR__ . '/../..' . '/app/Traits/PhoneExistable.php',
         'App\\Traits\\Whlogable' => __DIR__ . '/../..' . '/app/Traits/Whlogable.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',

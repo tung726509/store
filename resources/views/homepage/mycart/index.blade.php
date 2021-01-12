@@ -14,9 +14,9 @@
        line-height:1;
     }
     .bgc-white{
-     background-color: white;
-   }
-   .link-black{
+     background-color: white;}
+
+      .link-black{
      color: black;
    }
    .brcr-icon-lr{

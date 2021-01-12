@@ -63,7 +63,6 @@ class Option extends Model
 
         if(Arr::has($arr_options,'s_b_i')){
             $data['small_b_i'] = $arr_options['s_b_i'];
-            // $data['small_b_i'] = json_decode($arr_options['s_b_i']['content'],true);
         }
 
         return $data;
@@ -80,9 +79,11 @@ class Option extends Model
             if($data['key'] == 1){
                 return true;
             }
-        }else{
+
             return false;
         }
+
+        return false;
     }
 
 }

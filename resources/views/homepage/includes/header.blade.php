@@ -1,3 +1,8 @@
+<style>
+  #mini-cart .cart-head:after {
+    content: "";
+  }
+</style>
 <div class="header-wrapper">
   <header id="header" class="header-builder header-loaded" style="">
      <div class="header-main" style="top: 0px;">
@@ -45,17 +50,17 @@
                     </div>
                     <!-- header -->
                  </div>
-                 <!-- porto-sicon-box -->
               </div>
-              <div class="custom-html"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/my-account/" class="my-account" title="My Account"><i class="porto-icon-user-2"></i></a></div>
-              <div class="custom-html mr-1"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/wishlist/" class="wishlist" title="Wishlist"><i class="porto-icon-wishlist-2"></i></a></div>
+
+              {{-- <div class="custom-html"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/my-account/" class="my-account" title="My Account"><i class="porto-icon-user-2"></i></a></div> --}}
+              {{-- <div class="custom-html mr-1"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/wishlist/" class="wishlist" title="Wishlist"><i class="porto-icon-wishlist-2"></i></a></div> --}}
               <div id="mini-cart" class="mini-cart minicart-arrow-alt">
-                 <div class="cart-head"> <span class="cart-icon"><i class="minicart-icon porto-icon-bag-2"></i><span class="cart-items"><i class="fas fa-spinner fa-pulse"></i></span></span><span class="cart-items-text"><i class="fas fa-spinner fa-pulse"></i></span></div>
-                 <div class="cart-popup widget_shopping_cart">
-                    <div class="widget_shopping_cart_content">
-                       <div class="cart-loading"></div>
-                    </div>
-                 </div>
+                <div class="cart-head">
+                    <span class="cart-icon">
+                      <i class="minicart-icon porto-icon-bag-2"></i>
+                        <span class="cart-items">12</span>
+                    </span>
+                </div>
               </div>
            </div>
         </div>
@@ -73,12 +78,12 @@
                        <div class="inner" style="">
                           <ul class="sub-menu">
                           	@forelse($categories as $item)
-                             <li id="nav-menu-item-2021" class="menu-item menu-item-type-custom menu-item-object-custom" data-cols="1">
-                             	<a href="{{route('categories',['code'=>$item->code])}}">{{ $item->pretty_name }} <span class="tip" style="">NEW</span></a>
-                             </li>
-                             @empty
-                             <h1>chưa có danh mục nào</h1>
-                             @endforelse
+                              <li id="nav-menu-item-2021" class="menu-item menu-item-type-custom menu-item-object-custom" data-cols="1">
+                             	  <a href="{{route('categories',['code'=>$item->code])}}">{{ $item->pretty_name }} <span class="tip" style="">NEW</span></a>
+                              </li>
+                            @empty
+                              <h1>chưa có danh mục nào</h1>
+                            @endforelse
                           </ul>
                        </div>
                     </div>

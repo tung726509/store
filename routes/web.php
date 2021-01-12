@@ -8,6 +8,8 @@ Route::get('/home', 'HomeController@home')->name('home');
 Route::get('/categories/{code}', 'HomeController@categories')->name('categories');
 // detail
 Route::get('/detail/{product_id}', 'HomeController@productDetail')->name('detail');
+// mycart
+Route::get('/mycart', 'HomeController@productDetail')->name('detail');
 
 // Route::get('/detail/{product_id}', 'HomeController@productDetail')->middleware('cors')->name('detail');
 // Route::get('/home', function () {
@@ -22,9 +24,7 @@ Route::get('/detail/{product_id}', 'HomeController@productDetail')->name('detail
 //     return view('homepage.detail.index');
 // })->name('detail_product');
 
-Route::get('/mycart', function () {
-    return view('homepage.mycart.index');
-})->name('mycart');
+Route::get('/mycart', 'HomeController@myCart')->name('mycart');
 
 // Route::get('/aboutus', function () {
 //     return view('homepage.aboutus.index');

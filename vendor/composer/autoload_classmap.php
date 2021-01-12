@@ -6,10 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\CartItem' => $baseDir . '/app/CartItem.php',
     'App\\Category' => $baseDir . '/app/Category.php',
     'App\\CodeInfo' => $baseDir . '/app/CodeInfo.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
-    'App\\Cookie' => $baseDir . '/app/Cookie.php',
+    'App\\Cookiee' => $baseDir . '/app/Cookiee.php',
     'App\\Customer' => $baseDir . '/app/Customer.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\Admin\\Auth\\ConfirmPasswordController' => $baseDir . '/app/Http/Controllers/Admin/Auth/ConfirmPasswordController.php',
@@ -20,6 +21,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\Auth\\VerificationController' => $baseDir . '/app/Http/Controllers/Admin/Auth/VerificationController.php',
     'App\\Http\\Controllers\\Admin\\CategoryController' => $baseDir . '/app/Http/Controllers/Admin/CategoryController.php',
     'App\\Http\\Controllers\\Admin\\CustomerController' => $baseDir . '/app/Http/Controllers/Admin/CustomerController.php',
+    'App\\Http\\Controllers\\Admin\\DashboardController' => $baseDir . '/app/Http/Controllers/Admin/DashboardController.php',
     'App\\Http\\Controllers\\Admin\\OptionController' => $baseDir . '/app/Http/Controllers/Admin/OptionController.php',
     'App\\Http\\Controllers\\Admin\\OrderController' => $baseDir . '/app/Http/Controllers/Admin/OrderController.php',
     'App\\Http\\Controllers\\Admin\\OrderItemController' => $baseDir . '/app/Http/Controllers/Admin/OrderItemController.php',
@@ -60,6 +62,7 @@ return array(
     'App\\Tag' => $baseDir . '/app/Tag.php',
     'App\\Traits\\CurrencyUnitVn' => $baseDir . '/app/Traits/CurrencyUnitVn.php',
     'App\\Traits\\Filterable' => $baseDir . '/app/Traits/Filterable.php',
+    'App\\Traits\\GenerateRandomString' => $baseDir . '/app/Traits/GenerateRandomString.php',
     'App\\Traits\\PhoneExistable' => $baseDir . '/app/Traits/PhoneExistable.php',
     'App\\Traits\\Whlogable' => $baseDir . '/app/Traits/Whlogable.php',
     'App\\User' => $baseDir . '/app/User.php',

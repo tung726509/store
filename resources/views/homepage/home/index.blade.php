@@ -1,4 +1,3 @@
-
 @extends('homepage.layouts.app')
 
 @push('page-styles')
