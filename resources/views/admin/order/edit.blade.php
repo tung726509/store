@@ -365,7 +365,7 @@
                             <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                           </div>
                         </div>
-                        <p class="text-validate mb-0" id="tv_d_o_b_m"></p>
+                        <p class="text-validate mb-0 d-block" id="tv_d_o_b_m"></p>
                       </div>
 
                       {{-- địa chỉ --}}
@@ -957,6 +957,11 @@
         let d_o_b = $("#d_o_b_m").val();
         let address = $("#address_m").val();
         if(name && phone && address){
+          $("#name_m").removeClass('parsley-danger').addClass('parsley-success').next().html('');
+          $("#phone_m").removeClass('parsley-danger').addClass('parsley-success').next().html('');
+          $("#address_m").removeClass('parsley-danger').addClass('parsley-success').next().html('');
+          $("#d_o_b_m").removeClass('parsley-danger').addClass('parsley-success').parent().next().html('');
+
           $.ajax({
             url: '{{ route('administrator.order.customer_edit') }}',
             type: 'post',
@@ -977,7 +982,7 @@
                     $("#address_m").removeClass('parsley-success').addClass('parsley-danger').next().html(res.errors.address[0]);
                   }
                   if(obj_errors.includes('d_o_b')){
-                    $("#d_o_b_m").removeClass('parsley-success').addClass('parsley-danger').next().html(res.errors.d_o_b[0]);
+                    $("#d_o_b_m").removeClass('parsley-success').addClass('parsley-danger').parent().next().html(res.errors.d_o_b[0]);
                   }
                 Swal.fire({ 
                     icon: 'warning',

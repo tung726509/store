@@ -859,6 +859,7 @@ class OrderController extends Controller
                 'address.required' => 'Vui lòng nhập địa chỉ',
                 'address.min' => 'Tối thiểu 1 kí tụ',
                 'address.max' => 'Tối đa 255 kí tụ',
+                'd_o_b.date' => 'Định dạng ngày sinh không hợp lệ',
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);

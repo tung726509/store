@@ -265,7 +265,7 @@
                                           <li class="product-col product-default product type-product post-1366 status-publish first instock product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-clothes product_tag-fashion has-post-thumbnail sale downloadable shipping-taxable purchasable product-type-simple">
                                              <div class="product-inner">
                                                 <div class="product-image bor-radius-1">
-                                                   <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
+                                                   <a class="direct-link" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                       <div class="labels">
                                                          <div class="onhot">Hot</div>
                                                          @php
@@ -309,7 +309,7 @@
                                                             </a>
                                                        @endif
                                                    </span>
-                                                   <a class="product-loop-title" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
+                                                   <a class="product-loop-title direct-link" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                       <h3 class="woocommerce-loop-product__title">{{ $item->pretty_name }}</h3>
                                                    </a>
                                                    <div class="rating-wrap">
@@ -388,7 +388,7 @@
                                                 @forelse($categories as $item)
                                                   <div class="owl-item">
                                                     <li class="product-category product-col">
-                                                      <a href="{{route('categories',['code' => $item->code])}}">
+                                                      <a class="direct-link" href="{{route('categories',['code' => $item->code])}}">
                                                         <span class="thumb-info align-center">
                                                           <span class="thumb-info-wrapper tf-none"><img src="{{asset('homepage/images/'.$item->image_name)}}" alt="Accessories" width="300" height="300"></span> 
                                                             <span class="thumb-info-wrap">

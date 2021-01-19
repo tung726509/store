@@ -219,7 +219,7 @@
                                                        <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
                                                             <div class="product-inner">
                                                                <div class="product-image bor-radius-1">
-                                                                  <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
+                                                                  <a class="direct-link" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                                      <div class="labels">
                                                                          <div class="onhot">Hot</div>
                                                                          @php
@@ -375,7 +375,7 @@
                                                        <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
                                                             <div class="product-inner">
                                                                <div class="product-image bor-radius-1">
-                                                                  <a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
+                                                                  <a class="direct-link" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                                      <div class="labels">
                                                                          <div class="onhot">Hot</div>
                                                                          @php
@@ -509,7 +509,7 @@
                                                 @forelse($categories as $item)
                                                   <div class="owl-item">
                                                     <li class="product-category product-col">
-                                                      <a href="{{route('categories',['code' => $item->code])}}">
+                                                      <a class="direct-link" href="{{route('categories',['code' => $item->code])}}">
                                                         <span class="thumb-info align-center">
                                                           <span class="thumb-info-wrapper tf-none"><img src="{{asset('homepage/images/'.$item->image_name)}}" alt="Accessories" width="300" height="300"></span> 
                                                             <span class="thumb-info-wrap">

@@ -446,35 +446,35 @@
 		                               <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
 		                                  	<div class="product-inner">
 		                                     	<div class="product-image bor-radius-1">
-		                                        	<a href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
-		                                           	<div class="labels">
-			                                              <div class="onhot">Hot</div>
-			                                              @php
-			                                              if($now_timestamp <= $expired_discount_timestamp_item){
-			                                              @endphp
-			                                              <div class="onsale">giảm {{ $item->discount }}%</div>
-			                                              @php
-			                                              }
-			                                              @endphp
-		                                           	</div>
-		                                           	<div class="inner img-effect bor-radius-1">
-		                                           		@if($item->product_images->isNotEmpty())
-		                                           			<img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="" />
-		                                           			@if($item->product_images->count() >= 2)
-		                                           			<img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images[1]->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images[1]->name)}}" class="hover-image" alt="" />
-		                                           			@endif
-	                                           			@else
-	                                           				<img class="" width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="" />
-	                                           				<img width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="hover-image" alt="" />
-	                                           			@endif
-		                                           	</div>
-		                                           	@if($now_timestamp <= $expired_discount_timestamp_item)
-			                                           	<div class="sale-product-daily-deal">
-			                                              	<h5 class="daily-deal-title">
-			                                              		Kết thúc : {{ ($diff->y > 0 ? $diff->y.' năm':'').' '.($diff->m > 0 ? $diff->m.' tháng':'').' '.($diff->d > 0 ? $diff->d.' ngày':'').' '.($diff->hours > 0 ? $diff->hours.' giờ':'').' '.($diff->minutes > 0 ? $diff->minutes.' phút':'') }}
-			                                              	</h5>
+		                                        	<a class="direct-link" href="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
+			                                           	<div class="labels">
+				                                              <div class="onhot">Hot</div>
+				                                              @php
+				                                              if($now_timestamp <= $expired_discount_timestamp_item){
+				                                              @endphp
+				                                              <div class="onsale">giảm {{ $item->discount }}%</div>
+				                                              @php
+				                                              }
+				                                              @endphp
 			                                           	</div>
-		                                           	@endif
+			                                           	<div class="inner img-effect bor-radius-1">
+			                                           		@if($item->product_images->isNotEmpty())
+			                                           			<img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images->first()->name)}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="" />
+			                                           			@if($item->product_images->count() >= 2)
+			                                           			<img width="300" height="300" src="{{asset('admini/productImages/'.$item->product_images[1]->name)}}" data-oi="{{asset('admini/productImages/'.$item->product_images[1]->name)}}" class="hover-image" alt="" />
+			                                           			@endif
+		                                           			@else
+		                                           				<img class="" width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="" />
+		                                           				<img width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="hover-image" alt="" />
+		                                           			@endif
+			                                           	</div>
+			                                           	@if($now_timestamp <= $expired_discount_timestamp_item)
+				                                           	<div class="sale-product-daily-deal">
+				                                              	<h5 class="daily-deal-title">
+				                                              		Kết thúc : {{ ($diff->y > 0 ? $diff->y.' năm':'').' '.($diff->m > 0 ? $diff->m.' tháng':'').' '.($diff->d > 0 ? $diff->d.' ngày':'').' '.($diff->hours > 0 ? $diff->hours.' giờ':'').' '.($diff->minutes > 0 ? $diff->minutes.' phút':'') }}
+				                                              	</h5>
+				                                           	</div>
+			                                           	@endif
 		                                        	</a>
 		                                     	</div>
 		                                     	<div class="product-content">

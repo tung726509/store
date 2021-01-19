@@ -46,7 +46,7 @@
 @endsection
 @section('content')
 <div class="row">
-  <div class="col-12">
+  <div class="col-12 px-0">
     <div class="card animate__animated animate__rollIn animate__faster">
       <div class="table-rep-plugin">
         {{-- TICKET --}}
@@ -256,7 +256,7 @@
                     <p class="mb-0 pay-type-text {{ $item->payed_at != null ? 'text-success' : ''}}">{!! $item->payed_at != null ? '<i class="fas fa-check-circle icon-action"></i>' : ''!!}{{ $text }}</p>
                   </td>
                   <td class="text-center">{{-- thành tiền --}}
-                    <p class="mb-0">{{ modifierVnd($item->price != null ? $item->price : 0,'đ') }}</p>
+                    <p class="mb-0">Tổng : {{ modifierVnd($item->price != null ? $item->price : 0,'đ') }}</p>
                     @php
                       $ship_fee = 'Freeship';
                       if($item->ship_fee != null){

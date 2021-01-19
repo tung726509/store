@@ -36,7 +36,7 @@
     <div id="wrapper">
       {{-- sidebar-left --}}
       @include('admin.includes.sidebar-left') 
-
+      
       {{-- content-page --}}
       <div class="content-page">
          {{-- topbar --}}
@@ -72,10 +72,9 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
-        $(".direct-link").click(function(){
+        $(".direct-link").click(function(event){
           $('#preloader').css('display', '');
         });
-
       });   
     </script>
 

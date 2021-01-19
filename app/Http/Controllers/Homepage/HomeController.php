@@ -42,7 +42,7 @@ class HomeController extends Controller
         $customer_from_ck = $this->getCreateCookie($get_cookie);
         $customer = $customer_from_ck['customer'];
         $request->session()->push('user', 'lechihuy');
-        dd($request->session()->get('user'));
+        // dd($request->session()->get('user'));
         if($customer){
             $request->session()->push('user.username', 'lechihuy');
         }else{
