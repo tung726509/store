@@ -18,6 +18,7 @@ use Spatie\Permission\Models\Permission;
 class RoleController extends Controller
 {
     public function __construct(){
+        $this->middleware('auth');
     	$this->_m = new Role;
     	$this->permission_m = new Permission;
     }

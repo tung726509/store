@@ -14,6 +14,11 @@ use App\Product;;
 
 class WarehouseController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth');
+    }i
+
     public function index(){
     	$warehouses = Warehouse::with(['wh_items'])->get();
 

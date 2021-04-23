@@ -15,6 +15,7 @@ class CustomerController extends Controller
 {
 	function __construct()
 	{
+        $this->middleware('auth');
 		$this->_m = new Customer();
 	}
 

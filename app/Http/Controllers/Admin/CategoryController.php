@@ -15,7 +15,8 @@ use App\Category;
 class CategoryController extends Controller
 {
     public function __construct(){
-        $this->_m = new Category;
+        $this->middleware('auth');
+        $this->_m = new Category;  
     }
 
     public function index(){
@@ -38,7 +39,7 @@ class CategoryController extends Controller
 
     public function detail($value='')
     {
-    	# code...
+    	
     }
 
     public function getAdd(){
@@ -46,8 +47,7 @@ class CategoryController extends Controller
     }
 
 
-    public function add(Request $request)
-    {
+    public function add(Request $request){
     	$rules = [
             'code' => ['required','alpha_num','min:1','max:30','unique:categories,code'],
             'pretty_name' => ['required','min:1','max:40'],
@@ -114,8 +114,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function getEdit(Request $request,$id)
-    {
+    public function getEdit(Request $request,$id){
         $id = base64_decode($id);
     	$category = $this->_m->where('id',$id)->first();
     	if($category){
@@ -126,8 +125,7 @@ class CategoryController extends Controller
     	}
     }
 
-    public function edit(Request $request,$id)
-    {
+    public function edit(Request $request,$id){
         $id = base64_decode($id);
     	$rules = [
             'code' => ['required','alpha_num','min:1','max:30','unique:categories,code,'.$id.',id'],
@@ -154,7 +152,7 @@ class CategoryController extends Controller
             return back()->withInput()->withErrors($validator);
         }else{
             // dd($request->all());
-        	$code = $request->input('code');
+            $code = $request->input('code');
         	$pretty_name = $request->input('pretty_name');
         	$category = $this->_m->find($id);
 

@@ -22,6 +22,7 @@ class ProductController extends Controller
 {
     function __construct()
     {
+        $this->middleware('auth');
         $this->_m = new Product();
         $this->pd_m = new ProductDescription();
         $this->pi_m = new ProductImage();

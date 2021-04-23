@@ -12,7 +12,13 @@ use App\Tag;
 
 class TagController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(){
+
     	$per_page = request()->query('per', 10);
         $search = request()->query('s','');
         $param = [];

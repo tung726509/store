@@ -20,6 +20,7 @@ class OptionController extends Controller
 {
 	function __construct()
 	{
+        $this->middleware('auth');
 		$this->_m = new Option();
 		// discount sinh nhật mặc định
 		$this->bd_discount_default_key = 0; 

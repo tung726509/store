@@ -3,8 +3,9 @@
 Auth::routes();
 
 Route::get('/', function () {
+
     return view('admin.dashboard');
-})->name('dashboard');
+})->middleware('auth')->name('dashboard');
 
 Route::prefix('category')->name('category.')->group(function(){
 	Route::get('/', 'CategoryController@index')->name('index');//->where('show', 'trashed')->name('index');

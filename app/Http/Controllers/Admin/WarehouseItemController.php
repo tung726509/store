@@ -18,6 +18,7 @@ class WarehouseItemController extends Controller
 {
 	function __construct()
 	{
+        $this->middleware('auth');
 		$this->_m = new WarehouseItem();
 		$this->product_m = new Product();
 		$this->wh_m = new Warehouse();

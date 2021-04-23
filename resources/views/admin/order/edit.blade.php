@@ -55,6 +55,9 @@
       left: 43px;
       content: 'Đã thanh toán';
     }
+    .ui-datepicker{
+      z-index: 1050!important;
+    }
   </style>
 @endpush
 
@@ -287,7 +290,7 @@
               @if($use_birth_discount['key'] == 1)
                 <div class="form-row">
                   <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                    <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
                     <label for="checkbox110">Giảm giá {{$use_birth_discount['value']}}% trong tháng sinh nhật khách .</label>
                   </div>
                 </div>
@@ -295,7 +298,7 @@
               @if($use_transfer_discount['key'] == 1)
                 <div class="form-row">
                   <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                    <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
                     <label for="checkbox110">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
                   </div>
                 </div>

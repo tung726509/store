@@ -18,12 +18,10 @@ class RouteServiceProvider extends ServiceProvider
     protected $namespace_admin = 'App\Http\Controllers\Admin';
     protected $namespace_web = 'App\Http\Controllers\Homepage';
 
-    public const HOME = '/administrator';
+    public const HOME = '/admin_bts';
 
     public function boot()
     {
-        //
-
         parent::boot();
     }
 
@@ -53,7 +51,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapAdminRoutes()
     {
-        Route::prefix('administrator')
+        Route::prefix('admin_bts')
             ->name('administrator.')
             ->middleware('web')
             ->namespace($this->namespace_admin)

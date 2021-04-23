@@ -1,0 +1,33 @@
+.nice-number {
+  display: inline-flex;
+  justify-content: stretch;
+}
+
+.nice-number input {
+  vertical-align: middle;
+  -moz-appearance: textfield;
+  box-sizing: content-box;
+  margin: 0;
+  text-align: center;
+  padding: 0px 8px;
+}
+
+.minus-qty{
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border: 0px;
+  padidng: 6px 10px;
+}
+
+.plus-qty{
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  border: 0px;
+  padding: 6px 10px;
+}
+
+.nice-number input::-webkit-inner-spin-button,
+.nice-number input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

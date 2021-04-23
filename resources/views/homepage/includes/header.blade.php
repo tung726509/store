@@ -51,14 +51,21 @@
                     <!-- header -->
                  </div>
               </div>
-
-              {{-- <div class="custom-html"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/my-account/" class="my-account" title="My Account"><i class="porto-icon-user-2"></i></a></div> --}}
-              {{-- <div class="custom-html mr-1"><a href="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/wishlist/" class="wishlist" title="Wishlist"><i class="porto-icon-wishlist-2"></i></a></div> --}}
+              @if($customer)
+                <div class="custom-html">
+                  <a href="javascript:;" class="header-icon-user">
+                    <i class="far fa-user"></i>
+                  </a>
+                </div>
+                <div class="custom-html mr-1">
+                  <a href="javascript:;" class="header-phone">{{$customer->name ? $customer->name : $customer->phone }}</a>
+                </div>
+              @endif
               <div id="mini-cart" class="mini-cart minicart-arrow-alt">
-                <div class="cart-head">
+                <div class="cart-head header-icon-cart">
                     <span class="cart-icon">
                       <i class="minicart-icon porto-icon-bag-2"></i>
-                        <span class="cart-items">12</span>
+                        <span class="cart-items">0</span>
                     </span>
                 </div>
               </div>
@@ -96,3 +103,6 @@
      </div>
   </header>
 </div>
+<script type="text/javascript">
+
+</script>
