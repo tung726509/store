@@ -3,7 +3,7 @@ WebFontConfig = {
   };
   (function(d) {
   var wf = d.createElement('script'), s = d.scripts[0];
-  wf.src = 'http://store.min:81/homepage/js/webfont.js';
+  // wf.src = 'http://store.min:81/homepage/js/webfont.js';
   wf.async = true;
   s.parentNode.insertBefore(wf, s);
   })(document);

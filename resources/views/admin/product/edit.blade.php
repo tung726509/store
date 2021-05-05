@@ -90,6 +90,7 @@
 									<span class="invalid-feedback"><strong>{{ $message }}</strong></span>
 		                    	@enderror
 					      	</div>
+
 					      	<div class="form-group col-md-6">
 					         	<label for="price" class="col-form-label">Giá bán <span class="text-danger">*</span></label>
 					         	<input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" placeholder="vd : 100000" required value="{{ old('price',$product->price) }}">
@@ -128,6 +129,7 @@
 				</div>
 	        </div>
 	    </div>
+
 	    {{-- chương trình giảm giá --}}
 	   	<div class="col-md-4 col-sm-12 col-12">
 	        <div class="card mb-2 animate__animated animate__rollIn animate__faster">
@@ -172,6 +174,7 @@
 					</form>
 				</div>
 	        </div>
+
 	        <div class="card mb-2 p-1 animate__animated animate__rollIn animate__faster">
 	        	{{-- <div class="card-body"> --}}
 		        	<div class="form-row">

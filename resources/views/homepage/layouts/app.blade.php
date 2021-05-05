@@ -8,20 +8,21 @@
   	 	<link rel="shortcut icon" href="{{asset('homepage/images/favicon.ico')}}" type="image/x-icon">
 	   	<script src="{{asset('homepage/js/webfont.js')}}" async=""></script>
 
-	   	<script>document.documentElement.className = document.documentElement.className + ' yes-js js_active js'</script>
+	   	{{-- <script>document.documentElement.className = document.documentElement.className + ' yes-js js_active js'</script> --}}
 	   	<title>T-store {{-- | Cửa hàng tạp pí lù --}}</title>
 
-	   	<style id="woocommerce-inline-inline-css">.woocommerce form .form-row .required { visibility: visible; }</style>
+	   	{{-- <style id="woocommerce-inline-inline-css">.woocommerce form .form-row .required { visibility: visible; }</style> --}}
 
-	   	<link rel="stylesheet" id="fvm-header-0-css" href="{{asset('homepage/css/header-cd6f63a9-1534170389.min.css')}}" media="all">
+	   	<link rel="stylesheet" href="{{asset('homepage/css/header-cd6.min.css')}}" media="all">
 
-	   	<script src="{{asset('homepage/js/header-cb050ccd-1534170389.min.js')}}"></script>
+	   	<script src="{{asset('homepage/js/header-cb05.min.js')}}"></script>
 		<script src="{{asset('homepage/js/head-js-1.js')}}"></script>
+
 		@stack('libs-styles')
 
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,500,600,700,800%7CPoppins:200,300,400,500,600,700,800%7COswald:400,600,700" media="all">
 
-	   	<noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript>
+	   	{{-- <noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript> --}}
 
 	   	<script src="https://kit.fontawesome.com/eb07484667.js" crossorigin="anonymous"></script>
         @stack('page-styles')
@@ -43,10 +44,11 @@
 		{{-- menu màn hình điện thoại --}}
 		@include('homepage.includes.side-nav-panel')
 	
+		{{-- <script src="{{asset('homepage/js/jquery-3.5.0.min.js')}}"></script> --}}
 		<script src="{{asset('homepage/js/homepage-app-1.js')}}"></script>
-		<script src="{{asset('homepage/js/footer-982cab25-1534170389.min.js')}}"></script>
-		<script src="{{asset('homepage/js/homepage-app-2.js')}}"></script>
-		<script id="porto-script-jquery-scrollbar" src="{{asset('homepage/js/jquery.scrollbar.min.js')}}"></script>
+		{{-- <script src="{{asset('homepage/js/homepage-app-2.js')}}"></script> --}}
+		<script src="{{asset('homepage/js/footer-982.min.js')}}"></script>
+		{{-- <script id="porto-script-jquery-scrollbar" src="{{asset('homepage/js/jquery.scrollbar.min.js')}}"></script> --}}
 
 		<div id="topcontrol" title="" style="position: fixed; bottom: 0px; opacity: 1; cursor: pointer;"><i class="fas fa-chevron-up"></i></div>
 
@@ -61,6 +63,12 @@
 		          	jQuery("#loader").fadeIn();
 			    	jQuery("#preloader").fadeIn();
 		        });
+
+		        jQuery.ajaxSetup({
+				    headers: {
+				        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+				    }
+				});
 			});
 		</script>
 

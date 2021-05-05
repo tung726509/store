@@ -81,7 +81,6 @@ class ProductController extends Controller
 
     public function add(Request $request)
     {   
-
 		$rules = [
             'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku'],
             'pretty_name' => ['required','string','min:1','max:100'],
@@ -146,6 +145,7 @@ class ProductController extends Controller
         }
 
         $tags = $this->tag_m->get();
+        $categories = $this->category_m->get();
 
         $tags_of_product = [];
         if($product->tags != null){
@@ -153,7 +153,7 @@ class ProductController extends Controller
         }
         
     	if($product){
-    		return view('admin.product.edit',compact('product','tags','tags_of_product'));
+    		return view('admin.product.edit',compact('product','tags','categories','tags_of_product'));
     	}
     }
 

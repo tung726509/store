@@ -6,6 +6,7 @@
     	content: '';
 	}
 </style>
+
 <div id="side-nav-panel" class="">
 	<a href="#" class="side-nav-panel-close"><i class="fas fa-times"></i></a>
 	<div class="menu-wrap">

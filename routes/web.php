@@ -23,5 +23,5 @@ Route::get('/mycart', 'HomeController@myCart')->name('mycart');
 
 // ajax
 Route::prefix('ajax')->name('ajax.')->group(function(){
-	Route::get('/get-customer-by-phone', 'AjaxController@getCustomerByPhone')->name('get_customer_by_phone');
+	Route::post('/attach-customer-with-cookie', 'AjaxController@attachCustomerWithCookie')->name('attach_customer_with_cookie');
 });

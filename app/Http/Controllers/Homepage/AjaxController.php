@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Response;
 
 use App\Customer;
+use App\Cookiee;
 
 class AjaxController extends Controller
 {
@@ -21,17 +22,27 @@ class AjaxController extends Controller
         $this->customer_m = new Customer();
     }
 
-    public function getCustomerByPhone(Request $request)
+    public function attachCustomerWithCookie(Request $request)
     {
+        // dd(Cookie::get('cookie_string'));
 		$customer = null;
     	if($request->ajax()){
 	    	$phone = $request->phone;
-    		$customer = Customer::where('phone',$phone)->first();
-    		if($customer){
-    			
-    		}
+            $customer = Customer::firstOrCreate([
+                'phone' => $phone
+            ], [
 
-    		return Response::json(['customer' => $customer]);
+            ]);
+
+            if($customer){
+                $cookie_update = Cookiee::where('cookie_string',Cookie::get('cookie_string'))->update([
+                    'customer_id' => $customer->id
+                ]);
+
+                return Response::json(['success' => true,'customer' => $customer]);
+            }else{
+                return Response::json(['success' => false]);
+            }
     	}
 
     	return false;
