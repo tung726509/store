@@ -44,11 +44,12 @@
 		{{-- menu màn hình điện thoại --}}
 		@include('homepage.includes.side-nav-panel')
 	
-		{{-- <script src="{{asset('homepage/js/jquery-3.5.0.min.js')}}"></script> --}}
 		<script src="{{asset('homepage/js/homepage-app-1.js')}}"></script>
 		{{-- <script src="{{asset('homepage/js/homepage-app-2.js')}}"></script> --}}
 		<script src="{{asset('homepage/js/footer-982.min.js')}}"></script>
-		{{-- <script id="porto-script-jquery-scrollbar" src="{{asset('homepage/js/jquery.scrollbar.min.js')}}"></script> --}}
+
+		{{-- sweer alert 2 --}}
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 		<div id="topcontrol" title="" style="position: fixed; bottom: 0px; opacity: 1; cursor: pointer;"><i class="fas fa-chevron-up"></i></div>
 

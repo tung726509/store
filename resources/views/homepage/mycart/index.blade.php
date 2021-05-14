@@ -56,7 +56,7 @@
                                                                 </div>
                                                                 <div class="mycart-body">
                                                                     @forelse($cart_items as $item)
-                                                                        <div class="mycart-item">
+                                                                        <div class="mycart-item" id="mc_item_{{ $item->id }}">
                                                                             <div class="mycart-item-p product-image">
                                                                                 <div class="text-center">
                                                                                     <a href="#">
@@ -66,28 +66,43 @@
                                                                             </div>
                                                                             <div class="mycart-item-p product-qty">
                                                                                 <div class="form-row mb-2 pl-2">
-                                                                                    <p class="text-lowercase mb-0">{{ $item->product->pretty_name }} <i class="fas fa-arrow-down text-info ml-2"></i><span class="text-info">{{ $item->product->discount }}%</span></p>
+                                                                                    @php
+                                                                                        $now = Carbon\Carbon::now();
+                                                                                        $price = $item->product->price;
+                                                                                        if($item->product->expired_discount > $now){
+                                                                                            $price = $item->product->price * (( 100 - $item->product->discount) / 100);
+                                                                                        }
+                                                                                    @endphp
+                                                                                    <p class="text-lowercase mb-0">{{ $item->product->pretty_name }}
+                                                                                        @if( $item->product->expired_discount > $now )
+                                                                                            <i class="fas fa-arrow-down ml-2" style="color:#f46666"></i><span style="color:#f46666">{{ $item->product->discount }}%</span>
+                                                                                        @else
+
+                                                                                        @endif
+                                                                                    </p>
                                                                                 </div>
                                                                                 <div class="form-row mb-0 pl-2">
-                                                                                    <input type="number" value="{{ $item->quantity }}" style="width: 4ch;">
-                                                                                    <span class="ml-2 font-weight-bold">x {{ modifierVnd($item->product->price) }}</span>
+                                                                                    <input id="item_qty_{{ $item->id }}" class="item-qty" type="number" value="{{ $item->quantity }}" style="width: 4ch;" data-price="{{ $price }}" data-total="{{ $price*$item->quantity }}" data-picked="0" min="0" max="10000">
+                                                                                    <span class="ml-2 font-weight-bold">x {{ modifierVnd($price) }}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="mycart-item-p product-pick">
                                                                                 <div class="form-row text-center mb-0 h-50">
                                                                                     <div class="align-auto">
-                                                                                        <div class="pretty p-icon p-round p-pulse mr-0">
-                                                                                            <input type="checkbox"/>
-                                                                                            <div class="state p-success">
-                                                                                                <i class="icon mdi mdi-check"></i>
-                                                                                                <label></label>
+                                                                                        <div id="pretty-scale-test" style="font-size: 16px;">
+                                                                                            <div class="pretty p-icon p-jelly p-round p-bigger mr-0">
+                                                                                                <input class="item-check" type="checkbox" id="item_check_{{ $item->id }}" data-status="0" data-id="{{ $item->id }}"/>
+                                                                                                <div class="state p-info">
+                                                                                                    <i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                                                                                    <label></label>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="form-row text-center mb-0 h-50">
                                                                                     <div class="align-auto">
-                                                                                        <i class="far fa-trash-alt"></i>
+                                                                                        <i class="far fa-trash-alt item-trash" style="font-size: 18px" data-id="{{ $item->id }}"></i>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -96,11 +111,12 @@
 
                                                                     @endforelse
                                                                 </div>
+
                                                                 @if($cart_items->count() > 0)
                                                                     <div class="mycart-footer">
                                                                         <div class="clearfix">
                                                                             <p class="h6 float-left">Tạm Tính</p>
-                                                                            <p class="h6 float-right" id="provisional">204,000đ</p>
+                                                                            <p class="h6 float-right" id="provisional">0</p>
                                                                         </div>
                                                                         <div class="clearfix">
                                                                             <p class="h6 float-left">Sinh Nhật</p>
@@ -112,11 +128,11 @@
                                                                         </div>
                                                                         <div class="clearfix">
                                                                             <p class="h6 float-left">Phí Ship</p>
-                                                                            <p class="h6 float-right"><span id="ship_cost">từ 15k-30k</span></p>
+                                                                            <p class="h6 float-right"><span id="ship_cost" data-shipfee="false">từ 15k - 25k</span></p>
                                                                         </div>
                                                                         <div class="clearfix">
                                                                             <p class="font-weight-bold h5 float-left">Thành Tiền</p>
-                                                                            <p class="font-weight-bold h5 float-right">2.000.000đ</p>
+                                                                            <p class="font-weight-bold h5 float-right" id="total_money">2000000</p>
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <p class="text-success">* dự kiến giao hàng trong 1 - 2 ngày</p>
@@ -130,6 +146,7 @@
                                                         </div>
                                                     </div>
                                                     <hr />
+
                                                     <div class="row mb-5 ">
                                                         {{-- thông tin người nhận hàng --}}
                                                         <div class="vc_column_container col-md-6 mt-3">
@@ -142,119 +159,34 @@
                                                                         <div class="input-group-prepend mr-1">
                                                                             <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-user"></i></span>
                                                                         </div>
-                                                                        <input type="text" class="input-type-2" placeholder="Họ và Tên *"/>
+                                                                        <input type="text" class="input-type-2" placeholder="tên ..." value="{{ $customer != null ? $customer->name : '' }}" />
                                                                     </div>
                                                                     {{-- địa chỉ --}}
                                                                     <div class="input-group mb-3">
                                                                         <div class="input-group-prepend mr-1">
                                                                             <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-map-marked-alt"></i></span>
                                                                         </div>
-                                                                        <input type="text" class="input-type-2" placeholder="Địa Chỉ *"/>
+                                                                        <input type="text" class="input-type-2" placeholder="địa chỉ ..." value="{{ $customer != null ? $customer->address : '' }}"/>
                                                                     </div>
                                                                     {{-- số điện thoại --}}
                                                                     <div class="input-group mb-3">
                                                                         <div class="input-group-prepend mr-1">
                                                                             <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-phone-volume"></i></span>
                                                                         </div>
-                                                                        <input type="text" class="input-type-2" placeholder="Số Điện Thoại *"/>
+                                                                        <input type="text" class="input-type-2" placeholder="sđt ..." value="{{ $customer != null ? $customer->phone : '' }}"/>
                                                                     </div>
                                                                     {{-- facebook --}}
                                                                     <div class="input-group mb-3">
                                                                         <div class="input-group-prepend mr-1">
                                                                             <span class="input-group-text px-3 i-next-input-t2"><i class="fab fa-facebook"></i></span>
                                                                         </div>
-                                                                        <input type="text" class="input-type-2" placeholder="Facebook"/>
+                                                                        <input type="text" class="input-type-2" placeholder="facebook ..." value="{{ $customer != null ? $customer->facebook : '' }}"/>
                                                                     </div>
                                                                     <button class="btn btn-borders btn-md btn-primary float-right btn-update-info">Cập Nhật</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         {{-- lịch sử mua bán --}}
-                                                        {{-- <div class="vc_column_container col-md-6 mt-3">
-                                                            <div class="wpb_wrapper vc_column-inner">
-                                                                <p class="p-title mb-3"><i class="fas fa-history mr-1 p-icon-title"></i>Lịch sử mua hàng của bạn</p>
-                                                                <div class="porto-toggles wpb_content_element toggle-lg">
-                                                                    <section class="toggle">
-                                                                        <label><i class="far fa-clock icon-pending"></i>Đơn Đang Xử Lý</label>
-                                                                        <div class="toggle-content" style="display: none;">
-                                                                            <table class="table table-hover">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Firstname</th>
-                                                                                        <th>Lastname</th>
-                                                                                        <th>Email</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td>John</td>
-                                                                                        <td>Doe</td>
-                                                                                        <td>john@example.com</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>Mary</td>
-                                                                                        <td>Moe</td>
-                                                                                        <td>mary@example.com</td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </section>
-                                                                    <section class="toggle">
-                                                                        <label><i class="far fa-check-circle icon-success"></i>Đơn Giao Thành Công</label>
-                                                                        <div class="toggle-content" style="display: none;">
-                                                                            <table class="table table-hover">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Firstname</th>
-                                                                                        <th>Lastname</th>
-                                                                                        <th>Email</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td>John</td>
-                                                                                        <td>Doe</td>
-                                                                                        <td>john@example.com</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>Mary</td>
-                                                                                        <td>Moe</td>
-                                                                                        <td>mary@example.com</td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </section>
-                                                                    <section class="toggle">
-                                                                        <label><i class="far fa-times-circle icon-cancel"></i>Đơn Đã Hủy</label>
-                                                                        <div class="toggle-content" style="display: none;">
-                                                                            <table class="table table-hover">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>Firstname</th>
-                                                                                        <th>Lastname</th>
-                                                                                        <th>Email</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td>John</td>
-                                                                                        <td>Doe</td>
-                                                                                        <td>john@example.com</td>
-                                                                                    </tr>
-                                                                                    <tr>
-                                                                                        <td>Mary</td>
-                                                                                        <td>Moe</td>
-                                                                                        <td>mary@example.com</td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </div>
-                                                                    </section>
-                                                                 </div>
-                                                           </div>
-                                                        </div> --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -275,6 +207,7 @@
 
 @push('libs-scripts')
     <script src="{{ asset('admini/js/jquery-3.5.0.min.js') }}"></script>
+    <script src="{{ asset('homepage/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('homepage/js/jquery.nice-number.js') }}"></script>
 @endpush
 
@@ -290,15 +223,124 @@
                 onDecrement:false,
             });
 
-            $(".input-type-2").focusin(function(event) {
-                $(this).parent().find('.fas').css({
-                    // 'font-weight': '100',
-                });
-            }).focusout(function(event) {
-                // $(this).parent().find('.fas').css('font-weight', 'bold');
-            });
-            
-        });
 
+            // tăng giảm số lượng thì tính giá luôn
+            $(".minus-qty,.plus-qty").click(function(event) {
+                $(".item-qty").trigger('change');
+            });
+
+
+            // số lượng của item thay đổi
+            $(".item-qty").on('change keyup',function() {
+                let _this = $(this),
+                    qty = _this.val(),
+                    price = _this.attr('data-price'),
+                    total = parseInt(qty) * parseInt(price);
+
+                _this.attr('value',qty);
+                _this.attr('data-total',total);
+                update_total_money();
+            });
+
+            // click chọn sản phẩm
+            $(".item-check").click(function(event) {
+                let _this = $(this),
+                    id = _this.data('id');
+
+                if( _this.is(':checked') ){
+                    // _this.attr('data-status',1);
+                    $(`#item_qty_${id}`).attr('data-picked',1);
+                }else{
+                    // _this.attr('data-status',0);
+                    $(`#item_qty_${id}`).attr('data-picked',0);
+                }
+
+                update_total_money();
+            });
+
+            // click xóa sản phẩm
+            $(".item-trash").click(function(event) {
+                let _this = $(this),
+                    id = _this.attr('data-id');
+
+                if(id){
+                    Swal.fire({
+                        // title: 'Xóa sản phẩm ?',
+                        text: "Xóa sản phẩm ?",
+                        icon: '',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#757575',
+                        confirmButtonText: 'Xóa'
+                    }).then((result) => {
+                        if (result.isConfirmed){
+                            $.ajax({
+                                url: '{{ route('ajax.trash_item_in_cart') }}',
+                                type: 'post',
+                                data: {id: id},
+                            })
+                            .done(function(res){
+                                if(res.success){
+                                    $(`#mc_item_${id}`).hide( 'slide',300);
+                                    setTimeout(function(){
+                                        $(`#mc_item_${id}`).remove();
+                                        update_total_money();
+                                    },500);
+                                }else{
+                                    Swal.fire(
+                                        'Lỗi hệ thống !',
+                                        'Vui lòng thử lại sau.',
+                                        'error'
+                                    )
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+
+            // function up date giá tiền 
+            function update_total_money(){
+                let provisional = 0,
+                    total_money = 0;
+
+                $(".item-qty").each(function(index, el) {
+                    let picked = parseInt( $(el).attr('data-picked') ),
+                        total_of_item = 0;
+                    if(picked == 1){
+                        total_of_item = parseInt( $(el).attr('data-total') );
+                    }else if(picked == 0){
+
+                    }
+
+                    provisional += total_of_item;
+                });
+
+                $('#provisional').html(provisional);
+                total_money
+
+                // let use_free_ship_val = 0;
+                @if( $use_free_ship != null && is_array($use_free_ship) )
+                    // use_free_ship = parseInt('{{ $use_free_ship['value'] }}');
+                    if(provisional >= {{ $use_free_ship['value'] }}){
+                        $("#ship_cost").attr('data-shipfee',true);
+                        $("#ship_cost").html('miễn phí');
+                    }else{
+                        $("#ship_cost").attr('data-shipfee',false);
+                        $("#ship_cost").html('từ 15k - 30k');
+                    }
+                @endif
+
+                // test
+                if(product_qty){
+                    $("product_id").val();
+                }else{
+                    $("#ship_cost").attr('');
+                }
+                // end test
+                console.log(provisional);
+            }
+
+        });
     </script>
 @endpush

@@ -23,5 +23,8 @@ Route::get('/mycart', 'HomeController@myCart')->name('mycart');
 
 // ajax
 Route::prefix('ajax')->name('ajax.')->group(function(){
+	// gán customer cho cookie
 	Route::post('/attach-customer-with-cookie', 'AjaxController@attachCustomerWithCookie')->name('attach_customer_with_cookie');
+	// xóa irtem trong cart
+	Route::post('/trash-item-in-cart', 'AjaxController@trashItemInCart')->name('trash_item_in_cart');
 });

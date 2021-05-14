@@ -14,7 +14,7 @@ class Customer extends Model
     use Filterable,CurrencyUnitVn;
 
     protected $fillable = [
-        'name', 'phone', 'address','d_o_b','total_money','total_payed','created_at','created_by','updated_at','created_by','deleted_at','deleted_by'
+        'name', 'phone', 'address','d_o_b', 'facebook', 'total_money', 'total_payed', 'created_at', 'created_by', 'updated_at', 'created_by', 'deleted_at', 'deleted_by'
     ];
 
     protected $dates = ['d_o_b'];

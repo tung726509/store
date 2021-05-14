@@ -34,12 +34,14 @@ class AppServiceProvider extends ServiceProvider
             // option images
                 $dataImageOption = $this->option_m->getImageOption();
 
-            // ưu đãi khách hàng
+            // ưu đãi khách hàng (bắt buộc phải có vì chuyền ra trang /mycart sử dụng)
                 $cv_ict = $this->convertIncentive();
                 $use_birth_discount = $cv_ict['use_birth_discount'];
                 $use_free_ship = $cv_ict['use_free_ship'];
                 $use_transfer_discount = $cv_ict['use_transfer_discount'];
                 $ict_count = $cv_ict['ict_count'];
+
+            // dd($use_free_ship);
 
             View::share([
                 'categories' => $categories,
