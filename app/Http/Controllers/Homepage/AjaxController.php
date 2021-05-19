@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Crypt;
 use Response;
 
 use App\Customer;
+use App\CartItem;
 use App\Cookiee;
 
 class AjaxController extends Controller
@@ -46,5 +47,25 @@ class AjaxController extends Controller
     	}
 
     	return false;
+    }
+
+    public function trashItemInCart(Request $request)
+    {
+        if($request->ajax()){
+            $id = $request->id;
+
+            if($id){
+                // $deleted = CartItem::where('id',$id)->delete();
+                // if($deleted){
+                    return Response::json(['success'=>true]);
+                // }else{
+                    // return Response::json(['success'=>true]);
+                // }
+            }else{
+                return Response::json(['success'=>false]);
+            }
+        }
+
+        return Response::json(['success'=>false]);
     }
 }

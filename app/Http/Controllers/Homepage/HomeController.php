@@ -105,6 +105,10 @@ class HomeController extends Controller
 
     public function myCart(Request $request){
         $customer = $this->customer;
+        if($customer == null){
+            return redirect()->to('login');
+        }
+
         $cart_items = $this->cart_items;
 
         // dd($cart_items);

@@ -51,13 +51,12 @@ class CustomerController extends Controller
         $success_orders = $orders1->where('status',4)->count();
         $fail_orders = $orders1->where('status',5)->count();
 
-        $total_orders_money_convert = $this->_m->modifierVnd($orders->sum('price'),' VNĐ');
-        $total_money_payed_convert = $this->_m->modifierVnd($customer->total_money,' VNĐ');
-        $total_money_payed_convert = $this->_m->modifierVnd($customer->total_money,' VNĐ');
-        $total_payed_convert = $this->_m->modifierVnd($customer->total_payed == null ? 0 : $customer->total_payed,' VNĐ');
-        $not_pay_convert = $this->_m->modifierVnd((int)$orders->sum('price') - (int)$customer->total_money,' VNĐ');
+        $total_orders_money = $this->_m->modifierVnd($orders->whereIn('status',[1,3,4])->sum('price'),' VNĐ');
+        $total_money_success = $this->_m->modifierVnd($orders1->where('status',4)->sum('price'),' VNĐ');
+        $total_payed = $this->_m->modifierVnd($customer->total_payed ? $customer->total_payed : 0,' VNĐ');
+        $not_pay = $this->_m->modifierVnd((int)$orders->whereIn('status',[1,3,4])->sum('price') - (int)$customer->total_payed,' VNĐ');
 
-        return view('admin.customer.detail',compact('customer','orders','total_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders','total_orders_money_convert','total_money_payed_convert','not_pay_convert','total_payed_convert'));
+        return view('admin.customer.detail',compact('customer','orders','total_orders','un_process_orders','cancel_orders','confirm_orders','success_orders','fail_orders','total_orders_money','total_money_success','total_payed','not_pay'));
     }
 
     public function getAdd()

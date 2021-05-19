@@ -41,11 +41,13 @@
                     <div class="custom-html ml-5 mr-4 d-none d-lg-block">
                         <div class="porto-sicon-box text-left style_1 default-icon">
                             <div class="porto-sicon-default">
-                                <div id="porto-icon-10056015155ea931878fa2d" class="porto-just-icon-wrapper" style="text-align:center;">
-                                    <div class="porto-sicon-img " style="display:inline-block;font-size: 30px;"><img class="img-icon" alt="" src="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/wp-content/uploads/sites/116/2019/09/shop4_header_phone.png" width="30" height="31" /></div>
+                                <div class="porto-just-icon-wrapper" style="text-align:center;">
+                                    <div class="porto-sicon-img " style="display:inline-block;font-size: 30px;">
+                                        <img class="img-icon" alt="" src="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/wp-content/uploads/sites/116/2019/09/shop4_header_phone.png" width="30" height="31"/>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="porto-sicon-header" >
+                            <div class="porto-sicon-header">
                                 <h3 class="porto-sicon-title" style="font-weight:600;font-size:11px;line-height:11px;color:#777;">CALL US NOW</h3>
                                 <p style="font-weight:700;font-size:18px;line-height:18px;color:#222529;">+123 5678 890</p>
                             </div>
@@ -56,24 +58,25 @@
                             <a href="javascript:;" class="header-icon-user"><i class="far fa-user"></i></a>
                         </div>
                         <div class="custom-html mr-1">
-                            <a href="javascript:;" class="header-phone">{{$customer->name ? $customer->name : $customer->phone }}</a>
+                            <a href="javascript:;" class="header-phone" style="color: #7ba7e2">{{ $customer->name ? 'Chào , '.$customer->name : $customer->phone }}</a>
                         </div>
                     @endif
-                    <div id="mini-cart" class="mini-cart minicart-arrow-alt">
+                    <div id="mini_cart" class="mini-cart minicart-arrow-alt">
                         <div class="cart-head header-icon-cart">
-                            <span class="cart-icon"><i class="minicart-icon porto-icon-bag-2"></i>
-                                @if($customer)
+                            <span class="cart-icon" style="position: relative;">
+                                <span class="header-icon-cart"><i class="fas fa-shopping-cart"></i></span>
                                     @if($cart_items)
-                                        <span class="cart-items">{{ $cart_items->count() }}</span>
+                                        <span class="icon-cart-number cart-items-count">{{ $cart_items->count() }}</span>
+                                    @else
+                                        <span class="icon-cart-number cart-items-count">0</span>
                                     @endif
-                                @endif
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {{-- menu màn hình điện thoại --}}
+
         <div class="header-bottom main-menu-wrap" style="top: 0px;">
             <div class="header-row container">
                 <div class="header-col header-left">
@@ -106,5 +109,10 @@
     </header>
 </div>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#mini_cart").click(function(event) {
+            window.location.replace("{{ route('mycart') }}");
+        });
 
+    });
 </script>

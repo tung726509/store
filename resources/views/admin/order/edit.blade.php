@@ -85,7 +85,7 @@
         <h4 class="header-title">
           <i class="fas fa-print" aria-hidden="true"></i> CHỈNH SỬA ĐƠN HÀNG {{$order->id}}
           <a href="{{route('administrator.order.detail',['id'=>base64_encode($order->id)])}}"><span class="text-info pl-2 pt-1 hoverine direct-link">#{{$order->code}}</span></a>
-          <span class="text-info pl-2 pt-1 hoverine" id="customer_edit"><i class="fas fa-pencil-alt"></i> {{$order->customer->name}}</span>
+          <span class="text-info pl-2 pt-1 hoverine" id="customer_edit"><i class="fas fa-pencil-alt"></i>{{$order->customer->name ? $order->customer->name : $order->customer->phone}}</span>
         </h4>
         <div class="text-muted m-b-20 font-13 position-relative">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</div>
         <form method="post" action="{{ url()->current()}}" id="editForm">

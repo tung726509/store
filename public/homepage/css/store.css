@@ -4,6 +4,24 @@
             padding: 0 .125rem;
             font-size: 24px;
             vertical-align: middle;
+            color: #7ba7e2 !important;
+        }
+        .header-icon-cart{
+            display: inline-block;
+            padding: 0 .125rem;
+            font-size: 24px;
+            vertical-align: middle;
+            color: #7ba7e2;
+        }
+        .icon-cart-number{
+          border-radius: 15px;
+          background-color: red;
+          color: white;
+          padding: 0px 7px;
+          font-size: 10px;
+          position: absolute;
+          top: 0px;
+          right: -13px;
         }
         .header-phone{
             display: inline-block;
@@ -154,12 +172,12 @@
         .table-style {
             border-radius: 20px;
         }
-        .btn-pay {
+        .btn-order {
             width: 100%;
             font-size: 20px;
             background-color: #5d9bb7 !important;
         }
-        .btn-pay:hover {
+        .btn-order:hover {
             background-color: black;
         }
         .mycart {
@@ -178,6 +196,9 @@
             .mycart-body {
                 border-bottom: 1px solid #a7a4a4;
                 margin-bottom: 5px;
+            }
+            .bor-bottom{
+                border-bottom: 1px solid #a7a4a4;
             }
                 .mycart-item {
                     display: flex;

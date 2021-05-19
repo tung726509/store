@@ -207,10 +207,12 @@
           <div class="col-12 col-md-5 offset-md-7 col-xl-4 offset-xl-8 money-form">
             <div class="form-row">
               <div class="col-12 col-md-12">
-                <h5 class=""><i class="fe-tag"></i> Tổng : {{ $total_orders_money_convert }}</h5>
-                <h5 class=""><i class="fas fa-check-double icon-action text-success"></i> Thành công : {{ $total_money_payed_convert }}</h5>
-                <h5 class=""><i class="fas fa-check icon-action text-warning"></i> Còn lại : {{ $not_pay_convert }}</h5>
-                <h4 class=""><i class="fas fa-hand-holding-usd icon-action" style="color: #4f50d6"></i> Thực nhận : {{ $total_payed_convert }}</h4>
+                <h5 class="">
+                  <i class="fe-tag"></i> Tổng đơn hàng : {{ $total_orders_money }}
+                </h5>
+                <h5 class=""><i class="fas fa-check-double icon-action text-success"></i> Giao thành công : {{ $total_money_success }}</h5>
+                <h5 class=""><i class="fas fa-hand-holding-usd icon-action" style="color: #4f50d6"></i> Thực nhận : {{ $total_payed }}</h5>
+                <h4 class=""><i class="fas fa-check icon-action text-warning"></i> Còn lại : {{ $not_pay }}</h4>
               </div>
             </div>
           </div>
