@@ -33,7 +33,12 @@ class HomeController extends Controller
         $this->new_ck_val = $new_ck_val;
         $this->new_cookie = cookie('cookie_string', $new_ck_val ,7200);
 
-        $get_ck_val = Crypt::decryptString(Cookie::get('cookie_string'));
+        if(Cookie::get('cookie_string')){
+            $get_ck_val = Crypt::decryptString(Cookie::get('cookie_string'));
+        }else{
+            $get_ck_val = null;
+        }
+
         if( $get_ck_val && strlen($get_ck_val) >= 14 ){
             $this->new_ck_val = $get_ck_val;
             $this->new_cookie = cookie('cookie_string', $get_ck_val ,7200);
@@ -111,9 +116,21 @@ class HomeController extends Controller
 
         $cart_items = $this->cart_items;
 
-        // dd($cart_items);
+        if(!$cart_items){
+            $cart_items = collect([]);
+        }
 
-        return response()->view('homepage.mycart.index',compact('customer','cart_items'))->withCookie($this->new_cookie);
+        $d_o_b = $customer->d_o_b;
+        if($d_o_b){
+            $d_o_b = (int) $d_o_b->format('m');
+        }
+        $current_month = Carbon::now()->month;
+        $birth_discount = false;
+        if($d_o_b == $current_month){
+            $birth_discount = true;
+        }
+
+        return response()->view('homepage.mycart.index',compact('customer','cart_items','birth_discount'))->withCookie($this->new_cookie);
     }
 
     public function checkCookieReturnCustomer(){

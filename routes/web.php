@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', 'HomeController@login')->name('login');
 
 // home
+Route::get('/', 'HomeController@home')->name('home');
 Route::get('/home', 'HomeController@home')->name('home');
 
 // categories
@@ -27,4 +28,6 @@ Route::prefix('ajax')->name('ajax.')->group(function(){
 	Route::post('/attach-customer-with-cookie', 'AjaxController@attachCustomerWithCookie')->name('attach_customer_with_cookie');
 	// xóa irtem trong cart
 	Route::post('/trash-item-in-cart', 'AjaxController@trashItemInCart')->name('trash_item_in_cart');
+	// câp nhật thông tin khách hàng  
+	Route::post('/update-customer-info', 'AjaxController@updateCustomerInfo')->name('update_customer_info');
 });

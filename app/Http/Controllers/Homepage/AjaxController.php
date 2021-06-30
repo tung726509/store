@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Cookie;
 use App\Traits\GenerateRandomString;
 use Illuminate\Support\Facades\Crypt;
 use Response;
+use App\Rules\VietnamesePhone;
+use Illuminate\Support\Facades\Validator;
 
 use App\Customer;
 use App\CartItem;
@@ -32,7 +34,7 @@ class AjaxController extends Controller
             $customer = Customer::firstOrCreate([
                 'phone' => $phone
             ], [
-
+                'updated_at' => null
             ]);
 
             if($customer){
@@ -55,17 +57,83 @@ class AjaxController extends Controller
             $id = $request->id;
 
             if($id){
-                // $deleted = CartItem::where('id',$id)->delete();
-                // if($deleted){
+                $deleted = CartItem::where('id',$id)->delete();
+                if($deleted){
                     return Response::json(['success'=>true]);
-                // }else{
-                    // return Response::json(['success'=>true]);
-                // }
+                }else{
+                    return Response::json(['success'=>false]);
+                }
             }else{
                 return Response::json(['success'=>false]);
             }
         }
 
+            
         return Response::json(['success'=>false]);
+    }
+
+    public function updateCustomerInfo(Request $request)
+    {
+        $rules = [
+            'phone' => ['required',new VietnamesePhone,'exists:customers,phone'],
+            'name' => ['required','string','min:1','max:50'],
+            'date' => ['required','date'],
+            'address' => ['required','string','min:1','max:255'],
+        ];
+
+        $messages = [
+            'phone.required' => 'Vui lòng nhập SĐT',
+            'phone.exists' => 'SĐT không tồn tại',
+            'name.required' => 'Vui lòng nhập tên KH',
+            'name.string' => 'Chỉ được nhập chuỗi',
+            'name.min' => 'Tối thiểu 1 kí tụ',
+            'name.max' => 'Tối đa 255 kí tụ',
+            'address.required' => 'Vui lòng nhập địa chỉ',
+            'address.string' => 'Chỉ được nhập chuỗi',
+            'address.min' => 'Tối thiểu 1 kí tụ',
+            'address.max' => 'Tối đa 255 kí tụ',
+            'date.required' => 'Vui lòng chọn ngày tháng năm sinh',
+            'date.date' => 'Ngày tháng không hợp lệ',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if($validator->fails()){
+            $errors = $validator->errors()->toArray();
+
+            return Response::json(['success' => false,'errors' => $errors]);
+        }else{
+            $phone = $request->input('phone');
+            $name = $request->input('name');
+            $address = $request->input('address');
+            $d_o_b = $request->input('date');
+            $customer = $this->customer_m->where('phone',$phone)->first();
+
+            if($customer){
+                $customer->name = $name;
+                $customer->address = $address;
+                // là khách hàng vừa tạo mới update đc sinh nhật
+                if($customer->updated_at == null || $customer->d_o_b == null){
+                    $customer->d_o_b = $d_o_b;
+                }
+                $update = $customer->save();
+                if($update){
+                    $d_o_b = $customer->d_o_b;
+                    if($d_o_b){
+                        $d_o_b = (int) $d_o_b->format('m');
+                    }
+                    $current_month = Carbon::now()->month;
+                    $birth_discount = false;
+                    if( $d_o_b == $current_month )
+                        $birth_discount = true;
+
+                    return Response::json(['success' => true,'birth_discount' => $birth_discount,'customer' => $customer]);
+                }else{
+                    return false;
+                }
+            }
+
+            return false;
+        }
     }
 }
