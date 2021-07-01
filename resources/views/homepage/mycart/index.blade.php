@@ -269,6 +269,7 @@
                     $(el).removeClass('not-empty');
                 }
             });
+            // end css ban đầu
 
             // đăng kí niceNumber
             $('input[type="number"]').niceNumber({
@@ -434,13 +435,11 @@
                         payments_val = {{ $use_transfer_discount['value'] }};
                         break;
                     @endif
-                    case 'abc':
-                        payments_val = 'abc';
-                        break;
                     default:
                         payments_val = 0;
                 }
                 $("#sale_transfer").text(payments_val);
+                update_total_money();
             });
 
             // function up date giá tiền 
@@ -481,6 +480,8 @@
                     @if(is_array($use_transfer_discount) )
                         transfer_discount = provisional * ( parseInt({{ $use_transfer_discount['value'] }}) / 100 );
                     @endif
+
+                    let payments_type = $("#payments_type").val();
                     
                     switch(payments_type) {
                         @if(is_array($use_transfer_discount) )
@@ -488,12 +489,11 @@
                             payments_val = {{ $use_transfer_discount['value'] }};
                             break;
                         @endif
-                        case 'abc':
-                            payments_val = 'abc';
-                            break;
                         default:
                             payments_val = 0;
                     }
+
+                    transfer_discount = provisional * ( parseInt(payments_val) / 100 );
 
                 // phí ship 
                     @if(is_array($use_free_ship) )

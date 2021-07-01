@@ -387,7 +387,7 @@ class OrderController extends Controller
 
             // dd($ois_pluck_id);
 
-            return view('admin.order.edit',compact('now','products','order','warehouses','customers','phone_list','warehouse_selected','use_birth_discount','use_free_ship','use_transfer_discount','m_o_b','arr_ois_origin','ubd','ufs','utd','order_items','ois_pluck_id'));
+            return view('admin.order.edit',compact('now','products','order','warehouses','customers','phone_list','warehouse_selected','use_birth_discount','use_free_ship','use_transfer_discount','m_o_b','arr_ois_origin','ubd','ufs','utd','order_items'));
         }else{
             $messages = 'Không tìm thấy gì cả =((';
             return view('admin.alertpages.404',compact('messages'));
@@ -477,6 +477,8 @@ class OrderController extends Controller
 
                 // chỉ update thông tin đơn hàng
                 if(Arr::has($request->all(),'btn_update_1')){
+                    dd(1,$request->all());
+
                     $t_o_f = json_decode($order->types_of_fee,true);
                     $ship_fee = (int) $order->ship_fee;
                     $original_order_price = 0;
@@ -548,6 +550,8 @@ class OrderController extends Controller
                         'status_at' => $status_at
                     ];
                 }else{// update toàn bộ đơn hàng
+                    dd(2,$request->all());
+
                     // arr request products
                     $arr_product_id = $request->input('product_id');
                     $arr_quantity = $request->input('quantity');

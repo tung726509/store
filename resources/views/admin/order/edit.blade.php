@@ -89,241 +89,241 @@
         </h4>
         <div class="text-muted m-b-20 font-13 position-relative">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</div>
         <form method="post" action="{{ url()->current()}}" id="editForm">
-         @csrf
-          {{-- nhập thông tin đơn hàng --}}
-          <div class="form-row">
-            {{-- phone --}}
-            <div class="form-group col-6 col-sm-6 col-md-6">
-              <label for="phone" class="col-form-label">Số đt <span class="text-danger">*</span></label>
-              <input type="text" class="form-control @error('phone') is-invalid @enderror {{$order->customer->phone != null ? 'parsley-success':''}}" id="phone" name="phone" placeholder="Nhập sđt" value="{{old('phone',$order->customer->phone != null ? $order->customer->phone:'')}}" required>
-              @error('phone')
-                <p class="text-validate mb-1" id="t_valid_phone">{{ $message }}</p>
-              @enderror
-            </div>
-
-            {{-- ten kh --}}
-            <div class="form-group col-6 col-sm-6 col-md-6">
-              <label for="name" class="col-form-label">Tên <span class="text-danger">*</span></label>
-              <input type="text" class="form-control @error('name') is-invalid @enderror {{$order->customer->name != null ? 'parsley-success':''}}" id="name" name="name" placeholder="Nhập tên" value="{{old('name',$order->customer->name != null ? $order->customer->name:'')}}" required readonly>
-              @error('name')
-                <p class="text-validate mb-1" id="t_valid_name">{{ $message }}</p>
-              @enderror
-            </div>
-
-            {{-- sinh nhật --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="d_o_b" class="col-form-label">Ngày sinh <span class="small text-info">(tháng/ngày/năm)</span></label>
-              <div class="input-group">
-                <input type="text" class="form-control @error('d_o_b') is-invalid @enderror {{$order->customer->d_o_b != null ? 'parsley-success':''}}" placeholder="mm/dd/yyyy" id="d_o_b" name="d_o_b" value="{{old('d_o_b',$order->customer->d_o_b != null ? $order->customer->d_o_b->format('m/d/Y'):'')}}" disabled>
-                <input type="hidden" name="d_o_b_1" value="{{old('d_o_b',$order->customer->d_o_b != null ? $order->customer->d_o_b->format('m/d/Y'):'')}}">
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+              @csrf
+              {{-- nhập thông tin đơn hàng --}}
+              <div class="form-row">
+                {{-- phone --}}
+                <div class="form-group col-6 col-sm-6 col-md-6">
+                  <label for="phone" class="col-form-label">Số đt <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control @error('phone') is-invalid @enderror {{$order->customer->phone != null ? 'parsley-success':''}}" id="phone" name="phone" placeholder="Nhập sđt" value="{{old('phone',$order->customer->phone != null ? $order->customer->phone:'')}}" required>
+                  @error('phone')
+                    <p class="text-validate mb-1" id="t_valid_phone">{{ $message }}</p>
+                  @enderror
                 </div>
-              </div>
-              @error('d_o_b')
-                <p class="text-validate mb-1" id="t_valid_d_o_b">{{ $message }}</p>
-              @enderror
-            </div>
 
-            {{-- địa chỉ --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="address" class="col-form-label">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
-              <div class="input-group">
-                <input type="text" class="form-control @error('address') is-invalid @enderror {{$order->address != null ? 'parsley-success':''}}" id="address" name="address" placeholder="Nhập địa chỉ" value="{{old('address',$order->address != null ? $order->address:'')}}" data-address="{{$order->customer->address != null ? $order->customer->address:''}}" required>
-                <div class="input-group-append">
-                  <button class="btn btn-dark waves-effect waves-light btn-address-default" type="button">Mặc định</button>
+                {{-- ten kh --}}
+                <div class="form-group col-6 col-sm-6 col-md-6">
+                  <label for="name" class="col-form-label">Tên <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control @error('name') is-invalid @enderror {{$order->customer->name != null ? 'parsley-success':''}}" id="name" name="name" placeholder="Nhập tên" value="{{old('name',$order->customer->name != null ? $order->customer->name:'')}}" required readonly>
+                  @error('name')
+                    <p class="text-validate mb-1" id="t_valid_name">{{ $message }}</p>
+                  @enderror
                 </div>
-              </div>
-              @error('address')
-                <p class="text-validate mb-1" id="t_valid_address">{{ $message }}</p>
-              @enderror
-            </div>
 
-            {{-- ngày xuất đơn --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="date" class="col-form-label">Ngày xuất đơn <span class="text-danger">*</span> <span class="small text-info">(tháng/ngày/năm)</span></label>
-              <div class="input-group">
-                <input type="text" class="form-control @error('date') is-invalid @enderror parsley-success" placeholder="mm/dd/yyyy" id="date" name="date" value="{{ $order->export_at == null ? date('m/d/Y',strtotime($now)) : date('m/d/Y',strtotime($order->export_at)) }}" required>
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                {{-- sinh nhật --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="d_o_b" class="col-form-label">Ngày sinh <span class="small text-info">(tháng/ngày/năm)</span></label>
+                  <div class="input-group">
+                    <input type="text" class="form-control @error('d_o_b') is-invalid @enderror {{$order->customer->d_o_b != null ? 'parsley-success':''}}" placeholder="mm/dd/yyyy" id="d_o_b" name="d_o_b" value="{{old('d_o_b',$order->customer->d_o_b != null ? $order->customer->d_o_b->format('m/d/Y'):'')}}" disabled>
+                    <input type="hidden" name="d_o_b_1" value="{{old('d_o_b',$order->customer->d_o_b != null ? $order->customer->d_o_b->format('m/d/Y'):'')}}">
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                    </div>
+                  </div>
+                  @error('d_o_b')
+                    <p class="text-validate mb-1" id="t_valid_d_o_b">{{ $message }}</p>
+                  @enderror
                 </div>
-              </div>
-              @error('date')
-                <p class="text-validate mb-1" id="t_valid_date">{{ $message }}</p>
-              @enderror
-            </div>
 
-            {{-- phí ship --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="cost" class="col-form-label">Phí ship <span class="small text-info">( không nhập mặc định sẽ là FREE SHIP )</span></label>
-              <div class="input-group">
-                <input type="number" class="form-control @error('cost') is-invalid @enderror {{old('d_o_b',$order->ship_fee != null ? 'parsley-success':'')}}" placeholder="" id="cost" name="cost" value="{{old('ship_fee',$order->ship_fee != null ? $order->ship_fee:'')}}">
-              </div>
-              @error('cost')
-                <p class="text-validate mb-1" id="t_valid_cost">{{ $message }}</p>
-              @enderror
-            </div>
-
-            {{-- hình thức chuyển khoản --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="cost" class="col-form-label">Hình thức thanh toán</label>
-              <select class="form-control select2 select-pay-type" data-style="btn-light" name="pay_type" data-type="{{ $utd == null ? 'cash' : 'transfer'}}" data-value="{{$utd != null ? $utd : '0'}}" required>
-                <option value="cash" {{ $utd == null ? 'selected' : '' }} data-value="0">Tiền mặt</option>
-                @if($use_transfer_discount['key'] == 1)
-                  <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
-                @else
-                  @if($utd != null)
-                    <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
-                  @else
-                    <option value="transfer" disabled>Chuyển 
-                     (khóa)</option>
-                  @endif
-                @endif
-              </select>
-            </div>
-
-            {{-- xác nhận thanh toán --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="cost" class="col-form-label">Xác nhận thanh toán</label>
-              <div class="row m-0 text-center">
-                <input type="checkbox" class="js-switch confirm-pay-checkbox" name="confirm-pay" {{ $order->payed_at != null ? 'checked' : ''}}>
-              </div>
-            </div>
-
-            {{-- note --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="note" class="col-form-label">Note </label>
-              <textarea class="form-control @error('note') is-invalid @enderror {{old('note',$order->note != null ? 'parsley-success':'')}}" rows="1" id="note" name="note">{{old('note',$order->note != null ? $order->note:'')}}</textarea>
-              @error('note')
-                <p class="text-validate mb-1" id="t_valid_note">{{ $message }}</p>
-              @enderror
-            </div>
-
-            {{-- kho hàng --}}
-            <div class="form-group col-12 col-sm-6 col-md-6">
-              <label for="cost" class="col-form-label">Kho hàng <span class="text-danger">*</span> <span class="text-danger d-none alert-wh text-uppercase">Không đủ cho đơn hàng</span></label>
-              <select class="form-control select2 select-warehouse" data-style="btn-light" name="warehouse_id" required>
-                <option value="">-- Chọn --</option>
-                @forelse($warehouses as $item)
-                <option value="{{ $item->id }}" {{$order->warehouse_id == $item->id ? 'selected':''}}>
-                  <span class="text-uppercase">{{ $item->name }}
-                </option>
-                @empty
-                @endforelse
-              </select>
-            </div>
-
-            {{-- thông báo kho hàng có phú hợp với đơn hàng --}}
-            @if($order->status != 1)
-              <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
-                <button type="submit" class="btn btn-primary update-order text-center" name="btn_update_1">Cập nhật</button>
-              </div>
-            @endif
-
-            {{-- phần sản phẩm trong đơn hàng --}}
-            <div class="form-group col-12 btn-add-pf">
-              @if($order->status != 6)
-                <p class="mb-1 mt-3 font-weight-bold text-uppercase">Thêm sản phẩm vào đơn hàng</p>
-              @endif
-              {{-- column title --}}
-              <div class="form-row colunm-title-product d-none">
-                <div class="form-group col-5">
-                  <p class="mb-0">Sản phẩm</p>
+                {{-- địa chỉ --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="address" class="col-form-label">Địa chỉ nhận hàng <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <input type="text" class="form-control @error('address') is-invalid @enderror {{$order->address != null ? 'parsley-success':''}}" id="address" name="address" placeholder="Nhập địa chỉ" value="{{old('address',$order->address != null ? $order->address:'')}}" data-address="{{$order->customer->address != null ? $order->customer->address:''}}" required>
+                    <div class="input-group-append">
+                      <button class="btn btn-dark waves-effect waves-light btn-address-default" type="button">Mặc định</button>
+                    </div>
+                  </div>
+                  @error('address')
+                    <p class="text-validate mb-1" id="t_valid_address">{{ $message }}</p>
+                  @enderror
                 </div>
-                <div class="form-group col-3">
-                  <p class="mb-0">SL</p>
+
+                {{-- ngày xuất đơn --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="date" class="col-form-label">Ngày xuất đơn <span class="text-danger">*</span> <span class="small text-info">(tháng/ngày/năm)</span></label>
+                  <div class="input-group">
+                    <input type="text" class="form-control @error('date') is-invalid @enderror parsley-success" placeholder="mm/dd/yyyy" id="date" name="date" value="{{ $order->export_at == null ? date('m/d/Y',strtotime($now)) : date('m/d/Y',strtotime($order->export_at)) }}" required>
+                    <div class="input-group-append">
+                      <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                    </div>
+                  </div>
+                  @error('date')
+                    <p class="text-validate mb-1" id="t_valid_date">{{ $message }}</p>
+                  @enderror
                 </div>
-                <div class="form-group col-2">
-                  <p class="mb-0"><i class="fas fa-arrow-down"></i> %</p>
+
+                {{-- phí ship --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="cost" class="col-form-label">Phí ship <span class="small text-info">( không nhập mặc định sẽ là FREE SHIP )</span></label>
+                  <div class="input-group">
+                    <input type="number" class="form-control @error('cost') is-invalid @enderror {{old('d_o_b',$order->ship_fee != null ? 'parsley-success':'')}}" placeholder="" id="cost" name="cost" value="{{old('ship_fee',$order->ship_fee != null ? $order->ship_fee:'')}}">
+                  </div>
+                  @error('cost')
+                    <p class="text-validate mb-1" id="t_valid_cost">{{ $message }}</p>
+                  @enderror
                 </div>
-                <div class="form-group col-1">
+
+                {{-- hình thức chuyển khoản --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="cost" class="col-form-label">Hình thức thanh toán</label>
+                  <select class="form-control select2 select-pay-type" data-style="btn-light" name="pay_type" data-type="{{ $utd == null ? 'cash' : 'transfer'}}" data-value="{{$utd != null ? $utd : '0'}}" required>
+                    <option value="cash" {{ $utd == null ? 'selected' : '' }} data-value="0">Tiền mặt</option>
+                    @if($use_transfer_discount['key'] == 1)
+                      <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
+                    @else
+                      @if($utd != null)
+                        <option value="transfer" {{ $utd != null ? 'selected' : '' }} data-value="{{ $use_transfer_discount['value'] }}">Chuyển khoản</option>
+                      @else
+                        <option value="transfer" disabled>Chuyển 
+                         (khóa)</option>
+                      @endif
+                    @endif
+                  </select>
                 </div>
-              </div>
-              {{-- danh sách sản phẩm và số lượng --}}
-              <div id="products_wrapper" class="d-none">
-                @if($order->warehouse_id != null)
-                    @forelse($order_items->where('quantity','>',0)->load(['product']) as $item)
-                        <div class="form-row">
-                          {{-- chọn sản phẩm --}}
-                          <div class="form-group col-5">
-                            <select class="form-control select2 select-product" data-style="btn-light" name="product_id[]" required>
-                              <option value="">-- Chọn --</option>
-                              @forelse($warehouse_selected->wh_items as $wh_item)
-                                <option value="{{ $wh_item->product_id }}" data-discount="{{ $wh_item->product_id == $item->product_id ? $item->discount : $wh_item->product->discount }}" data-price="{{ $item->price }}" data-inventory="{{ $wh_item->quantity }}" {{ $wh_item->product_id == $item->product_id ? 'selected' : '' }}>
-                                  <span class="text-uppercase">{{ $wh_item->product->pretty_name }} - Tồn kho : {{ $wh_item->quantity }}
-                                </option>
-                              @empty
-                              @endforelse
-                            </select>
-                          </div>
-                          {{-- số lượng --}}
-                          <div class="form-group col-3">
-                            <input type="number" class="form-control p-1 quantity" name="quantity[]" required placeholder="Nhập số" min="1" max="" value="{{ $item->quantity }}" data-discount="{{ $item->discount }}" data-price="{{ $item->price }}" data-total="{{ ($item->quantity * $item->price)*((100 - $item->discount)/100) }}">
-                          </div>
-                          {{-- discount --}}
-                          <div class="form-group col-2">
-                            <input type="number" class="form-control p-1 discount" name="discount[]" required placeholder="" min="1" max="100" value="{{ $item->discount }}" readonly>
-                            <input type="hidden" class="form-control p-1 price" name="price[]" required value="{{ $item->price }}">
-                          </div>
-                          <div class="form-group col-1">
-                            <button type="button" class="btn btn-danger waves-light waves-effect remove-product-field"><i class="fas fa-minus"></i></button>
-                          </div>
-                        </div>
+
+                {{-- xác nhận thanh toán --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="cost" class="col-form-label">Xác nhận thanh toán</label>
+                  <div class="row m-0 text-center">
+                    <input type="checkbox" class="js-switch confirm-pay-checkbox" name="confirm-pay" {{ $order->payed_at != null ? 'checked' : ''}}>
+                  </div>
+                </div>
+
+                {{-- note --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="note" class="col-form-label">Note </label>
+                  <textarea class="form-control @error('note') is-invalid @enderror {{old('note',$order->note != null ? 'parsley-success':'')}}" rows="1" id="note" name="note">{{old('note',$order->note != null ? $order->note:'')}}</textarea>
+                  @error('note')
+                    <p class="text-validate mb-1" id="t_valid_note">{{ $message }}</p>
+                  @enderror
+                </div>
+
+                {{-- kho hàng --}}
+                <div class="form-group col-12 col-sm-6 col-md-6">
+                  <label for="cost" class="col-form-label">Kho hàng <span class="text-danger">*</span> <span class="text-danger d-none alert-wh text-uppercase">Không đủ cho đơn hàng</span></label>
+                  <select class="form-control select2 select-warehouse" data-style="btn-light" name="warehouse_id" required>
+                    <option value="">-- Chọn --</option>
+                    @forelse($warehouses as $item)
+                    <option value="{{ $item->id }}" {{$order->warehouse_id == $item->id ? 'selected':''}}>
+                      <span class="text-uppercase">{{ $item->name }}
+                    </option>
                     @empty
                     @endforelse
-                @endif
-              </div>
-              {{-- thêm mới trường sản phẩm --}}
-              @if($order->status != 6)
-                <div class="form-row">
-                  <div class="form-group col-12">
-                    <button type="button" class="btn btn-info waves-light waves-effect mt-35 add-product-field pl-3 pr-3"><i class="fas fa-plus"></i></button>
-                  </div>
+                  </select>
                 </div>
-              @endif
-            </div>
-          </div>
 
-          {{-- thành tiền --}}
-          <div class="form-row pl-2 pr-2 create-order d-none">
-            <div class="form-group col-12 col-md-12 col-sm-12">
-              @if($use_birth_discount['key'] == 1)
-                <div class="form-row">
-                  <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
-                    <label for="checkbox110">Giảm giá {{$use_birth_discount['value']}}% trong tháng sinh nhật khách .</label>
+                {{-- thông báo kho hàng có phú hợp với đơn hàng --}}
+                @if($order->status != 1)
+                  <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
+                    <button type="submit" class="btn btn-primary update-order text-center" id="btn_update_1" name="btn_update_1">Cập nhật</button>
                   </div>
-                </div>
-              @endif
-              @if($use_transfer_discount['key'] == 1)
-                <div class="form-row">
-                  <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
-                    <label for="checkbox110">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
+                @endif
+
+                {{-- phần sản phẩm trong đơn hàng --}}
+                <div class="form-group col-12 btn-add-pf">
+                  @if($order->status != 6)
+                    <p class="mb-1 mt-3 font-weight-bold text-uppercase">Thêm sản phẩm vào đơn hàng</p>
+                  @endif
+                  {{-- column title --}}
+                  <div class="form-row colunm-title-product d-none">
+                    <div class="form-group col-5">
+                      <p class="mb-0">Sản phẩm</p>
+                    </div>
+                    <div class="form-group col-3">
+                      <p class="mb-0">SL</p>
+                    </div>
+                    <div class="form-group col-2">
+                      <p class="mb-0"><i class="fas fa-arrow-down"></i> %</p>
+                    </div>
+                    <div class="form-group col-1">
+                    </div>
                   </div>
-                </div>
-              @endif
-              @if($use_free_ship['key'] == 1)
-                <div class="form-row">
-                  <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-freeship" id="checkbox-10" type="checkbox" disabled="" checked="" data-status="on" name="checkbox_freeship">
-                    <label for="checkbox-10">Đang bật FREESHIP cho đơn hàng trên {{ $use_free_ship['value']/1000 }}k</label>
+                  {{-- danh sách sản phẩm và số lượng --}}
+                  <div id="products_wrapper" class="d-none">
+                    @if($order->warehouse_id != null)
+                        @forelse($order_items->where('quantity','>',0)->load(['product']) as $item)
+                            <div class="form-row">
+                              {{-- chọn sản phẩm --}}
+                              <div class="form-group col-5">
+                                <select class="form-control select2 select-product" data-style="btn-light" name="product_id[]" required>
+                                  <option value="">-- Chọn --</option>
+                                  @forelse($warehouse_selected->wh_items as $wh_item)
+                                    <option value="{{ $wh_item->product_id }}" data-discount="{{ $wh_item->product_id == $item->product_id ? $item->discount : $wh_item->product->discount }}" data-price="{{ $item->price }}" data-inventory="{{ $wh_item->quantity }}" {{ $wh_item->product_id == $item->product_id ? 'selected' : '' }}>
+                                      <span class="text-uppercase">{{ $wh_item->product->pretty_name }} - Tồn kho : {{ $wh_item->quantity }}
+                                    </option>
+                                  @empty
+                                  @endforelse
+                                </select>
+                              </div>
+                              {{-- số lượng --}}
+                              <div class="form-group col-3">
+                                <input type="number" class="form-control p-1 quantity" name="quantity[]" required placeholder="Nhập số" min="1" max="" value="{{ $item->quantity }}" data-discount="{{ $item->discount }}" data-price="{{ $item->price }}" data-total="{{ ($item->quantity * $item->price)*((100 - $item->discount)/100) }}">
+                              </div>
+                              {{-- discount --}}
+                              <div class="form-group col-2">
+                                <input type="number" class="form-control p-1 discount" name="discount[]" required placeholder="" min="1" max="100" value="{{ $item->discount }}" readonly>
+                                <input type="hidden" class="form-control p-1 price" name="price[]" required value="{{ $item->price }}">
+                              </div>
+                              <div class="form-group col-1">
+                                <button type="button" class="btn btn-danger waves-light waves-effect remove-product-field"><i class="fas fa-minus"></i></button>
+                              </div>
+                            </div>
+                        @empty
+                        @endforelse
+                    @endif
                   </div>
+                  {{-- thêm mới trường sản phẩm --}}
+                  @if($order->status != 6)
+                    <div class="form-row">
+                      <div class="form-group col-12">
+                        <button type="button" class="btn btn-info waves-light waves-effect mt-35 add-product-field pl-3 pr-3"><i class="fas fa-plus"></i></button>
+                      </div>
+                    </div>
+                  @endif
                 </div>
-              @endif
-            </div>
-            <div class="form-group col-12 col-md-9 col-sm-12 money-form">
-              <p class="h5 text-center">Tạm Tính : <span id="provisional"></span></p>
-              <p class="h5 text-center d-none">Sinh Nhật : giảm <span id="sale_d_o_b" data-birth="false"></span>%</p>
-              <p class="h5 text-center d-none">Chuyển khoản : giảm <span id="sale_transfer" data-transfer="false"></span>%</p>
-              <p class="h5 text-center">Phí Ship : <span id="ship_cost"></span></p>
-              <p class="h3 text-center text-info">Tổng Tiền : <span id="order_total"></span></p>
-            </div>
-            <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-center pt-3">
-              <input type="hidden" name="arr_ois_origin" value="{{ $arr_ois_origin }}">
-              <button type="submit" class="btn btn-primary create-order d-none text-center p-3 update-order" name="btn_update_2">Cập nhật</button>
-            </div>
-          </div>
+              </div>
+
+              {{-- thành tiền --}}
+              <div class="form-row pl-2 pr-2 create-order d-none">
+                <div class="form-group col-12 col-md-12 col-sm-12">
+                  @if($use_birth_discount['key'] == 1)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Giảm giá {{$use_birth_discount['value']}}% trong tháng sinh nhật khách .</label>
+                      </div>
+                    </div>
+                  @endif
+                  @if($use_transfer_discount['key'] == 1)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                        <label for="checkbox110">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
+                      </div>
+                    </div>
+                  @endif
+                  @if($use_free_ship['key'] == 1)
+                    <div class="form-row">
+                      <div class="checkbox checkbox-success checkbox-circle">
+                        <input class="checkbox-freeship" id="checkbox-10" type="checkbox" disabled="" checked="" data-status="on" name="checkbox_freeship">
+                        <label for="checkbox-10">Đang bật FREESHIP cho đơn hàng trên {{ $use_free_ship['value']/1000 }}k</label>
+                      </div>
+                    </div>
+                  @endif
+                </div>
+                <div class="form-group col-12 col-md-9 col-sm-12 money-form">
+                  <p class="h5 text-center">Tạm Tính : <span id="provisional"></span></p>
+                  <p class="h5 text-center d-none">Sinh Nhật : giảm <span id="sale_d_o_b" data-birth="false"></span>%</p>
+                  <p class="h5 text-center d-none">Chuyển khoản : giảm <span id="sale_transfer" data-transfer="false"></span>%</p>
+                  <p class="h5 text-center">Phí Ship : <span id="ship_cost"></span></p>
+                  <p class="h3 text-center text-info">Tổng Tiền : <span id="order_total"></span></p>
+                </div>
+                <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-center pt-3">
+                  <input type="hidden" name="arr_ois_origin" value="{{ $arr_ois_origin }}">
+                  <button type="submit" class="btn btn-primary create-order d-none text-center p-3 update-order" name="btn_update_2">Cập nhật</button>
+                </div>
+              </div>
         </form>
     </div>
     @endif
@@ -1046,11 +1046,8 @@
             text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
           })
       }else{
-        // test
-        
-        // end test
-          $("#editForm").submit();
           $("#d_o_b").removeAttr('disabled');
+          $("#editForm").submit();
       }
     });
 

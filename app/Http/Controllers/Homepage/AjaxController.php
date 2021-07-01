@@ -57,12 +57,12 @@ class AjaxController extends Controller
             $id = $request->id;
 
             if($id){
-                $deleted = CartItem::where('id',$id)->delete();
-                if($deleted){
+                // $deleted = CartItem::where('id',$id)->delete();
+                // if($deleted){
                     return Response::json(['success'=>true]);
-                }else{
-                    return Response::json(['success'=>false]);
-                }
+                // }else{
+                    // return Response::json(['success'=>false]);
+                // }
             }else{
                 return Response::json(['success'=>false]);
             }
