@@ -477,7 +477,7 @@ class OrderController extends Controller
 
                 // chỉ update thông tin đơn hàng
                 if(Arr::has($request->all(),'btn_update_1')){
-                    dd(1,$request->all());
+                    // dd(1,$request->all());
 
                     $t_o_f = json_decode($order->types_of_fee,true);
                     $ship_fee = (int) $order->ship_fee;
@@ -550,7 +550,7 @@ class OrderController extends Controller
                         'status_at' => $status_at
                     ];
                 }else{// update toàn bộ đơn hàng
-                    dd(2,$request->all());
+                    // dd(2,$request->all());
 
                     // arr request products
                     $arr_product_id = $request->input('product_id');

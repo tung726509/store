@@ -670,7 +670,7 @@
     });
 
     // nhập số lượng thì tính giá
-    $("#products_wrapper").on('keyup','.quantity',function(event){
+    $("#products_wrapper").on('keyup change','.quantity',function(event){
       let quantity = parseInt($(this).val());
       if(quantity){
         if(quantity > 0){

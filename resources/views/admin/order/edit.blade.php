@@ -216,7 +216,7 @@
                 {{-- thông báo kho hàng có phú hợp với đơn hàng --}}
                 @if($order->status != 1)
                   <div class="form-group col-12 col-md-12 col-sm-12 text-right mb-0">
-                    <button type="submit" class="btn btn-primary update-order text-center" id="btn_update_1" name="btn_update_1">Cập nhật</button>
+                    <input class="btn btn-primary update-order text-center" id="btn_update_1" name="btn_update_1" value="Cập nhật" readonly/>
                   </div>
                 @endif
 
@@ -319,9 +319,9 @@
                   <p class="h5 text-center">Phí Ship : <span id="ship_cost"></span></p>
                   <p class="h3 text-center text-info">Tổng Tiền : <span id="order_total"></span></p>
                 </div>
-                <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-center pt-3">
+                <div class="form-group col-12 col-md-3 col-sm-12 text-right mb-0 text-right pt-3">
                   <input type="hidden" name="arr_ois_origin" value="{{ $arr_ois_origin }}">
-                  <button type="submit" class="btn btn-primary create-order d-none text-center p-3 update-order" name="btn_update_2">Cập nhật</button>
+                  <input class="btn btn-primary create-order d-none text-center update-order" id="btn_update_2" name="btn_update_2" value="Cập nhật" readonly/>
                 </div>
               </div>
         </form>
@@ -920,7 +920,7 @@
     });
 
     // nhập số lượng thì tính giá
-    $("#products_wrapper").on('keyup','.quantity',function(event){
+    $("#products_wrapper").on('keyup change','.quantity',function(event){
       let quantity = parseInt($(this).val());
       if(quantity){
         if(quantity > 0){
@@ -1039,6 +1039,7 @@
     $(".update-order").click(function(event){
       event.preventDefault();
       let confirm_pay_btn = $('.confirm-pay-checkbox').is(":checked");
+      let id_this = $(this).attr('id');
       if(confirm_pay_btn){
           Swal.fire({
             icon: 'info',
@@ -1046,6 +1047,11 @@
             text: 'Chuyển về chưa thanh toán để có thể sửa danh sách sp . "Xác nhận thanh toán" lại sau khi nhận đủ tiền',
           })
       }else{
+          if(id_this == 'btn_update_1'){
+            $("#btn_update_2").attr('disabled',true);
+          }else if(id_this == 'btn_update_2'){
+            $("#btn_update_1").attr('disabled',true);
+          }
           $("#d_o_b").removeAttr('disabled');
           $("#editForm").submit();
       }
