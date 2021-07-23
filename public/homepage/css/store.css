@@ -299,3 +299,9 @@
       padding:17px;
       border-radius: 16px;
     }
+    .color-pink{
+        color: #f46666;
+    }
+    .not-empty{
+        border :  1px solid #2ec928 !important;
+    }

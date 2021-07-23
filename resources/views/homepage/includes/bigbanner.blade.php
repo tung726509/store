@@ -1,74 +1,74 @@
 <style type="text/css">
-  div.porto-ibanner-container{
-    height: 65% !important;
-  }
-  .banner-height-image{
-      height: 330px;
+    div.porto-ibanner-container{
+      height: 65% !important;
     }
-
-  @media only screen and (max-width: 1700px) {
-    div.porto-ibanner-container{  
-      height: 73% !important;
-    }
-  }
-
-  @media only screen and (max-width: 1500px) {
-    div.porto-ibanner-container{  
-      height: 80% !important;
-    }
-  }
-
-  @media only screen and (max-width: 1400px) {
-    div.porto-ibanner-container{  
-      height: 80% !important;
-    }
-
     .banner-height-image{
-      height:310px;
-    }
-  }
+        height: 330px;
+      }
 
-  @media only screen and (max-width: 1300px) {
-    div.porto-ibanner-container{  
-      height: 83% !important;
-    }
-
-    .banner-height-image{
-      height:290px;
-    }
-  }
-
-  @media only screen and (max-width: 1200px) {
-    div.porto-ibanner-container{  
-      height: 100% !important;
+    @media only screen and (max-width: 1700px) {
+      div.porto-ibanner-container{  
+        height: 73% !important;
+      }
     }
 
-    .banner-height-image{
-      height: auto;
-    }
-  }
-
-  @media only screen and (min-width: 576px) and (max-width: 870px) {
-    div.porto-ibanner-container{  
-      height: 100% !important;
-    }
- 
-    .bbi-text-1{
-      margin-bottom: 5px !important;
+    @media only screen and (max-width: 1500px) {
+      div.porto-ibanner-container{  
+        height: 80% !important;
+      }
     }
 
-    .bbi-text-2{
-      margin-bottom: 5px !important;
+    @media only screen and (max-width: 1400px) {
+      div.porto-ibanner-container{  
+        height: 80% !important;
+      }
+
+      .banner-height-image{
+        height:310px;
+      }
     }
 
-    .bbi-text-3{
-      margin-bottom: 5px !important;
+    @media only screen and (max-width: 1300px) {
+      div.porto-ibanner-container{  
+        height: 83% !important;
+      }
+
+      .banner-height-image{
+        height:290px;
+      }
     }
 
-    .banner-height-image{
-      height: auto;
+    @media only screen and (max-width: 1200px) {
+      div.porto-ibanner-container{  
+        height: 100% !important;
+      }
+
+      .banner-height-image{
+        height: auto;
+      }
     }
-  }
+
+    @media only screen and (min-width: 576px) and (max-width: 870px) {
+      div.porto-ibanner-container{  
+        height: 100% !important;
+      }
+   
+      .bbi-text-1{
+        margin-bottom: 5px !important;
+      }
+
+      .bbi-text-2{
+        margin-bottom: 5px !important;
+      }
+
+      .bbi-text-3{
+        margin-bottom: 5px !important;
+      }
+
+      .banner-height-image{
+        height: auto;
+      }
+    }
 </style>
 {{-- Big Banner --}}
 <div class="banner-height-image porto-carousel owl-carousel has-ccols ccols-1 mb-0 home-slider nav-style-4 owl-drag" data-plugin-options="" style="">

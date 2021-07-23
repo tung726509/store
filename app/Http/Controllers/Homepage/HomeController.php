@@ -53,6 +53,10 @@ class HomeController extends Controller
         $customer = $this->customer;
         $cart_items = $this->cart_items;
 
+        if($customer){
+            return $this->myCart();
+        }
+
         return response()->view('homepage.login.index',compact('customer','cart_items'))->withCookie($this->new_cookie);
     }
 
@@ -165,5 +169,4 @@ class HomeController extends Controller
 
         return $cart_items;
     }
-
 }

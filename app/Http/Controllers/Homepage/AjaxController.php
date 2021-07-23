@@ -14,6 +14,7 @@ use App\Rules\VietnamesePhone;
 use Illuminate\Support\Facades\Validator;
 
 use App\Customer;
+use App\Product;
 use App\CartItem;
 use App\Cookiee;
 
@@ -23,10 +24,11 @@ class AjaxController extends Controller
 
 	function __construct(){
         $this->customer_m = new Customer();
+        $this->product_m = new Product();
+        $this->cartitem_m = new CartItem();
     }
 
-    public function attachCustomerWithCookie(Request $request)
-    {
+    public function attachCustomerWithCookie(Request $request){
         // dd(Cookie::get('cookie_string'));
 		$customer = null;
     	if($request->ajax()){
@@ -51,8 +53,7 @@ class AjaxController extends Controller
     	return false;
     }
 
-    public function trashItemInCart(Request $request)
-    {
+    public function trashItemInCart(Request $request){
         if($request->ajax()){
             $id = $request->id;
 
@@ -72,8 +73,7 @@ class AjaxController extends Controller
         return Response::json(['success'=>false]);
     }
 
-    public function updateCustomerInfo(Request $request)
-    {
+    public function updateCustomerInfo(Request $request){
         $rules = [
             'phone' => ['required',new VietnamesePhone,'exists:customers,phone'],
             'name' => ['required','string','min:1','max:50'],
@@ -135,5 +135,58 @@ class AjaxController extends Controller
 
             return false;
         }
+    }
+
+    public function addProductToCart(Request $request){
+        if($request->ajax()){
+            $product_id = $request->product_id;
+            $customer_id = $request->customer_id;
+
+            if($customer_id && $product_id){
+                $customer = $this->customer_m->find($customer_id);
+                $product = $this->product_m->find($product_id);
+
+                if(!$customer)
+                    return Response::json(['success'=>false,'message'=>'Người dùng không tồn tại !']);
+                
+                if(!$product)
+                    return Response::json(['success'=>false,'message'=>'Sản phẩm không tồn tại !']);
+
+                $cart_item = $this->cartitem_m->where([
+                    'product_id'=>$product_id,
+                    'customer_id'=>$customer_id,
+                    'status'=>null
+                ])->first();
+
+                if($cart_item){
+                    $cart_item->quantity = (int)$cart_item->quantity + 1;
+                    $updated = $cart_item->save();
+
+                    if($updated){
+                        return Response::json(['success'=>true,'message'=>'Đã thêm sản phẩm vào giỏ hàng !','status'=>'update']);
+                    }else{
+                        return Response::json(['success'=>false,'message'=>'Lỗi hệ thống , vui lòng thử lại sau !']);
+                    }
+                }else{
+                    $created = $this->cartitem_m->create([
+                        'customer_id' => $customer_id,
+                        'product_id' => $product_id,
+                        'quantity' => 1,
+                        'status' => null,
+                        'created_at' => Carbon::now(),
+                    ]);
+
+                    if($created){
+                        return Response::json(['success'=>true,'message'=>'Đã thêm sản phẩm vào giỏ hàng !','status'=>'create']);
+                    }else{
+                        return Response::json(['success'=>false,'message'=>'Lỗi hệ thống , vui lòng thử lại sau !']);
+                    }
+                }
+            }else{
+                return Response::json(['success'=>false,'message'=>'Lỗi hệ thống , vui lòng thử lại sau !']);
+            }
+        }
+
+        return false;
     }
 }

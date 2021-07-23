@@ -1,12 +1,15 @@
+{{-- master layout --}}
 @extends('homepage.layouts.app')
 
+{{-- css library --}}
 @push('libs-styles')
+    <link href="{{ asset('homepage/css/store.css') }}" rel="stylesheet">
     <link href="{{ asset('homepage/css/jquery.nice-number.css') }}" rel="stylesheet">
     <link href="{{ asset('homepage/css/pretty-checkbox.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('homepage/css/store.css') }}" rel="stylesheet">
     <link href="{{asset('admini/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" type="text/css">
 @endpush
 
+{{-- css page --}}
 @push('page-styles')
     <style type="text/css">
         .color-pink{
@@ -18,238 +21,207 @@
     </style>
 @endpush
 
-@section('content')
-<div id="main" class="column1 wide clearfix no-breadcrumbs">
-    <!-- main -->
-    {{-- <div class="container-fluid"> --}}
-        <div class="row main-content-wrap">
-            <!-- main content -->
-            <div class="main-content col-lg-12">
-                <div id="content" role="main">
-                    <article class="post-143 page type-page status-publish hentry">
-                        <div class="page-content">
-                            {{-- super banner --}}
-                            @include('homepage.includes.bigbanner')
-                            {{-- breadcrumb --}}
-                            <section class="page-top page-header-6" style="">
-                                <div class="container hide-title">
-                                    <div class="row" style="border: 1px solid #E9E4E4;border-radius: 15px;">
-                                      <div class="col-lg-12" style="">
-                                            <nav aria-label="breadcrumb bgc-white">
-                                                <ol class="breadcrumb p-0 bgc-white mb-1 mt-1">
-                                                  <li><i class="fas fa-home brcr-icon-lr"></i><a href="#" class="link-black">Home</a></li>
-                                                  <li><i class="fas fa-angle-right brcr-icon-lr"></i><a href="#" class="link-black">My Cart</a></li>
-                                                </ol>
-                                            </nav>
-                                      </div>
-                                    </div>
-                                </div>
-                            </section>
-                            {{-- main --}}
-                            <div class="column1 boxed mt-4">
-                                <div class="container">
-                                    {{-- <hr class="hr-style"/> --}}
-                                    <div class="row main-content-wrap">
-                                        <div class="main-content col-lg-12">
-                                            <div id="content" role="main">
-                                                <div class="page-content">
-                                                    <div class="vc_row wpb_row row">
-                                                        <div class="col-lg-12">
-                                                            <p class="p-title mb-3"><i class="fas fa-shopping-cart mr-1 p-icon-title"></i>Giỏ hàng của bạn</p>
-                                                            <div class="mycart">
-                                                                <div class="mycart-header">
-                                                                    <div class="h6">Có <span class="font-weight-bold cart-items-count">{{ $cart_items ? $cart_items->count() : '0' }}</span> sản phẩm trong giỏ hàng</div>
-                                                                </div>
-                                                                <div class="mycart-body">
-                                                                    @if($cart_items)
-                                                                        @forelse($cart_items as $item)
-                                                                            <div class="mycart-item" id="mc_item_{{ $item->id }}">
-                                                                                <div class="mycart-item-p product-image">
-                                                                                    <div class="text-center">
-                                                                                        <a href="#">
-                                                                                            <img width="auto" src="{{asset('homepage/images/rsz_plain_backpack_1b-120x155.jpg')}}" class="" alt="" srcset="" sizes=""/>
-                                                                                        </a>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="mycart-item-p product-qty">
-                                                                                    <div class="form-row mb-2 pl-2">
-                                                                                        @php
-                                                                                            $now = Carbon\Carbon::now();
-                                                                                            $price = $item->product->price;
-                                                                                            if($item->product->expired_discount > $now){
-                                                                                                $price = $item->product->price * (( 100 - $item->product->discount) / 100);
-                                                                                            }
-                                                                                        @endphp
-                                                                                        <p class="text-lowercase mb-0">{{ $item->product->pretty_name }}
-                                                                                            @if( $item->product->expired_discount > $now )
-                                                                                                <i class="fas fa-arrow-down color-pink ml-2"></i><span class="color-pink">{{ $item->product->discount }}%</span>
-                                                                                            @else
+{{-- bread_crumb --}}
+@section('breadcrumb')
+   @parent
+   <li>
+      <i class="fas fa-angle-right brcr-icon-lr"></i><a href="{{ route('mycart') }}" class="link-black">Giỏ hàng</a>
+   </li>
+@endsection
 
-                                                                                            @endif
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    <div class="form-row mb-0 pl-2">
-                                                                                        <input id="item_qty_{{ $item->id }}" class="item-qty" type="number" value="{{ $item->quantity }}" style="width: 4ch;" data-price="{{ $price }}" data-total="{{ $price*$item->quantity }}" data-picked="0" min="0" max="10000">
-                                                                                        <span class="ml-2 font-weight-bold">x {{ modifierVnd($price) }}</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="mycart-item-p product-pick">
-                                                                                    <div class="form-row text-center mb-0 h-50">
-                                                                                        <div class="align-auto">
-                                                                                            <div id="pretty-scale-test" style="font-size: 16px;">
-                                                                                                <div class="pretty p-icon p-jelly p-round p-bigger mr-0">
-                                                                                                    <input class="item-check" type="checkbox" id="item_check_{{ $item->id }}" data-status="0" data-id="{{ $item->id }}"/>
-                                                                                                    <div class="state p-info">
-                                                                                                        <i class="mdi mdi-checkbox-marked-circle-outline"></i>
-                                                                                                        <label></label>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="form-row text-center mb-0 h-50">
-                                                                                        <div class="align-auto">
-                                                                                            <i class="far fa-trash-alt item-trash" style="font-size: 18px" data-id="{{ $item->id }}"></i>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        @empty
-                                                                        @endforelse
-                                                                    @endif
+{{-- content --}}
+@section('content')
+        {{-- ưu đãi khách hàng --}}
+        @include('homepage.includes.incentive')
+
+        {{-- giỏ hàng --}}
+        <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
+            <div class="container">
+                <div class="vc_row wpb_row row">
+                    <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 p-0">
+                        <p class="p-title mb-3"><i class="fas fa-shopping-cart mr-1 p-icon-title"></i>Giỏ hàng của bạn</p>
+                        <div class="mycart">
+                            <div class="mycart-header">
+                                <div class="h6">Có <span class="font-weight-bold cart-items-count">{{ $cart_items->count() > 0  ? $cart_items->count() : '0' }}</span> sản phẩm trong giỏ hàng</div>
+                            </div>
+                            @if($cart_items->count() > 0)
+                                <div class="mycart-body">
+                                    @forelse($cart_items as $item)
+                                        <div class="mycart-item" id="mc_item_{{ $item->id }}">
+                                            <div class="mycart-item-p product-image">
+                                                <div class="text-center">
+                                                    <a href="#">
+                                                        <img width="auto" src="{{asset('homepage/images/rsz_plain_backpack_1b-120x155.jpg')}}" class="" alt="" srcset="" sizes=""/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="mycart-item-p product-qty">
+                                                <div class="form-row mb-2 pl-2">
+                                                    @php
+                                                        $price = $item->product->price;
+                                                        if($item->product->expired_discount > $now){
+                                                            $price = $item->product->price * (( 100 - $item->product->discount) / 100);
+                                                        }
+                                                    @endphp
+                                                    <p class="text-lowercase mb-0">{{ $item->product->pretty_name }}
+                                                        @if( $item->product->expired_discount > $now )
+                                                            <i class="fas fa-arrow-down color-pink ml-2"></i><span class="color-pink">{{ $item->product->discount }}%</span>
+                                                        @else
+
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                                <div class="form-row mb-0 pl-2">
+                                                    <input id="item_qty_{{ $item->id }}" class="item-qty" type="number" value="{{ $item->quantity }}" style="width: 4ch;" data-price="{{ $price }}" data-total="{{ $price*$item->quantity }}" data-picked="0" min="0" max="10000">
+                                                    <span class="ml-2 font-weight-bold">x {{ modifierVnd($price) }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="mycart-item-p product-pick">
+                                                <div class="form-row text-center mb-0 h-50">
+                                                    <div class="align-auto">
+                                                        <div id="pretty-scale-test" style="font-size: 16px;">
+                                                            <div class="pretty p-icon p-jelly p-round p-bigger mr-0">
+                                                                <input class="item-check" type="checkbox" id="item_check_{{ $item->id }}" data-status="0" data-id="{{ $item->id }}"/>
+                                                                <div class="state p-info">
+                                                                    <i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                                                    <label></label>
                                                                 </div>
-                                                                @if($cart_items)
-                                                                    @if($cart_items->count() > 0)
-                                                                        <div class="mycart-footer">
-                                                                            <div class="clearfix">
-                                                                                <p class="h6 float-left">Tạm Tính</p>
-                                                                                <p class="h6 float-right" id="provisional">đ0</p>
-                                                                            </div>
-                                                                            <div class="clearfix {{ $birth_discount ? '' : 'd-none' }}">
-                                                                                <p class="h6 float-left">Sinh Nhật</p>
-                                                                                <p class="h6 float-right color-pink">
-                                                                                    <i class="fas fa-arrow-down ml-2"></i><span id="sale_d_o_b" data-status="{{ $birth_discount ? 'true' : 'false' }}">{{ $use_birth_discount['value'] }}</span>%
-                                                                                </p>
-                                                                            </div>
-                                                                            @if(is_array($use_transfer_discount) )
-                                                                                <div class="clearfix">
-                                                                                    {{-- <p class="h6 float-left">Chuyển khoản</p> --}}
-                                                                                    <select class="float-left" name="payments_type" id="payments_type" style="padding:0px;margin-bottom: .5rem;font-size: 1rem;width: 150px">
-                                                                                        <option value="ck">Chuyển khoản</option>
-                                                                                        <option value="tm" selected>Tiền mặt</option>
-                                                                                    </select>
-                                                                                    <p class="h6 float-right color-pink"><i class="fas fa-arrow-down ml-2"></i> <span id="sale_transfer" data-transfer="tm">0</span>%</p> 
-                                                                                </div>
-                                                                            @endif
-                                                                            <div class="clearfix">
-                                                                                <p class="h6 float-left">Phí Ship</p>
-                                                                                <p class="h6 float-right"><span id="ship_cost" data-status="false">từ 15k - 20k</span></p>
-                                                                            </div>
-                                                                            <div class="clearfix">
-                                                                                <p class="font-weight-bold h5 float-left">Thành Tiền</p>
-                                                                                <p class="font-weight-bold h5 float-right" id="total_money">đ0</p>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <p class="text-success mb-0">* shop sẽ gọi điện xác nhận đơn hàng</p>
-                                                                                <p class="text-success mb-0">* dự kiến giao hàng trong 1 - 2 ngày</p>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <button class="btn btn-primary btn-border-radius btn-order py-3">Đặt Hàng</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endif
-                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <hr/>
-
-                                                    <div class="row mb-5 ">
-                                                        {{-- thông tin người nhận hàng --}}
-                                                        <div class="vc_column_container col-md-6 mt-3">
-                                                            <div class="wpb_wrapper vc_column-inner">
-                                                                <div class="box-content" style="">
-                                                                    <p class="p-title m-0"><i class="fas fa-user mr-1 p-icon-title"></i>Thông tin người nhận hàng</p>
-                                                                    <p class="text-muted align-left mb-4">Các trường đánh dấu <span class="text-danger">(*)</span> là bắt buộc .</p>
-                                                                    {{-- số điện thoại --}}
-                                                                    <div class="input-group mb-2">
-                                                                        <div class="input-group-prepend mr-1">
-                                                                            <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-phone-volume"></i></span>
-                                                                        </div>
-                                                                        <input type="text" id="customer_phone" class="input-type-2 customer-info" placeholder="sđt ... *" value="{{ $customer != null ? $customer->phone : '' }}" required/>
-                                                                        <p class="w-100 text-danger mb-0" id="customer_phone_error" style="margin-left: 50px;"></p>
-                                                                    </div>
-                                                                    {{-- tên --}}
-                                                                    <div class="input-group mb-2">
-                                                                        <div class="input-group-prepend mr-1">
-                                                                            <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-user"></i></span>
-                                                                        </div>
-                                                                        <input type="text" id="customer_name" class="input-type-2 customer-info" placeholder="tên ... *" value="{{ $customer != null ? $customer->name : '' }}" required/>
-                                                                        <p class="w-100 text-danger mb-0" id="customer_name_error" style="margin-left: 50px;"></p>
-                                                                    </div>
-                                                                    {{-- địa chỉ --}}
-                                                                    <div class="input-group mb-2">
-                                                                        <div class="input-group-prepend mr-1">
-                                                                            <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-map-marked-alt"></i></span>
-                                                                        </div>
-                                                                        <input type="text" id="customer_address" class="input-type-2 customer-info" placeholder="địa chỉ ... *" value="{{ $customer != null ? $customer->address : '' }}" required/>
-                                                                        <p class="w-100 text-danger mb-0" id="customer_address_error" style="margin-left: 50px;"></p>
-                                                                    </div>
-                                                                    {{-- sinh nhật --}}
-                                                                    <div class="input-group mb-2">
-                                                                        <div class="input-group-prepend mr-1">
-                                                                            <span class="input-group-text px-3 i-next-input-t2"><i class="far fa-calendar-alt"></i></span>
-                                                                        </div>
-                                                                        <input type="text" id="customer_date" class="input-type-2 customer-info" placeholder="mm/dd/yyyy" value="{{ $customer != null ? ($customer->d_o_b ? $customer->d_o_b->format('m/d/Y') : '') : '' }}" data-date-end-date="0d" {{ $customer->d_o_b ? 'disabled' : ''}} required/>
-                                                                        <p class="w-100 text-danger mb-0" id="customer_date_error" style="margin-left: 50px;"></p>
-                                                                    </div>
-                                                                    {{-- facebook --}}
-                                                                    {{-- <div class="input-group mb-2">
-                                                                        <div class="input-group-prepend mr-1">
-                                                                            <span class="input-group-text px-3 i-next-input-t2"><i class="fab fa-facebook"></i></span>
-                                                                        </div>
-                                                                        <input type="text" class="input-type-2 customer-info" placeholder="facebook ..." value="{{ $customer != null ? $customer->facebook : '' }}"/>
-                                                                        <p class="w-100 text-danger mb-0" id="customer_phone_error" style="margin-left: 50px;"></p>
-                                                                    </div> --}}
-                                                                    <button class="btn btn-borders btn-md btn-primary float-right btn-update-info">Cập Nhật</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        {{-- lịch sử mua bán --}}
+                                                </div>
+                                                <div class="form-row text-center mb-0 h-50">
+                                                    <div class="align-auto">
+                                                        <i class="far fa-trash-alt item-trash" style="font-size: 18px" data-id="{{ $item->id }}"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @empty
+                                    @endforelse
                                 </div>
-                            </div>
+                            @endif
+                            @if($cart_items)
+                                @if($cart_items->count() > 0)
+                                    <div class="mycart-footer">
+                                        <div class="clearfix">
+                                            <p class="h6 float-left">Tạm Tính</p>
+                                            <p class="h6 float-right" id="provisional">đ0</p>
+                                        </div>
+                                        <div class="clearfix {{ $birth_discount ? '' : 'd-none' }}">
+                                            <p class="h6 float-left">Sinh Nhật</p>
+                                            <p class="h6 float-right color-pink">
+                                                <i class="fas fa-arrow-down ml-2"></i><span id="sale_d_o_b" data-status="{{ $birth_discount ? 'true' : 'false' }}">{{ $use_birth_discount['value'] }}</span>%
+                                            </p>
+                                        </div>
+                                        @if(is_array($use_transfer_discount) )
+                                            <div class="clearfix">
+                                                {{-- <p class="h6 float-left">Chuyển khoản</p> --}}
+                                                <select class="float-left" name="payments_type" id="payments_type" style="padding:0px;margin-bottom: .5rem;font-size: 1rem;width: 150px">
+                                                    <option value="ck">Chuyển khoản</option>
+                                                    <option value="tm" selected>Tiền mặt</option>
+                                                </select>
+                                                <p class="h6 float-right color-pink"><i class="fas fa-arrow-down ml-2"></i> <span id="sale_transfer" data-transfer="tm">0</span>%</p> 
+                                            </div>
+                                        @endif
+                                        <div class="clearfix">
+                                            <p class="h6 float-left">Phí Ship</p>
+                                            <p class="h6 float-right">
+                                                <span id="ship_cost" data-status="false">đ0{{-- từ 15k - 20k --}}</span>
+                                            </p>
+                                        </div>
+                                        <div class="clearfix">
+                                            <p class="font-weight-bold h5 float-left">Thành Tiền</p>
+                                            <p class="font-weight-bold h5 float-right" id="total_money">đ0</p>
+                                        </div>
+                                        <div class="form-row">
+                                            <p class="text-success mb-0">* shop sẽ gọi điện xác nhận đơn hàng</p>
+                                            <p class="text-success mb-0">* dự kiến giao hàng trong 1 - 2 ngày</p>
+                                        </div>
+                                        <div class="form-row">
+                                            <button class="btn btn-primary btn-border-radius btn-order py-3">Đặt Hàng</button>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
-                    </article>
+                    </div>
                 </div>
             </div>
-            <!-- end main content -->
-            <div class="sidebar-overlay"></div>
-        </div>
-    {{-- </div> --}}
-</div>
+        </section>
+        <hr/>
+
+        {{-- thông tin người nhận hàng --}}
+        <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
+            <div class="container">
+                <div class="row mb-5 ">
+                    <div class="vc_column_container col-md-6 mt-3">
+                        <div class="wpb_wrapper vc_column-inner">
+                            <div class="box-content" style="">
+                                <p class="p-title m-0"><i class="fas fa-user mr-1 p-icon-title"></i>Thông tin người nhận hàng</p>
+                                <p class="text-muted align-left mb-4">Các trường đánh dấu <span class="text-danger">(*)</span> là bắt buộc .</p>
+                                {{-- số điện thoại --}}
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend mr-1">
+                                        <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-phone-volume"></i></span>
+                                    </div>
+                                    <input type="text" id="customer_phone" class="input-type-2 customer-info" placeholder="sđt ... *" value="{{ $customer != null ? $customer->phone : '' }}" required/>
+                                    <p class="w-100 text-danger mb-0 customer-error" id="customer_phone_error" style="margin-left: 50px;"></p>
+                                </div>
+                                {{-- tên --}}
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend mr-1">
+                                        <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-user"></i></span>
+                                    </div>
+                                    <input type="text" id="customer_name" class="input-type-2 customer-info" placeholder="tên ... *" value="{{ $customer != null ? $customer->name : '' }}" required/>
+                                    <p class="w-100 text-danger mb-0" id="customer_name_error" style="margin-left: 50px;"></p>
+                                </div>
+                                {{-- địa chỉ --}}
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend mr-1">
+                                        <span class="input-group-text px-3 i-next-input-t2"><i class="fas fa-map-marked-alt"></i></span>
+                                    </div>
+                                    <input type="text" id="customer_address" class="input-type-2 customer-info" placeholder="địa chỉ ... *" value="{{ $customer != null ? $customer->address : '' }}" required/>
+                                    <p class="w-100 text-danger mb-0" id="customer_address_error" style="margin-left: 50px;"></p>
+                                </div>
+                                {{-- sinh nhật --}}
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend mr-1">
+                                        <span class="input-group-text px-3 i-next-input-t2"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input type="text" id="customer_date" class="input-type-2 customer-info" placeholder="mm/dd/yyyy" value="{{ $customer != null ? ($customer->d_o_b ? $customer->d_o_b->format('m/d/Y') : '') : '' }}" data-date-end-date="0d" {{ $customer->d_o_b ? 'disabled' : ''}} required/>
+                                    <p class="w-100 text-danger mb-0" id="customer_date_error" style="margin-left: 50px;"></p>
+                                </div>
+                                {{-- facebook --}}
+                                {{-- <div class="input-group mb-2">
+                                    <div class="input-group-prepend mr-1">
+                                        <span class="input-group-text px-3 i-next-input-t2"><i class="fab fa-facebook"></i></span>
+                                    </div>
+                                    <input type="text" class="input-type-2 customer-info" placeholder="facebook ..." value="{{ $customer != null ? $customer->facebook : '' }}"/>
+                                    <p class="w-100 text-danger mb-0" id="customer_phone_error" style="margin-left: 50px;"></p>
+                                </div> --}}
+                                <button class="btn btn-borders btn-md btn-primary float-right btn-update-info">Cập Nhật</button>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- lịch sử mua bán --}}
+                </div>
+            </div>
+        </section>
 @endsection
 
+{{-- js library --}}
 @push('libs-scripts')
-    <script src="{{ asset('admini/js/jquery-3.5.0.min.js') }}"></script>
+    {{-- <script src="{{ asset('admini/js/jquery-3.5.0.min.js') }}"></script> --}}
     <script src="{{ asset('homepage/js/jquery-ui.min.js') }}"></script>
-    <script src="{{asset('admini/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset('admini/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('homepage/js/jquery.nice-number.js') }}"></script>
 @endpush
 
+{{-- js page --}}
 @push('page-scripts')
     <script type="text/javascript">
-        $(document).ready(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+        jQuery(document).ready(function ($) {
             // pretty date
             $( "#customer_date" ).datepicker({
                 disableTouchKeyboard:true,
@@ -311,6 +283,7 @@
                     .done(function(res) {
                         if(res.success){
                             $("#sale_d_o_b").attr('data-status', res.birth_discount);
+                            $(".customer-info").next().text('');    
                             if(res.birth_discount)
                                 $("#sale_d_o_b").parent().parent().removeClass('d-none');
                             else
@@ -442,15 +415,19 @@
                 update_total_money();
             });
 
+            $(".btn-order").click(function(event){
+                
+            });
+
             // function up date giá tiền 
             function update_total_money(){
                 let provisional = 0,
                     birth_discount = 0,
                     transfer_discount = 0,
                     total_money = 0;
-
-                // update số loại item trong giỏ
-                $(".cart-items-count").text($(".mycart-item").length); 
+                
+                // update số loại sản phẩm trong giỏ
+                update_cart_items_count();
 
                 // tính giá tam tính
                 $(".item-qty").each(function(index, el){
@@ -458,9 +435,12 @@
                         total_of_item = 0;
 
                     if(picked == 1){
-                        total_of_item = parseInt( $(el).attr('data-total') );
-                    }else if(picked == 0){
-
+                        let total = $(el).attr('data-total');
+                        if(total == 'NaN' ){
+                            total_of_item = 0; 
+                        }else{
+                            total_of_item = parseInt( total );
+                        }
                     }
 
                     provisional += total_of_item;
@@ -495,14 +475,22 @@
 
                     transfer_discount = provisional * ( parseInt(payments_val) / 100 );
 
-                // phí ship 
-                    @if(is_array($use_free_ship) )
+                // phí ship
+                    let text_ship = ' + ship';
+                    @if( is_array($use_free_ship) )
                         if(provisional >= {{ $use_free_ship['value'] }}){
                             $("#ship_cost").attr('data-status',true);
                             $("#ship_cost").html('miễn phí');
+                            text_ship = '';
                         }else{
                             $("#ship_cost").attr('data-status',false);
-                            $("#ship_cost").html('từ 15k - 20k');
+                            if(provisional == 0){
+                                $("#ship_cost").html('đ0');
+                                text_ship = '';
+                            }
+                            else{
+                                $("#ship_cost").html('từ 15k - 20k');
+                            }
                         }
                     @endif
 
@@ -511,7 +499,7 @@
                 console.log(birth_discount,transfer_discount,birth_discount_status);
 
                 $('#provisional').html( modifierVnd(provisional) );
-                $('#total_money').html( modifierVnd(total_money) );
+                $('#total_money').html( modifierVnd(total_money)+text_ship );
             }
 
             // convert to currency_vietnamese
@@ -521,7 +509,14 @@
 
                 return x;
             }
+
+            // update số loại sản phẩm trong giỏ
+            function update_cart_items_count() {
+                $(".cart-items-count").text($(".mycart-item").length);
+            }
         });
 
     </script>
 @endpush
+
+

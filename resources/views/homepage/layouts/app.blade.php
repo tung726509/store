@@ -11,9 +11,8 @@
 	   	{{-- <script>document.documentElement.className = document.documentElement.className + ' yes-js js_active js'</script> --}}
 	   	<title>T-store {{-- | Cửa hàng tạp pí lù --}}</title>
 
-	   	{{-- <style id="woocommerce-inline-inline-css">.woocommerce form .form-row .required { visibility: visible; }</style> --}}
-
 	   	<link rel="stylesheet" href="{{asset('homepage/css/header-cd6.min.css')}}" media="all">
+	   	<link rel="stylesheet" href="{{asset('admini/css/alertify.min.css')}}"/>
 
 	   	<script src="{{asset('homepage/js/header-cb05.min.js')}}"></script>
 		<script src="{{asset('homepage/js/head-js-1.js')}}"></script>
@@ -36,27 +35,60 @@
 		   	<!-- header wrapper -->
 		   	@include('homepage.includes.header')
 		   	<!-- end header wrapper -->
-		   	@yield('content')
+		   	<div id="main" class="column1 wide clearfix no-breadcrumbs">
+		      	<div class="container-fluid">
+		         	<div class="row main-content-wrap">
+		            	<div class="main-content col-lg-12">
+		               		<div id="content" role="main">
+		                  		<div class="page-content">
+		                  			{{-- banner lớn --}}
+							      	@include('homepage.includes.bigbanner')
+
+							      	{{-- breadcrumb --}}
+							      	<section class="page-top page-header-6"> 
+									    <div class="container hide-title">
+									        <div class="row" style="border: 1px solid #E9E4E4;border-radius: 15px;">
+									          <div class="col-lg-12" style="">
+									              <nav aria-label="breadcrumb bgc-white">
+									                <ol class="breadcrumb p-0 bgc-white mb-1 mt-1">
+												      	@section('breadcrumb')
+										                    <li>
+										                      <i class="fas fa-home brcr-icon-lr"></i><a href="{{ route('home') }}" class="link-black">Home</a>
+										                    </li>
+												      	@show
+							      					</ol>
+									            </nav>
+									          </div>
+									        </div>
+									    </div>
+									</section>
+							      	
+		   							@yield('content')
+		   						</div>
+		   					</div>
+		   				</div>
+		   				<div class="sidebar-overlay"></div>
+		   			</div>
+		   		</div>
+		   	</div>
 		   	<!-- end main -->
 		   	@include('homepage.includes.footer')
 		</div>
 		<div class="panel-overlay"></div>
 		{{-- menu màn hình điện thoại --}}
 		@include('homepage.includes.side-nav-panel')
-	
-		<script src="{{asset('homepage/js/homepage-app-1.js')}}"></script>
-		{{-- <script src="{{asset('homepage/js/homepage-app-2.js')}}"></script> --}}
-		<script src="{{asset('homepage/js/footer-982.min.js')}}"></script>
 
-		{{-- sweer alert 2 --}}
+		<script src="{{ asset('homepage/js/homepage-app-1.js') }}"></script>
+		<script src="{{ asset('homepage/js/footer-982.min.js') }}"></script>
+
+		{{-- sweer alert 2 and alertify --}}
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+		<script src="{{ asset('admini/js/alertify.min.js') }}"></script>
 
 		<div id="topcontrol" title="" style="position: fixed; bottom: 0px; opacity: 1; cursor: pointer;"><i class="fas fa-chevron-up"></i></div>
 
-		@stack('libs-scripts')
-
 		<script type='text/javascript'>
-			jQuery(document).ready(function() {
+			jQuery(document).ready(function($) {
 				jQuery("#loader").delay(2).fadeOut("slow");
 			    jQuery("#preloader").delay(2).fadeOut();
 
@@ -66,12 +98,14 @@
 		        });
 
 		        jQuery.ajaxSetup({
-				    headers: {
-				        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-				    }
-				});
+	                headers: {
+	                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+	                }
+	            });
 			});
 		</script>
+
+		@stack('libs-scripts')
 
 	    @stack('page-scripts')
 	    

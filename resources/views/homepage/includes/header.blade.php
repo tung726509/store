@@ -14,30 +14,6 @@
                     </h1>
                 </div>
                 <div class="header-col header-right">
-                    {{-- <div class="searchform-popup">
-                        <a class="search-toggle"><i class="fas fa-search"></i><span class="search-text">Search</span></a>
-                        <form action="https://www.portotheme.com/wordpress/porto/gutenberg-shop4/" method="get" class="searchform searchform-cats">
-                            <div class="searchform-fields">
-                                <span class="text"><input name="s" type="text" value="" placeholder="Search&hellip;" autocomplete="off" /></span><input type="hidden" name="post_type" value="product"/> 
-                                <select  name='product_cat' id='product_cat' class='cat' >
-                                    <option value='0'>All Categories</option>
-                                    <option class="level-0" value="accessories">Accessories</option>
-                                    <option class="level-1" value="caps">&nbsp;&nbsp;&nbsp;Caps</option>
-                                    <option class="level-1" value="watches">&nbsp;&nbsp;&nbsp;Watches</option>
-                                    <option class="level-0" value="dress">Dress</option>
-                                    <option class="level-1" value="clothing">&nbsp;&nbsp;&nbsp;Clothing</option>
-                                    <option class="level-2" value="hoodies">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hoodies</option>
-                                    <option class="level-0" value="electronics">Electronics</option>
-                                    <option class="level-1" value="toys">&nbsp;&nbsp;&nbsp;Toys</option>
-                                    <option class="level-0" value="fashion">Fashion</option>
-                                    <option class="level-1" value="shoes">&nbsp;&nbsp;&nbsp;Shoes</option>
-                                    <option class="level-1" value="t-shirts-fashion">&nbsp;&nbsp;&nbsp;T-Shirts</option>
-                                </select>
-                                <span class="button-wrap"> <button class="btn btn-special" title="Search" type="submit"><i class="fas fa-search"></i></button> </span>
-                            </div>
-                            <div class="live-search-list"></div>
-                        </form>
-                    </div> --}}
                     <div class="custom-html ml-5 mr-4 d-none d-lg-block">
                         <div class="porto-sicon-box text-left style_1 default-icon">
                             <div class="porto-sicon-default">

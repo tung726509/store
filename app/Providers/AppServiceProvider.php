@@ -27,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         if ($request->is('admin_bts/*')) {
             // chưa có gì
         }else{
+            $now = Carbon::now();
+            $now_timestamp = strtotime($now);
             $categories = $this->category_m->withCount(['products'])->get();
             $options = $this->option_m->getOption();
             $tags = $this->tag_m->get();
@@ -52,6 +54,8 @@ class AppServiceProvider extends ServiceProvider
                 'use_free_ship' => $use_free_ship,
                 'use_transfer_discount' => $use_transfer_discount,
                 'ict_count' => $ict_count,
+                'now' => $now,
+                'now_timestamp' => $now_timestamp,
             ]);
         }
     }
