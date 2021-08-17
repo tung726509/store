@@ -60,7 +60,7 @@
 	<div class="col-md-12 col-sm-12 col-12">
 		<div class="card">
 			<div class="card-body">
-			    <h3 class="header-title mb-1"><i class="fas fa-user-edit" aria-hidden="true"></i> Tài Khoản : <span class="text-info text-lowercase">{{$user->name.' | '.$user->email}}</span></h3>
+			    <h3 class="header-title mb-1 mb-2"><i class="fas fa-user-edit" aria-hidden="true"></i> Tài Khoản : <span class="text-info text-uppercase">{{  $user->name }}</span></h3>
 			    <h3 class="header-title mb-1"><i class="far fa-hand-rock" aria-hidden="true"></i> Quyền Hạn : <span class="text-info">{{ $role_pretty_name }}</span></h3>
 			    <p class="text-muted">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</p>
 			    <ul class="nav nav-tabs mt-3">

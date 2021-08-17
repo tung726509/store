@@ -212,7 +212,6 @@
 
 {{-- js library --}}
 @push('libs-scripts')
-    {{-- <script src="{{ asset('admini/js/jquery-3.5.0.min.js') }}"></script> --}}
     <script src="{{ asset('homepage/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('admini/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('homepage/js/jquery.nice-number.js') }}"></script>

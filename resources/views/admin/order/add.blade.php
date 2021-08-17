@@ -232,24 +232,24 @@
               @if($use_birth_discount['key'] == 1)
               <div class="form-row">
                 <div class="checkbox checkbox-success checkbox-circle">
-                  <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="">
-                  <label for="checkbox110">Giảm giá {{$use_birth_discount['value']}}% trong tháng sinh nhật khách .</label>
+                  <input class="checkbox-birthday" type="checkbox" disabled="" checked="">
+                  <label for="">Giảm giá {{$use_birth_discount['value']}}% trong tháng sinh nhật khách .</label>
                 </div>
               </div>
               @endif
               @if($use_transfer_discount['key'] == 1)
                 <div class="form-row">
                   <div class="checkbox checkbox-success checkbox-circle">
-                    <input class="checkbox-birthday" id="checkbox110" type="checkbox" disabled="" checked="" name="checkbox_birthday">
-                    <label for="checkbox110">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
+                    <input class="checkbox-birthday" type="checkbox" disabled="" checked="" name="checkbox_birthday">
+                    <label for="">Giảm giá {{$use_transfer_discount['value']}}% cho khách hàng chuyển khoản .</label>
                   </div>
                 </div>
               @endif
               @if($use_free_ship['key'] == 1)
               <div class="form-row">
                 <div class="checkbox checkbox-success checkbox-circle">
-                  <input class="checkbox-freeship" id="checkbox-10" type="checkbox" disabled="" checked="" data-status="on" name="checkbox_freeship">
-                  <label for="checkbox-10">Đang bật FREESHIP cho đơn hàng trên {{ $use_free_ship['value']/1000 }}k</label>
+                  <input class="checkbox-freeship" type="checkbox" disabled="" checked="" data-status="on" name="checkbox_freeship">
+                  <label for="">Đang bật FREESHIP cho đơn hàng trên {{ $use_free_ship['value']/1000 }}k</label>
                 </div>
               </div>
               @endif
@@ -328,7 +328,7 @@
           data: {phone:phone},
         })
         .done(function(res){
-          if(res.success){
+          if(res.success){ 
             if(res.message == 'exist'){
               $("input[name=name]").val(res.info['name']).addClass('parsley-success').attr('readonly',true);
               $("input[name=address]").val(res.info['address']).data('address',res.info['address']).addClass('parsley-success').attr('readonly', false);

@@ -61,47 +61,7 @@
 @push('page-scripts')
     <script type="text/javascript">
         jQuery(document).ready(function($) {
-            // thêm sản phẩm vào giỏ hàng
-            $(".add_to_cart_button").click(function(event){
-                @if($customer)
-                    let product_id = $(this).data('product-id');
-                    let customer_id = {{ $customer->id }};
-                    if(product_id && customer_id){
-                        $.ajax({
-                            url: '{{ route('ajax.add_product_to_cart') }}',
-                            type: 'post',
-                            data: {
-                                product_id: product_id,
-                                customer_id: customer_id
-                            },
-                        })
-                        .done(function(res){
-                            if(res.success){
-                                if(res.status == 'create'){
-                                    let cart_items_count = parseInt( $(".cart-items-count").text() );
-                                    $(".cart-items-count").text(cart_items_count + 1);
-                                }
-                                alertify.success(`<p class="text-white m-0">${res.message}</p>`);
-                            }else{
-                                alertify.error(`<p class="text-white m-0">${res.message}</p>`);
-                            }
-                        })
-                    }else{
-                        Swal.fire(
-                            'Lỗi hệ thống !',
-                            'Vui lòng thử lại sau.',
-                            'error'
-                        )
-                    }
-                @else
-                  let page_path = window.location.pathname;
-                    window.location.replace(`{{ route('login') }}?page_path=${page_path}`);
-                @endif
-            });
-
-            function add_product_to_cart(customer_id,product_id,qty) {
-               
-            }
+            
         });
     </script>
 @endpush
