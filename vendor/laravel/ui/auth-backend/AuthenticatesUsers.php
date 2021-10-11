@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 trait AuthenticatesUsers
 {
@@ -125,7 +126,9 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        $user = Auth::user();
+        $user->last_login = Carbon::now();
+        $user->save();
     }
 
     /**

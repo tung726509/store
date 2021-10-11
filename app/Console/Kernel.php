@@ -3,35 +3,28 @@
 namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Carbon\Carbon;
+use App\Cookiee;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * The Artisan commands provided by your application.
-     *
-     * @var array
-     */
     protected $commands = [
-        //
+        Commands\InactiveUser::class,
     ];
 
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('email:inactiveUsers')->da();
+
+        $schedule->call(function () {
+            Cookiee::insert([
+                'cookie_string' => 'Day la title bai viet',
+                'created_at' => Carbon::now(),
+            ]);
+        })->everyMinute();
     }
 
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');

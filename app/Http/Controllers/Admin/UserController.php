@@ -11,6 +11,9 @@ use Response;
 use Illuminate\Support\Arr;
 use App\Rules\VietnamesePhone;
 use App\Rules\PasswordCorrect;
+use App\Jobs\SendEmail;
+use Mail;
+use App\Mail\MailNotify;
 
 use App\User;
 use App\Role;
@@ -38,8 +41,20 @@ class UserController extends Controller
         $query = $query->filter($param);
         $users = $query->orderBy('created_at','asc')->paginate($per_page);
 
-        // dd($users);
-    	
+        // test
+        $users1 = User::all();
+        $message = [
+            'type' => 'Create task',
+            'task' => 'tạo test',
+            'content' => 'has been created!',
+        ];
+        $user = Auth::user();
+        // cách 1 : gọi qua 1 cái job và đây là các đi kèm release() , delay() , attempts() viết sau dispatch
+        // SendEmail::dispatch($message, $users1);
+        // cách 2 gọi trực tiếp 1 cái mail
+        // Mail::to($user->email)->send(new MailNotify($message));
+        // end test
+
     	return view('admin.user.index',compact('per_page','search','users'));
     }
 

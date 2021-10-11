@@ -13,7 +13,7 @@ class User extends Authenticatable
     use Notifiable,Filterable,HasRoles;
 
     protected $fillable = [
-        'name','username','lock','social_network','email', 'password','username'
+        'name','username','lock','social_network','last_login','email', 'password','username'
     ];
 
     protected $hidden = [
