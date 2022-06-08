@@ -30,7 +30,8 @@ class ProductController extends Controller
         $this->tag_m = new Tag();
     }
 
-    function random($length) {
+    function random($length)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -41,33 +42,34 @@ class ProductController extends Controller
         return $randomString;
     }
 
-    public function index(){
+    public function index()
+    {
         $per_page = request()->query('per', 10);
-        $sale = request()->query('sale','');
-        $search = request()->query('s','');
+        $sale = request()->query('sale', '');
+        $search = request()->query('s', '');
         $param = [];
 
         $query = $this->_m->with(['wh_items']);
 
-        if($sale != null && $sale != ""){
-            if($sale == "sale"){
+        if ($sale != null && $sale != "") {
+            if ($sale == "sale") {
                 $param['sale'] = $sale;
-            }elseif($sale == "not_sale"){
+            } elseif ($sale == "not_sale") {
                 $param['sale'] = $sale;
             }
         }
 
-        if($search != null && $search != ""){
+        if ($search != null && $search != "") {
             $param['sku'] = $search;
         }
 
         $query = $query->filter($param);
 
-    	$products = $query->paginate($per_page);
+        $products = $query->paginate($per_page);
 
-    	$now = strtotime(Carbon::now());
+        $now = strtotime(Carbon::now());
 
-    	return view('admin.product.index',compact('products','now','per_page','sale','search'));
+        return view('admin.product.index', compact('products', 'now', 'per_page', 'sale', 'search'));
     }
 
     public function detail()
@@ -76,17 +78,19 @@ class ProductController extends Controller
 
     public function getAdd()
     {
-    	return view('admin.product.add');
+        $categories = $this->category_m->get();
+
+        return view('admin.product.add', compact('categories'));
     }
 
     public function add(Request $request)
-    {   
-		$rules = [
-            'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku'],
-            'pretty_name' => ['required','string','min:1','max:100'],
-            'buy_into' => ['nullable','integer','min:500'],
-            'price' => ['required','integer','min:500'],
-            'category_id' => ['required','integer','exists:categories,id'],
+    {
+        $rules = [
+            'sku' => ['required', 'alpha_num', 'min:1', 'max:50', 'unique:products,sku'],
+            'pretty_name' => ['required', 'string', 'min:1', 'max:100'],
+            'buy_into' => ['nullable', 'integer', 'min:500'],
+            'price' => ['required', 'integer', 'min:500'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
 
         $messages = [
@@ -111,11 +115,11 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
-        }else{
+        } else {
             $code = $this->random(10);
-        	$data = [
+            $data = [
                 'code' => $code,
                 'sku' => $request->input('sku'),
                 'pretty_name' => $request->input('pretty_name'),
@@ -128,19 +132,19 @@ class ProductController extends Controller
 
             $created = $this->_m->create($data);
 
-            if($created){
-                return back()->with('success','Thêm mới thành công !');
-            }else{
-                return back()->withInput()->with('fail','Lỗi hệ thống , vui lòng thử lại sau !');    
+            if ($created) {
+                return back()->with('success', 'Thêm mới thành công !');
+            } else {
+                return back()->withInput()->with('fail', 'Lỗi hệ thống , vui lòng thử lại sau !');
             }
         }
     }
 
     public function getEdit($id)
     {
-    	$product = $this->_m->with(['tags','description','product_images'])->find($id);
+        $product = $this->_m->with(['tags', 'description', 'product_images'])->find($id);
 
-        if(is_null($product)){
+        if (is_null($product)) {
             return view('admin.alertpages.404');
         }
 
@@ -148,28 +152,28 @@ class ProductController extends Controller
         $categories = $this->category_m->get();
 
         $tags_of_product = [];
-        if($product->tags != null){
+        if ($product->tags != null) {
             $tags_of_product = $product->tags->pluck('id')->toArray();
         }
-        
-    	if($product){
-    		return view('admin.product.edit',compact('product','tags','categories','tags_of_product'));
-    	}
+
+        if ($product) {
+            return view('admin.product.edit', compact('product', 'tags', 'categories', 'tags_of_product'));
+        }
     }
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
         // dd(request()->all());
         $rules = [];
         $messages = [];
 
-        if($request->has('editForm')){
+        if ($request->has('editForm')) {
             $rules = [
-                'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku,'.$id.',id'],
-                'pretty_name' => ['required','string','min:1','max:80'],
-                'buy_into' => ['nullable','integer','min:500'],
-                'price' => ['required','integer','min:500'],
-                'category_id' => ['required','integer','exists:categories,id'],
+                'sku' => ['required', 'alpha_num', 'min:1', 'max:50', 'unique:products,sku,' . $id . ',id'],
+                'pretty_name' => ['required', 'string', 'min:1', 'max:80'],
+                'buy_into' => ['nullable', 'integer', 'min:500'],
+                'price' => ['required', 'integer', 'min:500'],
+                'category_id' => ['required', 'integer', 'exists:categories,id'],
                 'tags[]' => ['array'],
             ];
 
@@ -195,10 +199,10 @@ class ProductController extends Controller
             ];
         }
 
-        if($request->has('saleForm')){
+        if ($request->has('saleForm')) {
             $rules = [
-                'discount' => ['nullable','numeric','min:1','max:100'],
-                'expired_discount' => ['nullable','date_format:m/d/Y'],
+                'discount' => ['nullable', 'numeric', 'min:1', 'max:100'],
+                'expired_discount' => ['nullable', 'date_format:m/d/Y'],
             ];
 
             $messages = [
@@ -209,15 +213,15 @@ class ProductController extends Controller
             ];
         }
 
-        if($request->has('descriptionForm')){
+        if ($request->has('descriptionForm')) {
             $rules = [
-                'origin' => ['nullable','string','max:50'],
-                'trademark' => ['nullable','string','max:100'],
-                'note' => ['nullable','string'],
-                'user_manual' => ['nullable','string'],
-                'description' => ['nullable','string'],
-                'preservation' => ['nullable','string'],
-                'size' => ['nullable','string'],
+                'origin' => ['nullable', 'string', 'max:50'],
+                'trademark' => ['nullable', 'string', 'max:100'],
+                'note' => ['nullable', 'string'],
+                'user_manual' => ['nullable', 'string'],
+                'description' => ['nullable', 'string'],
+                'preservation' => ['nullable', 'string'],
+                'size' => ['nullable', 'string'],
             ];
 
             $messages = [
@@ -233,9 +237,9 @@ class ProductController extends Controller
             ];
         }
 
-        if($request->has('imageForm')){
+        if ($request->has('imageForm')) {
             $rules = [
-                'productimage' => ['required','mimes:jpeg,jpg,png,gif','max:1024'],
+                'productimage' => ['required', 'mimes:jpeg,jpg,png,gif', 'max:1024'],
             ];
 
             $messages = [
@@ -247,15 +251,15 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
-        }else{
+        } else {
             $data = [];
             $updated_product = '';
             $form_id = '';
 
             // tạo mảng data editForm
-            if($request->has('editForm')){
+            if ($request->has('editForm')) {
                 $data = [
                     'sku' => $request->input('sku'),
                     'pretty_name' => $request->input('pretty_name'),
@@ -271,17 +275,17 @@ class ProductController extends Controller
             }
 
             // tạo mảng data saleForm
-            if($request->has('saleForm')){
+            if ($request->has('saleForm')) {
                 $data = [
                     'discount' => $request->input('discount'),
-                    'expired_discount' => date('Y/m/d',strtotime($request->input('expired_discount'))),
+                    'expired_discount' => date('Y/m/d', strtotime($request->input('expired_discount'))),
                 ];
 
                 $form_id = 'saleForm';
-            }  
+            }
 
             // tạo mảng và update descriptionForm
-            if($request->has('descriptionForm')){
+            if ($request->has('descriptionForm')) {
                 $froala_default = '<p data-f-id="pbf" style="text-align: center; font-size: 14px; margin-top: 30px; opacity: 0.65; font-family: sans-serif;">Powered by <a href="https://www.froala.com/wysiwyg-editor?pb=1" title="Froala Editor">Froala Editor</a></p>';
                 $note = $request->input('note');
                 $user_manual = $request->input('user_manual');
@@ -302,40 +306,41 @@ class ProductController extends Controller
                 ];
 
                 $updated_product = $this->pd_m->updateOrCreate(
-                    ['product_id' => $id],$data
+                    ['product_id' => $id],
+                    $data
                 );
 
                 $form_id = 'descriptionForm';
             }
 
             // update editForm hoặc saleForm
-            if($request->has('editForm') || $request->has('saleForm')){
+            if ($request->has('editForm') || $request->has('saleForm')) {
                 $product = $this->_m->find($id);
                 $updated_product = $product->update($data);
 
-                if($request->has('editForm')){
+                if ($request->has('editForm')) {
                     $updated_tags = $product->tags()->sync($tags);
                 }
             }
 
             //gán image cho product
-            if($request->has('imageForm')){
-                if ($request->hasFile('productimage')){
+            if ($request->has('imageForm')) {
+                if ($request->hasFile('productimage')) {
                     $now = strtotime(Carbon::now());
                     $image = $request->file('productimage');
                     $origin_name = $image->getClientOriginalName();
                     $type = $image->extension();
                     $location = public_path('admini/productImages/');
-                    $name = $now.'.'.$type;
-                    $move = $image->move($location,$name);
+                    $name = $now . '.' . $type;
+                    $move = $image->move($location, $name);
 
-                    $img = Image::make('admini/productImages/'.$name);
+                    $img = Image::make('admini/productImages/' . $name);
 
-                    if(File::exists($location.$name)){
-                        File::delete($location.$name);
+                    if (File::exists($location . $name)) {
+                        File::delete($location . $name);
                     }
 
-                    $img->resize(600,600)->save('admini/productImages/'.$name);
+                    $img->resize(600, 600)->save('admini/productImages/' . $name);
 
                     $data = [
                         'product_id' => $id,
@@ -351,24 +356,24 @@ class ProductController extends Controller
                 }
             }
 
-            if($updated_product){
-                $url = url()->current().'#'.$form_id;
-                return redirect($url)->with('success','Cập nhật thành công !');
-            }else{
-                return back()->withInput()->with('fail','Lỗi hệ thống , vui lòng thử lại sau !');
+            if ($updated_product) {
+                $url = url()->current() . '#' . $form_id;
+                return redirect($url)->with('success', 'Cập nhật thành công !');
+            } else {
+                return back()->withInput()->with('fail', 'Lỗi hệ thống , vui lòng thử lại sau !');
             }
         }
     }
 
     public function pickStarAjax(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             $star = $request->star;
             $product_id = $request->product_id;
-            $updated = $this->_m->where('id',$product_id)->update(['star'=>$star]);
-            if($updated){
-                return Response::json(['success'=>true]);
-            }else{
+            $updated = $this->_m->where('id', $product_id)->update(['star' => $star]);
+            if ($updated) {
+                return Response::json(['success' => true]);
+            } else {
                 return false;
             }
         }
@@ -378,19 +383,19 @@ class ProductController extends Controller
 
     public function deleteImageAjax(Request $request)
     {
-        if($request->ajax()){
-            $product_image = $this->pi_m->where('id',$request->id)->first();
-            if(!is_null($product_image)){
+        if ($request->ajax()) {
+            $product_image = $this->pi_m->where('id', $request->id)->first();
+            if (!is_null($product_image)) {
                 $name = $product_image->name;
                 $location = public_path('admini/productImages/');
 
-                if(File::exists($location.$name)){
-                    File::delete($location.$name);
+                if (File::exists($location . $name)) {
+                    File::delete($location . $name);
                 }
 
                 $deleted =  $product_image->delete();
-                if($deleted){
-                    return Response::json(['success'=>true]);
+                if ($deleted) {
+                    return Response::json(['success' => true]);
                 }
             }
 
@@ -400,9 +405,10 @@ class ProductController extends Controller
         return false;
     }
 
-    public function uploadImageAjax(Request $request){
+    public function uploadImageAjax(Request $request)
+    {
         $rules = [
-            'file' => ['required','file','image','mimetypes:image/jpeg,image/png,image/gif','mimes:jpeg,jpg,png,gif','max:5120']
+            'file' => ['required', 'file', 'image', 'mimetypes:image/jpeg,image/png,image/gif', 'mimes:jpeg,jpg,png,gif', 'max:5120']
         ];
 
         $messages = [
@@ -416,25 +422,24 @@ class ProductController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
-            return Response::json(['success' => false,'message' => 'validate fail']);
-        }else{
-            if($request->hasFile('file')){
+        if ($validator->fails()) {
+            return Response::json(['success' => false, 'message' => 'validate fail']);
+        } else {
+            if ($request->hasFile('file')) {
                 $now = strtotime(Carbon::now());
                 $image = $request->file('file');
                 $origin_name = $image->getClientOriginalName();
                 $type = $image->extension();
                 $location = public_path('admini/productImages/');
-                $name = $now.'.'.$type;
-                $move = $image->move($location,$name);
+                $name = $now . '.' . $type;
+                $move = $image->move($location, $name);
 
                 return Response::json([
-                    'link' => asset('admini/productImages/'.$name),
+                    'link' => asset('admini/productImages/' . $name),
                 ]);
             }
-            
-            return Response::json(['success' => false,'message' => 'have not file']);
-            
+
+            return Response::json(['success' => false, 'message' => 'have not file']);
         }
     }
 }
