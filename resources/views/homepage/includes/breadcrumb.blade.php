@@ -1,4 +1,4 @@
-<section class="page-top page-header-6"> 
+<section class="page-top page-header-6">
     <div class="container hide-title">
         <div class="row" style="border: 1px solid #E9E4E4;border-radius: 15px;">
           <div class="col-lg-12" style="">

@@ -22,8 +22,8 @@
 
 {{-- content --}}
 @section('content')
-      {{-- ưu đãi khách hàng --}}
-      @include('homepage.includes.incentive')
+      {{-- featured post --}}
+      @include('homepage.includes.featured-post')
 
       {{-- bán chạy --}}
       <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
@@ -61,7 +61,7 @@
 @push('page-scripts')
     <script type="text/javascript">
         jQuery(document).ready(function($) {
-            
+
         });
     </script>
 @endpush

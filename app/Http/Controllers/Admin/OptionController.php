@@ -23,7 +23,7 @@ class OptionController extends Controller
         $this->middleware('auth');
 		$this->_m = new Option();
 		// discount sinh nhật mặc định
-		$this->bd_discount_default_key = 0; 
+		$this->bd_discount_default_key = 0;
 		$this->bd_discount_default_value = 0;
 		// freeship mặc định
 		$this->fs_discount_default_key = 0;
@@ -43,7 +43,8 @@ class OptionController extends Controller
 		$small_b_i = $dataImageOption['small_b_i'];
 		// dd($med_b_i['name']);
 
-		return view('admin.option.banner',compact('arr_options','big_b_i','med_b_i','small_b_i'));
+		// return view('admin.option.banner',compact('arr_options','big_b_i','med_b_i','small_b_i'));
+		return view('admin.option.banner',compact('big_b_i','med_b_i','small_b_i'));
 	}
 
 	public function banner(Request $request){
@@ -366,7 +367,7 @@ class OptionController extends Controller
             	}else{
             		return false;
             	}
-			}	
+			}
 		}
 
 		return false;
@@ -429,6 +430,6 @@ class OptionController extends Controller
         return view('admin.option.index');
     }
 
-        
+
 }
 

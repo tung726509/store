@@ -4,7 +4,7 @@
 	   	<meta charset="UTF-8">
 	   	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	   	<meta name="csrf-token" content="{{ csrf_token() }}">
-        
+
   	 	<link rel="shortcut icon" href="{{asset('homepage/images/favicon.ico')}}" type="image/x-icon">
 	   	<script src="{{asset('homepage/js/webfont.js')}}" async=""></script>
 
@@ -32,6 +32,8 @@
 	<body class="home page-template-default page page-id-143 wp-embed-responsive full blog-116  theme-porto woocommerce-js yith-wcan-free login-popup">
 		<div id="yith-wcwl-popup-message" style="display: none;"><div id="yith-wcwl-message"></div></div>
   		<div class="page-wrapper">
+            {{-- banner lớn --}}
+            @include('homepage.includes.bigbanner')
 		   	<!-- header wrapper -->
 		   	@include('homepage.includes.header')
 		   	<!-- end header wrapper -->
@@ -41,28 +43,6 @@
 		            	<div class="main-content col-lg-12">
 		               		<div id="content" role="main">
 		                  		<div class="page-content">
-		                  			{{-- banner lớn --}}
-							      	@include('homepage.includes.bigbanner')
-
-							      	{{-- breadcrumb --}}
-							      	<section class="page-top page-header-6"> 
-									    <div class="container hide-title">
-									        <div class="row" style="border: 1px solid #E9E4E4;border-radius: 15px;">
-									          <div class="col-lg-12" style="">
-									              <nav aria-label="breadcrumb bgc-white">
-									                <ol class="breadcrumb p-0 bgc-white mb-1 mt-1">
-												      	@section('breadcrumb')
-										                    <li>
-										                      <i class="fas fa-home brcr-icon-lr"></i><a href="{{ route('home') }}" class="link-black">Home</a>
-										                    </li>
-												      	@show
-							      					</ol>
-									            </nav>
-									          </div>
-									        </div>
-									    </div>
-									</section>
-							      	
 		   							@yield('content')
 		   						</div>
 		   					</div>
@@ -142,7 +122,7 @@
 	            });
 
 	            function add_product_to_cart(customer_id,product_id,qty) {
-	               
+
 	            }
 			});
 		</script>
@@ -150,6 +130,6 @@
 		@stack('libs-scripts')
 
 	    @stack('page-scripts')
-	    
+
 	</body>
 </html>

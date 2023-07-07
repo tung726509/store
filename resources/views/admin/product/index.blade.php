@@ -93,11 +93,12 @@
                         <thead>
                            <tr>
                               <th class="text-center"><i class="far fa-sun"></i></th>
-                              <th data-priority="1" class="text-center">Mã</th>
-                              <th data-priority="1" class="text-center">Tên</th>
-                              <th data-priority="1" class="text-center">Giá bán</th>
-                              <th data-priority="1" class="text-center">Discount</th>
-                              <th data-priority="1" class="text-center">Kết Thúc</th>
+                              {{-- <th data-priority="1" class="text-center">Mã</th> --}}
+                              <th data-priority="1" class="text-center">Tên bài viết</th>
+                              <th data-priority="1" class="text-center">Danh mục</th>
+                              <th data-priority="1" class="text-center">Người tạo</th>
+                              <th data-priority="1" class="text-center">Ngày tạo</th>
+                              <th data-priority="1" class="text-center">Ngày sửa</th>
                            </tr>
                         </thead>
                         <tbody>
@@ -113,29 +114,24 @@
                                      </div>
                                  </div>
                               </td>
-                              <td class="text-center">{{$item->sku}}</td>
+                              {{-- <td class="text-center">{{$item->sku}}</td> --}}
                               <td class="text-center">
                               	{{-- <a href="#" class="text-danger"> --}}
-                                    <p class="badge badge-primary p-1 mb-0">{{$item->pretty_name}}</p>
+                                    <p class=" p-1 mb-0">{{$item->pretty_name}}</p>
                                  {{-- </a> --}}
-                              	<small class="text-muted display-block">Tồn kho : <span class="font-size-t">{{$item->wh_items->sum('quantity')}}</span></small>
+                              	{{-- <small class="text-muted display-block">Tồn kho : <span class="font-size-t">{{$item->wh_items->sum('quantity')}}</span></small> --}}
                               </td>
-                              <td class="text-center">{{$item->price / 1000}}k VNĐ</td>
-                              <td class="text-center">
-                                 @if($item->discount != null && $item->discount != "")
-                                 <span class="font-size-t">{{$item->discount}}</span> %
-                                 @endif
+                              <td class="text-left">
+                                    <p class="badge badge-success p-1 mb-0 w-100">{{$item->category->pretty_name}}</p>
                               </td>
                               <td class="text-center">
-                              	@php
-                              	$expired_discount = strtotime($item->expired_discount);
-                              	@endphp
-                              	@if($now <= $expired_discount)
-                              		<span class="badge badge-success p-1">{{ date('d/m/Y',$expired_discount) }}</span>
-                              	@elseif($now > $expired_discount)
-                              		<span class="badge badge-danger p-1">Hết giảm</span>
-
-                              	@endif
+                                <p class="p-1 mb-0">{{$item->user->name}}</p>
+                              </td>
+                              <td class="text-center">
+                                <p class="p-1 mb-0">{{$item->created_at}}</p>
+                              </td>
+                              <td class="text-center">
+                                <p class="p-1 mb-0">{{$item->updated_at}}</p>
                               </td>
                            </tr>
                            @empty

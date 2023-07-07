@@ -7,19 +7,19 @@
       }
 
     @media only screen and (max-width: 1700px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 73% !important;
       }
     }
 
     @media only screen and (max-width: 1500px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 80% !important;
       }
     }
 
     @media only screen and (max-width: 1400px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 80% !important;
       }
 
@@ -29,7 +29,7 @@
     }
 
     @media only screen and (max-width: 1300px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 83% !important;
       }
 
@@ -39,7 +39,7 @@
     }
 
     @media only screen and (max-width: 1200px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 100% !important;
       }
 
@@ -49,10 +49,10 @@
     }
 
     @media only screen and (min-width: 576px) and (max-width: 870px) {
-      div.porto-ibanner-container{  
+      div.porto-ibanner-container{
         height: 100% !important;
       }
-   
+
       .bbi-text-1{
         margin-bottom: 5px !important;
       }
@@ -71,13 +71,13 @@
     }
 </style>
 {{-- Big Banner --}}
-<div class="banner-height-image porto-carousel owl-carousel has-ccols ccols-1 mb-0 home-slider nav-style-4 owl-drag" data-plugin-options="" style="">
+<div class="banner-height-image porto-carousel owl-carousel ccols-1 mb-0 home-slider nav-style-4 owl-drag" data-plugin-options="" style="">
   <div class="owl-stage-outer">
     <div class="owl-stage">
       @forelse(collect($dataImageOption['big_b_i']['name']) as $item)
         <div class="owl-item">
-            <div class="porto-ibanner mb-0" style="background:#f4f4f4;min-height:200px;">
-               <img width="80%" height="auto" src="{{asset('homepage/images/'.$item)}}" class="porto-ibanner-img">
+            <div class="porto-ibanner mb-0">
+               {{-- <img width="80%" height="auto" src="{{asset('homepage/images/'.$item)}}" class="porto-ibanner-img"> --}}
                <div class="porto-ibanner-desc no-padding d-flex">
                   <div class="container">
                     <div class="porto-ibanner-container">

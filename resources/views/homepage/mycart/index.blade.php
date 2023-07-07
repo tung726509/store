@@ -32,7 +32,7 @@
 {{-- content --}}
 @section('content')
         {{-- ưu đãi khách hàng --}}
-        @include('homepage.includes.incentive')
+        @include('homepage.includes.featured-post')
 
         {{-- giỏ hàng --}}
         <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
@@ -121,7 +121,7 @@
                                                     <option value="ck">Chuyển khoản</option>
                                                     <option value="tm" selected>Tiền mặt</option>
                                                 </select>
-                                                <p class="h6 float-right color-pink"><i class="fas fa-arrow-down ml-2"></i> <span id="sale_transfer" data-transfer="tm">0</span>%</p> 
+                                                <p class="h6 float-right color-pink"><i class="fas fa-arrow-down ml-2"></i> <span id="sale_transfer" data-transfer="tm">0</span>%</p>
                                             </div>
                                         @endif
                                         <div class="clearfix">
@@ -282,7 +282,7 @@
                     .done(function(res) {
                         if(res.success){
                             $("#sale_d_o_b").attr('data-status', res.birth_discount);
-                            $(".customer-info").next().text('');    
+                            $(".customer-info").next().text('');
                             if(res.birth_discount)
                                 $("#sale_d_o_b").parent().parent().removeClass('d-none');
                             else
@@ -415,16 +415,16 @@
             });
 
             $(".btn-order").click(function(event){
-                
+
             });
 
-            // function up date giá tiền 
+            // function up date giá tiền
             function update_total_money(){
                 let provisional = 0,
                     birth_discount = 0,
                     transfer_discount = 0,
                     total_money = 0;
-                
+
                 // update số loại sản phẩm trong giỏ
                 update_cart_items_count();
 
@@ -436,7 +436,7 @@
                     if(picked == 1){
                         let total = $(el).attr('data-total');
                         if(total == 'NaN' ){
-                            total_of_item = 0; 
+                            total_of_item = 0;
                         }else{
                             total_of_item = parseInt( total );
                         }
@@ -461,7 +461,7 @@
                     @endif
 
                     let payments_type = $("#payments_type").val();
-                    
+
                     switch(payments_type) {
                         @if(is_array($use_transfer_discount) )
                         case 'ck':

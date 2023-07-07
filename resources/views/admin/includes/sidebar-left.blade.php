@@ -47,15 +47,15 @@
         <!--- Sidemenu -->
         <div id="sidebar-menu" class="animate__animated animate__bounceInLeft animate__faster">
               <ul class="metismenu" id="side-menu">
-                <li class="menu-title">1 . <span class="text-blue-t">Quản Lý Bán Hàng</span></li>
-                <li>
+                {{-- <li class="menu-title">1 . <span class="text-blue-t">Quản Lý Bán Hàng</span></li> --}}
+                {{-- <li>
                     <a href="#" class="direct-link">
                     <i class="fas fa-chart-line"></i>
                     <span> Thống Kê </span>
                     </a>
-                </li>
+                </li> --}}
                 {{-- đơn mới --}}
-                <li>
+                {{-- <li>
                     <a href="#menuOrder" data-toggle="collapse">
                         <i class="fas fa-print"></i>
                         <span> Đơn Hàng <span class="badge badge-danger">3</span></span>
@@ -80,11 +80,11 @@
                            <li><a href="{{route('administrator.customer.add')}}" class="direct-link"><i class="fas fa-plus"></i> Thêm Mới</a></li>
                         </ul>
                     </div>
-                </li>
-                 
-                <li class="menu-title">2 . <span class="text-red-t">Khởi Tạo</span></li>
+                </li> --}}
+
+                {{-- <li class="menu-title">2 . <span class="text-red-t">Khởi Tạo</span></li> --}}
                 {{-- danh mục --}}
-                <li> 
+                <li>
                     <a href="#menuCategory" data-toggle="collapse">
                         <i class="fas fa-list"></i>
                         <span> Danh Mục </span>
@@ -101,7 +101,7 @@
                 <li>
                     <a href="#menuProduct" data-toggle="collapse">
                         <i class="fas fa-box-open"></i>
-                        <span> Sản Phẩm </span>
+                        <span> Bài Viết </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="menuProduct">
@@ -126,7 +126,7 @@
                     </div>
                 </li>
                 {{-- kho --}}
-                <li>
+                {{-- <li>
                     <a href=#menuWarehouse data-toggle="collapse">
                         <i class="fas fa-warehouse"></i>
                         <span> Kho </span>
@@ -138,8 +138,8 @@
                            <li><a href="{{route('administrator.warehouse.add')}}" class="direct-link"><i class="fas fa-plus"></i> Thêm Mới</a></li>
                         </ul>
                     </div>
-                </li>
-                <li class="menu-title">3 . <span class="text-white-t">Hệ Thống</span></li>
+                </li> --}}
+                {{-- <li class="menu-title">3 . <span class="text-white-t">Hệ Thống</span></li> --}}
                 {{-- tài khoản --}}
                 <li>
                     <a href="#menuAccount" data-toggle="collapse">
@@ -151,17 +151,17 @@
                         <ul class="nav-second-level">
                            <li><a href="{{route('administrator.user.index')}}" class="direct-link"><i class="fas fa-ellipsis-v" style="padding-left:3px;padding-right:3px;"></i> Tất Cả</a></li>
                            <li><a href="{{route('administrator.user.add')}}" class="direct-link"><i class="fas fa-plus"></i> Thêm Mới</a></li>
-                           
+
                         </ul>
                     </div>
                 </li>
                 {{-- phân quyền --}}
-                <li>
+                {{-- <li>
                     <a href="{{ route('administrator.role.index') }}" class="direct-link">
                     <i class="far fa-hand-rock"></i>
                     <span>Phân Quyền</span>
                     </a>
-                </li>
+                </li> --}}
                 {{-- cài đặt --}}
                 <li>
                     <a href="#menuSetting" data-toggle="collapse">
@@ -180,18 +180,18 @@
                                 </a>
                                 <div class="collapse" id="menuWebsite">
                                     <ul class="nav-third-level" aria-expanded="false">
-                                        <li>    
+                                        <li>
                                             <a href="{{route('administrator.option.banner')}}" class="direct-link"> 1 . Banner Quảng Cáo</a>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <a href="{{route('administrator.option.incentive')}}" class="direct-link"> 2 . Ưu Đãi Cho Khách Hàng</a>
-                                        </li>
+                                        </li> --}}
                                         <li>
-                                            <a href="{{route('administrator.option.aboutus')}}" class="direct-link">3 . Thông Tin Cửa Hàng</a>
+                                            <a href="{{route('administrator.option.aboutus')}}" class="direct-link">2 . Thông Tin Cửa Hàng</a>
                                         </li>
-                                        <li>
+                                        {{-- <li>
                                             <a href="#" class="direct-link">4 . Danh Mục</a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                 </div>
                             </li>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Image;
 use Carbon\Carbon;
 use Response;
@@ -47,7 +48,7 @@ class ProductController extends Controller
         $search = request()->query('s','');
         $param = [];
 
-        $query = $this->_m->with(['wh_items']);
+        $query = $this->_m->with(['wh_items', 'category']);
 
         if($sale != null && $sale != ""){
             if($sale == "sale"){
@@ -66,6 +67,7 @@ class ProductController extends Controller
     	$products = $query->paginate($per_page);
 
     	$now = strtotime(Carbon::now());
+        // dd($products);
 
     	return view('admin.product.index',compact('products','now','per_page','sale','search'));
     }
@@ -80,9 +82,8 @@ class ProductController extends Controller
     }
 
     public function add(Request $request)
-    {   
+    {
 		$rules = [
-            'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku'],
             'pretty_name' => ['required','string','min:1','max:100'],
             'buy_into' => ['nullable','integer','min:500'],
             'price' => ['required','integer','min:500'],
@@ -90,11 +91,6 @@ class ProductController extends Controller
         ];
 
         $messages = [
-            'sku.required' => 'Vui lòng nhập mã sản phẩm',
-            'sku.alpha_num' => 'Vui lòng chỉ nhập chữ và số',
-            'sku.min' => 'Tối thiểu 1 kí tự',
-            'sku.max' => 'Tối đa 50 kí tự',
-            'sku.unique' => 'Mã sản phẩm đã trùng',
             'pretty_name.required' => 'Vui lòng nhập tên sản phẩm',
             'pretty_name.string' => 'Chỉ nhập chuỗi',
             'pretty_name.min' => 'Tối thiểu 1 kí tự',
@@ -117,7 +113,7 @@ class ProductController extends Controller
             $code = $this->random(10);
         	$data = [
                 'code' => $code,
-                'sku' => $request->input('sku'),
+                'sku' => $this->createSlugString($request->input('pretty_name')),
                 'pretty_name' => $request->input('pretty_name'),
                 'buy_into' => $request->input('buy_into'),
                 'price' => $request->input('price'),
@@ -131,7 +127,7 @@ class ProductController extends Controller
             if($created){
                 return back()->with('success','Thêm mới thành công !');
             }else{
-                return back()->withInput()->with('fail','Lỗi hệ thống , vui lòng thử lại sau !');    
+                return back()->withInput()->with('fail','Lỗi hệ thống , vui lòng thử lại sau !');
             }
         }
     }
@@ -151,7 +147,9 @@ class ProductController extends Controller
         if($product->tags != null){
             $tags_of_product = $product->tags->pluck('id')->toArray();
         }
-        
+
+        // dd($product);
+
     	if($product){
     		return view('admin.product.edit',compact('product','tags','categories','tags_of_product'));
     	}
@@ -159,26 +157,17 @@ class ProductController extends Controller
 
     public function edit(Request $request,$id)
     {
-        // dd(request()->all());
         $rules = [];
         $messages = [];
 
         if($request->has('editForm')){
             $rules = [
-                'sku' => ['required','alpha_num','min:1','max:50','unique:products,sku,'.$id.',id'],
                 'pretty_name' => ['required','string','min:1','max:80'],
-                'buy_into' => ['nullable','integer','min:500'],
-                'price' => ['required','integer','min:500'],
                 'category_id' => ['required','integer','exists:categories,id'],
                 'tags[]' => ['array'],
             ];
 
             $messages = [
-                'sku.required' => 'Vui lòng nhập mã sản phẩm',
-                'sku.alpha_num' => 'Vui lòng chỉ nhập chữ và số',
-                'sku.min' => 'Tối thiểu 1 kí tự',
-                'sku.max' => 'Tối đa 50 kí tự',
-                'sku.unique' => 'Mã sản phẩm đã trùng',
                 'pretty_name.required' => 'Vui lòng nhập tên sản phẩm',
                 'pretty_name.string' => 'Chỉ nhập chuỗi',
                 'pretty_name.min' => 'Tối thiểu 1 kí tự',
@@ -195,41 +184,13 @@ class ProductController extends Controller
             ];
         }
 
-        if($request->has('saleForm')){
-            $rules = [
-                'discount' => ['nullable','numeric','min:1','max:100'],
-                'expired_discount' => ['nullable','date_format:m/d/Y'],
-            ];
-
-            $messages = [
-                'discount.numeric' => 'Chỉ được nhập số',
-                'discount.min' => 'Giảm tối thiểu 1%',
-                'discount.max' => 'Giảm tối đa 100%',
-                'expired_discount.max' => 'Định dạng ngày không đúng',
-            ];
-        }
-
         if($request->has('descriptionForm')){
             $rules = [
-                'origin' => ['nullable','string','max:50'],
-                'trademark' => ['nullable','string','max:100'],
-                'note' => ['nullable','string'],
-                'user_manual' => ['nullable','string'],
                 'description' => ['nullable','string'],
-                'preservation' => ['nullable','string'],
-                'size' => ['nullable','string'],
             ];
 
             $messages = [
-                'origin.string' => 'Chỉ được nhập chuỗi',
-                'origin.max' => 'Tối đa 50 kí tự',
-                'trademark.string' => 'Chỉ được nhập chuỗi',
-                'trademark.max' => 'Tối đa 100 kí tự',
-                'note.string' => 'Chỉ được nhập chuỗi',
-                'user_manual.string' => 'Chỉ được nhập chuỗi',
                 'description.string' => 'Chỉ được nhập chuỗi',
-                'preservation.string' => 'Chỉ được nhập chuỗi',
-                'size.string' => 'Chỉ được nhập chuỗi',
             ];
         }
 
@@ -257,7 +218,7 @@ class ProductController extends Controller
             // tạo mảng data editForm
             if($request->has('editForm')){
                 $data = [
-                    'sku' => $request->input('sku'),
+                    'sku' => $this->createSlugString($request->input('pretty_name')),
                     'pretty_name' => $request->input('pretty_name'),
                     'buy_into' => $request->input('buy_into'),
                     'price' => $request->input('price'),
@@ -270,35 +231,12 @@ class ProductController extends Controller
                 $form_id = 'editForm';
             }
 
-            // tạo mảng data saleForm
-            if($request->has('saleForm')){
-                $data = [
-                    'discount' => $request->input('discount'),
-                    'expired_discount' => date('Y/m/d',strtotime($request->input('expired_discount'))),
-                ];
-
-                $form_id = 'saleForm';
-            }  
-
             // tạo mảng và update descriptionForm
             if($request->has('descriptionForm')){
                 $froala_default = '<p data-f-id="pbf" style="text-align: center; font-size: 14px; margin-top: 30px; opacity: 0.65; font-family: sans-serif;">Powered by <a href="https://www.froala.com/wysiwyg-editor?pb=1" title="Froala Editor">Froala Editor</a></p>';
-                $note = $request->input('note');
-                $user_manual = $request->input('user_manual');
-                $description = $request->input('description');
-                $preservation = $request->input('preservation');
-                $size = $request->input('size');
-
-                // dd($description,$size,$user_manual,$preservation,$note);
 
                 $data = [
-                    'origin' => $request->input('origin'),
-                    'trademark' => $request->input('trademark'),
                     'description' => $request->input('description') == $froala_default ? null : $request->input('description'),
-                    'size' => $request->input('size') == $froala_default ? null : $request->input('size'),
-                    'user_manual' => $request->input('user_manual') == $froala_default ? null : $request->input('user_manual'),
-                    'preservation' => $request->input('preservation') == $froala_default ? null : $request->input('preservation'),
-                    'note' => $request->input('note') == $froala_default ? null : $request->input('note'),
                 ];
 
                 $updated_product = $this->pd_m->updateOrCreate(
@@ -309,13 +247,13 @@ class ProductController extends Controller
             }
 
             // update editForm hoặc saleForm
-            if($request->has('editForm') || $request->has('saleForm')){
+            if($request->has('editForm')){
                 $product = $this->_m->find($id);
                 $updated_product = $product->update($data);
 
-                if($request->has('editForm')){
+                // if($request->has('editForm')){
                     $updated_tags = $product->tags()->sync($tags);
-                }
+                // }
             }
 
             //gán image cho product
@@ -432,9 +370,15 @@ class ProductController extends Controller
                     'link' => asset('admini/productImages/'.$name),
                 ]);
             }
-            
+
             return Response::json(['success' => false,'message' => 'have not file']);
-            
+
         }
+    }
+
+    public function createSlugString($value) {
+        $slug = Str::slug($value);
+
+        return $slug;
     }
 }

@@ -23,7 +23,7 @@
 {{-- content --}}
 @section('content')
       {{-- ưu đãi khách hàng --}}
-      @include('homepage.includes.incentive')
+      {{-- @include('homepage.includes.featured-post') --}}
 
       {{-- ds sản phẩm theo category --}}
       <section class="vc_section porto-section porto-inner-container pb-4 pt-0">
@@ -31,15 +31,14 @@
           <div class="porto-products wpb_content_element mb-4">
             <h2 class="section-title slider-title"><span class="inline-title">DANH SÁCH {{ $category->pretty_name }}</span><span class="line"></span></h2>
             {{-- sắp xếp và số lượng hiển thị --}}
-            <form method="get" id="filterForm" action="{{ route('categories',['code'=>$category->code]) }}">
+            {{-- <form method="get" id="filterForm" action="{{ route('categories',['code'=>$category->code]) }}">
                @csrf
                <div class="pb-3 container" style="opacity: 1;">
                   <div class="row">
                      <div class="col-12 mb-2">
-                        {{-- sắp xếp sản phẩm theo --}}
                         <div class="row">
                            <div class="col-4 col-md-2 align-self-center">
-                              <label>Sắp xếp theo : </label> 
+                              <label>Sắp xếp theo : </label>
                            </div>
                            <div class="col-7">
                               <select name="orderby" class="orderby" id="filter_price">
@@ -50,7 +49,6 @@
                         </div>
                      </div>
                      <div class="col-12">
-                        {{-- số lượng hiển thị / trang --}}
                         <div class="row">
                            <div class="col-4 col-md-2 align-self-center">
                               <label>Hiển Thị : </label>
@@ -66,11 +64,11 @@
                      </div>
                   </div>
                </div>
-            </form>
+            </form> --}}
 
-            {{-- ds products --}}
+            {{-- ds bài viết --}}
             @include('homepage.includes.foreach-products',['data' => $category_products])
-            
+
             {{-- điều hướng trang --}}
             {{ $category_products->render('vendor.pagination.custom-by-me') }}
           </div>
@@ -78,7 +76,7 @@
       </section>
 
       {{-- small banner và danh mục  --}}
-      @include('homepage.includes.small-banner')
+      {{-- @include('homepage.includes.small-banner') --}}
 @endsection
 
 {{-- js library --}}
@@ -87,7 +85,7 @@
 
 {{-- js page --}}
 @push('page-scripts')
-   <script type="text/javascript">  
+   <script type="text/javascript">
       jQuery(document).ready(function($) {
          var screen_width = $( window ).width();
          var itemsss = 1;
@@ -119,7 +117,7 @@
            items:1,
            dots:false,
          });
-         
+
          $("#filter_price").change(function(){
             $("#filterForm").submit();
          });
