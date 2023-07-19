@@ -8,7 +8,6 @@
   	 	<link rel="shortcut icon" href="{{asset('homepage/images/favicon.ico')}}" type="image/x-icon">
 	   	<script src="{{asset('homepage/js/webfont.js')}}" async=""></script>
 
-	   	{{-- <script>document.documentElement.className = document.documentElement.className + ' yes-js js_active js'</script> --}}
 	   	<title>T-store {{-- | Cửa hàng tạp pí lù --}}</title>
 
 	   	<link rel="stylesheet" href="{{asset('homepage/css/header-cd6.min.css')}}" media="all">
@@ -21,9 +20,8 @@
 
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:200,300,400,500,600,700,800%7CPoppins:200,300,400,500,600,700,800%7COswald:400,600,700" media="all">
 
-	   	{{-- <noscript><style>.woocommerce-product-gallery{ opacity: 1 !important; }</style></noscript> --}}
-
-	   	<script src="https://kit.fontawesome.com/eb07484667.js" crossorigin="anonymous"></script>
+	   	{{-- <script src="https://kit.fontawesome.com/eb07484667.js" crossorigin="anonymous"></script> --}}
+        <script src="https://kit.fontawesome.com/c45d62faee.js" crossorigin="anonymous"></script>
         @stack('page-styles')
 	</head>
 
@@ -38,18 +36,17 @@
 		   	@include('homepage.includes.header')
 		   	<!-- end header wrapper -->
 		   	<div id="main" class="column1 wide clearfix no-breadcrumbs">
-		      	<div class="container-fluid">
-		         	<div class="row main-content-wrap">
-		            	<div class="main-content col-lg-12">
-		               		<div id="content" role="main">
-		                  		<div class="page-content">
-		   							@yield('content')
-		   						</div>
-		   					</div>
+		      	{{-- <div class="container-fluid"> --}}
+		         	<div class="row page-container">
+		            	<div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 page-content">
+                            @yield('content')
 		   				</div>
+                        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4 sidebar-content">
+                            @include('homepage.includes.side-bar')
+                        </div>
 		   				<div class="sidebar-overlay"></div>
 		   			</div>
-		   		</div>
+		   		{{-- </div> --}}
 		   	</div>
 		   	<!-- end main -->
 		   	@include('homepage.includes.footer')

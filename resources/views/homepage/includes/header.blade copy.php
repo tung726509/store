@@ -42,15 +42,15 @@
 </style>
 <div class="header-wrapper">
     <header id="header" class="header-builder header-loaded" style="">
-        <div class="header-main" style="top: 0px;">
+        <!-- <div class="header-main" style="top: 0px;">
             <div class="header-row container">
                 <div class="header-col header-left">
                     <a class="mobile-toggle"><i class="fas fa-bars"></i></a>
-                    {{-- <h1 class="logo logo-transition">
+                    <h1 class="logo logo-transition">
                         <img class="img-responsive standard-logo retina-logo" src="//www.portotheme.com/wordpress/porto/gutenberg-shop4/wp-content/uploads/images/logo_ecomblue.png">
-                    </h1> --}}
+                    </h1>
                 </div>
-                {{-- <div class="header-col header-right">
+                <div class="header-col header-right">
                     <div id="mini_cart" class="mini-cart minicart-arrow-alt">
                         <div class="cart-head header-icon-cart">
                             <span class="cart-icon" style="position: relative;">
@@ -63,9 +63,9 @@
                             </span>
                         </div>
                     </div>
-                </div> --}}
+                </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="header-bottom main-menu-wrap" style="top: 0px;">
             <div class="header-row container">

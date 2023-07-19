@@ -75,27 +75,19 @@ class HomeController extends Controller
 
     public function categories(Request $request,$code){
         $customer = $this->customer;
-        $cart_items = $this->cart_items;
 
-        $orderby = request()->query('orderby','l_to_h');
         $count = (int) request()->query('count',10);
         $param = [];
 
     	$category = $this->category_m->where('code',$code)->first();
 
     	if($category){
-            $category_products = $this->product_m->with(['tags','product_images'])->where('category_id',$category->id);
-            $new_products = $this->product_m->with(['tags','product_images'])->orderBy('created_at','desc')->get();
-
-            if($orderby == "l_to_h"){
-                $category_products = $category_products->orderBy('price','asc');
-            }else{
-                $category_products = $category_products->orderBy('price','desc');
-            }
+            $category_products = $this->product_m->with(['tags','product_images'])->where('category_id', $category->id);
+            $standing_products = $this->product_m->with(['tags','product_images', 'description'])->where('star', 1)->get();
 
             $category_products = $category_products->paginate($count);
 
-    		return response()->view('homepage.categories.index',compact('category_products','category','orderby','count','new_products','customer','cart_items'))->withCookie($this->new_cookie);
+    		return response()->view('homepage.categories.index',compact('category_products','category','count','standing_products','customer'))->withCookie($this->new_cookie);
     	}else{
     		return $this->home();
     	}

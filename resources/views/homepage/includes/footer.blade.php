@@ -3,7 +3,6 @@
 		         <div class="footer-main">
 		            <div class="container">
 		               <div class="row">
-               				{{--  --}}
 		                  	<div class="col-lg-4">
 		                     	<aside id="shop_contact_info" class="widget contact-info">
 			                        <h3 class="widget-title">Liên Hệ</h3>
@@ -12,7 +11,7 @@
 			                              <li><i class="far fa-dot-circle"></i> <strong>Địa Chỉ:</strong> <span>{{ $options['com_address']['content'] }}</span></li>
 			                              <li><i class="fab fa-whatsapp"></i> <strong>Số Điện Thoại:</strong> <span>{{ $options['com_phone']['content'] }}</span></li>
 			                              <li><i class="far fa-envelope"></i> <strong>Email:</strong> <span><a href="mailto:{{ $options['com_email']['content'] }}">{{ $options['com_email']['content'] }}</a></span></li>
-			                              <li><i class="far fa-clock"></i> <strong>Thời Giang Hoạt Động :</strong> <span>{{ $options['open_time']['content'] }}</span></li>
+			                              {{-- <li><i class="far fa-clock"></i> <strong>Thời Giang Hoạt Động :</strong> <span>{{ $options['open_time']['content'] }}</span></li> --}}
 			                           </ul>
 			                        </div>
 	                     		</aside>
@@ -26,9 +25,9 @@
 		                  	</div>
 		                  	<div class="col-lg-4">
 		                     <aside id="woocommerce_product_tag_cloud-2" class="widget woocommerce widget_product_tag_cloud">
-		                        <h3 class="widget-title">Phổ Biến</h3>
+		                        <h3 class="widget-title">Chuyên Mục</h3>
 		                        <div class="tagcloud">
-		                        	@forelse($tags as $item)
+		                        	@forelse($categories as $item)
 	                        		<a href="#" class="tag-cloud-link tag-link-33 tag-link-position-1" style="font-size: 8pt;">{{ $item->pretty_name }}</a>
 		                        	@empty
 
@@ -38,9 +37,9 @@
 		                  	</div>
 		                  	<div class="col-lg-4">
 		                     <aside id="text-7" class="widget widget_text">
-		                        <h3 class="widget-title">Subscribe Newsletter</h3>
+		                        <h3 class="widget-title">Subscribe New Posts</h3>
 		                        <div class="textwidget">
-		                           <p>Get all the latest information on events, sales and offers. Sign up for newsletter:</p>
+		                           <p>Get all notifications about the latest articles. Sign up for new posts:</p>
 		                           <div role="form" class="wpcf7" id="wpcf7-f1512-o1" lang="en-US" dir="ltr">
 		                              <div class="screen-reader-response"></div>
 		                              <form action="/wordpress/porto/gutenberg-shop4/#wpcf7-f1512-o1" method="post" class="wpcf7-form" novalidate="novalidate">

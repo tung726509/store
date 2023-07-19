@@ -1,68 +1,156 @@
 <style type="text/css">
-	#side-nav-panel .accordion-menu .arrow:before {
-    	content: '';
-	}
-	#side-nav-panel .accordion-menu .open>.arrow:before {
-    	content: '';
-	}
-    .p-relate-title {
-        display: block;
-        width: 100%;
+    .card {
+        border-radius: 5px;
+    }
+    .card-header {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-color: #ff9900;
+    }
+    .card-header_title {
+        margin: 0px !important;
+        color: white;
+    }
+    .card-content {
+        margin: 50px 20px;
+    }
+    .card-content_img {
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+    .card-content_title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .card-content_content {
+
+    }
+
+    .post-standing {
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: 5px;
+    }
+
+    .post-standing-header {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        background-color: #ff9900;
+        padding: 0.75rem 1.25rem;
+    }
+    .post-standing-header_title {
+        margin: 0px !important;
+        /* text-decoration: underline; */
+        color: white;
+    }
+    .post-standing-content {
+        margin: 50px 15px;
+    }
+    .post-standing-content_img {
+        border-radius: 5px;
+        width: 87px;
+    }
+    .post-standing-content_title {
+        line-height: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #000;
+    }
+    .post-standing-content_content {
+        font-size: 13px;
+        line-height: 18px;
+        color: #000;
         overflow: hidden;
-        margin: 0px !important;
-        color: black !important;
-        text-decoration: none;
-        transition: 0.15s;
-        font-size: 14px;
+        max-height: 40px;
+        display: -webkit-box;
+        }
+    .post-standing-content_date {
+        font-size: 10px;
     }
-    .fl-left {
-        float: left;
+
+    .input-email {
+        width: 100%;
+        height: 50px;
+        padding: 10px;
+        border: 1px solid #c3c2c2;
+        border-radius: 10px;
+        margin: 20px 0 20px 0;
     }
-    .block-post-relate-t {
-        color: #ff9900 !important;
-        font-size: 18px;
-        border-bottom: 1px solid rgb(60, 54, 54);
-        margin-bottom: 24px;
-        font-family: 'Roboto Slab';
+    .btn-email {
+        color: white;
+        background-color: #ff9900;
+        border-radius: 5px;
     }
-    .product {
-        margin: 0px !important;
+    .badge {
+        background-color: #c3c2c2;
+        padding: 2px 5px;
+        width: fit-content;
+        border-radius: 5px;
+        margin-right: 5px;
+        margin-bottom: 5px;
     }
 </style>
 
-<div class="relate-post">
-    <div class="entry-header-outer">
-        <div class="related products">
-            <div class="container">
-                <h3 class="block-post-relate-t">Giới thiệu</h3>
-                <div class="slider-wrapper">
-                    <div class="woocommerce columns-5">
-                        <ul class="products products-container products-slider owl-carousel nav-center-images-only nav-pos-outside nav-style-4 show-nav-hover pcols-lg-5 pcols-md-3 pcols-xs-3 pcols-ls-2 pwidth-lg-5 pwidth-md-3 pwidth-xs-3 pwidth-ls-2 owl-loaded owl-drag mar-0" data-plugin-options="{&quot;themeConfig&quot;:true,&quot;lg&quot;:3,&quot;md&quot;:3,&quot;xs&quot;:2,&quot;ls&quot;:2,&quot;nav&quot;:false}">
-                            <div class="owl-stage-outer owl-height p-0">
-                                <div class="owl-stage">
-                                    <div class="owl-item">
-                                        <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
-                                            <div class="product-inner">
-                                                <div class="product-image bor-radius-1">
-                                                    <a class="direct-link" href="#">
-                                                        <div class="inner img-effect bor-radius-1">
-                                                            <img width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="porto-lazyload  wp-post-image lazy-load-loaded" alt="">
-                                                            <img width="300" height="300" src="{{asset('admini/productImages/empty-product.jpg')}}" data-oi="{{asset('admini/productImages/empty-product.jpg')}}" class="hover-image" alt="" />
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="product-content">
-                                                    {{-- <a class="{{ route('detail',['product_id' => base64_encode($item->code)]) }}"> --}}
-                                                        <h3 class="p-relate-title fl-left">{{ $item->pretty_name }}</h3>
-                                                        <p class="date meta-item tie-icon m-0">28 Tháng Tám, 2021</p>
-                                                    {{-- </a> --}}
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </div>
-                                </div>
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-header_title">Giới thiệu</h3>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img width="100" height="100" src="{{asset('admini/productImages/empty-product.jpg')}}" class="card-content_img" alt="">
+                        <div class="card-content_title h3">Nhật Dương</div>
+                        <div class="card-content_content">Blog Diary is a new generation WordPress personal blog theme, that can give your readers immersive browsing experience.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="post-standing">
+            <div class="post-standing-header">
+                <h3 class="post-standing-header_title">Bài viết nổi bật</h3>
+            </div>
+            <div class="post-standing-content my-4">
+                @forelse ($standing_products as $item)
+                    <div class="row mb-3">
+                        <div class="col-4 text-center">
+                            <img width="100" height="100" src="{{asset('admini/productImages/empty-product.jpg')}}" class="post-standing-content_img" alt="">
+                        </div>
+                        <div class="col-8 text-left ">
+                            <div class="post-standing-content_title">{{ $item->pretty_name }}</div>
+                            <div class="post-standing-content_content">
+                                @foreach ($tags as $item)
+                                    <p class="badge">{{ $item->pretty_name }}</p>
+                                @endforeach
                             </div>
-                        </ul>
+                            {{-- <div class="post-standing-content_date">20 Tháng 8, 2022</div> --}}
+                            <div class="post-standing-content_date">{{ $item->created_at }}</div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-silver">chưa có bài viết nổi bật</p>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-content my-4">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="card-content_content text-black">Đăng ký để  nhận thông báo mỗi khi có </br> bài viết mới</div>
+                        <input class="input-email" placeholder="abc@gmail.com" />
+                        <div class="btn btn-email btn-md w-100">Đăng ký</div>
                     </div>
                 </div>
             </div>

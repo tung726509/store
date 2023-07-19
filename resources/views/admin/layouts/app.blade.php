@@ -24,19 +24,20 @@
       {{-- icon --}}
       <link href="{{asset('admini/css/icons.min.css')}}" rel="stylesheet" type="text/css">
       {{-- font awesome  --}}
-      <script src="https://kit.fontawesome.com/eb07484667.js" crossorigin="anonymous"></script>
-      
+      <script src="https://kit.fontawesome.com/c45d62faee.js" crossorigin="anonymous"></script>
+      {{-- <script src="https://kit.fontawesome.com/eb07484667.js" crossorigin="anonymous"></script> --}}
+
       {{-- animate --}}
       <link rel="stylesheet" href="{{ asset('admini/css/animate.min.css') }}"/>
   </head>
 
-  @include('admin.includes.animate-loading') 
+  @include('admin.includes.animate-loading')
 
   <body class="" data-sidebar-size="default" data-sidebar-color="dark" data-layout-width="fluid" data-layout-menu-position="fixed" data-sidebar-showuser="true" data-topbar-color="light">
     <div id="wrapper">
       {{-- sidebar-left --}}
-      @include('admin.includes.sidebar-left') 
-      
+      @include('admin.includes.sidebar-left')
+
       {{-- content-page --}}
       <div class="content-page">
          {{-- topbar --}}
@@ -75,7 +76,7 @@
         $(".direct-link").click(function(event){
           $('#preloader').css('display', '');
         });
-      });   
+      });
     </script>
 
   </body>

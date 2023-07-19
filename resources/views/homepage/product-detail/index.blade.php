@@ -11,11 +11,11 @@
 @push('page-styles')
 	<style type="text/css">
         .summary-before {
-            border: 1px solid black;
+            border: 1px solid rgba(0,0,0,.125);
             padding: 0px;
         }
         .relate-post {
-            border: 1px solid black;
+            border: 1px solid rgba(0,0,0,.125);
             padding: 0px;
         }
         .entry-header {
@@ -31,6 +31,7 @@
             color: #999999 !important;
         }
         .label-category {
+            width: fit-content;
             background-color: #ff9900;
             color: #FFFFFF;
             padding: 2px 4px 2px 4px;
@@ -94,113 +95,111 @@
 
 {{-- content --}}
 @section('content')
-	<div class="container">
-  		<div class="product type-product post-1366 status-publish first instock product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-clothes product_tag-fashion has-post-thumbnail sale downloadable shipping-taxable purchasable product-type-simple product-layout-default">
-         	<div class="product-summary-wrap">
-                <div class="row">
-                	<div class="col-md-8">
-                        {{-- tt bài viết --}}
-                        <div class="summary-before">
-                            {{-- title post --}}
-                            <div class="entry-header-outer">
-                                <ol class="breadcrumb breadcrumb-detail p-0 bgc-white mb-1 mt-1">
-                                    <li>
-                                        <i class="fas fa-home brcr-icon-lr"></i><a href="#" class="link-black">Home</a>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-angle-right brcr-icon-lr"></i><a href="{{ route('categories',['code'=>$product->category->code]) }}" class="link-black">{{$product->category->pretty_name}}</a>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-angle-right brcr-icon-lr"></i><a href="#" class="link-black">{{$product->pretty_name}}</a>
-                                    </li>
-                                </ol>
-                                <div class="entry-header">
-                                    <span class="post-cat-wrap">
-                                        <a class="post-cat label-category" href="https://nhatduong.co/review-sach/">Review sách</a>
-                                    </span>
-                                    <h1 class="post-title entry-title">Review Sách “Học tập cũng cần chiến lược”</h1>
-                                    <div class="post-meta clearfix">
-                                        <span class="date meta-item tie-icon">1 Tháng Ba, 2023</span>
-                                        <div class="tie-alignright">
-                                            <span class="meta-views meta-item ">
-                                                <span class="tie-icon-fire" aria-hidden="true"></span> 121
-                                            </span>
-                                            <span class="meta-reading-time meta-item"><span class="tie-icon-bookmark" aria-hidden="true"></span> 14 phút đọc</span>
+	{{-- <div class="container"> --}}
+    <div class="product type-product post-1366 status-publish first instock product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-clothes product_tag-fashion has-post-thumbnail sale downloadable shipping-taxable purchasable product-type-simple product-layout-default">
+        <div class="product-summary-wrap">
+            <div class="row">
+                <div class="col-md-12">
+                    {{-- tt bài viết --}}
+                    <div class="summary-before">
+                        {{-- title post --}}
+                        <div class="entry-header-outer">
+                            <ol class="breadcrumb breadcrumb-detail p-0 bgc-white mb-1 mt-1">
+                                <li>
+                                    <i class="fas fa-home brcr-icon-lr"></i><a href="/" class="link-black">Home</a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-angle-right brcr-icon-lr"></i><a href="{{ route('categories',['code'=>$product->category->code]) }}" class="link-black">{{$product->category->pretty_name}}</a>
+                                </li>
+                                <li>
+                                    <i class="fas fa-angle-right brcr-icon-lr"></i><a href="#" class="link-black">{{$product->pretty_name}}</a>
+                                </li>
+                            </ol>
+                            <div class="entry-header">
+                                <span class="post-cat-wrap">
+                                    <p class="post-cat label-category">{{$product->category->pretty_name}}</p>
+                                </span>
+                                <h1 class="post-title entry-title">
+                                    {!! $product->pretty_name !!}
+                                </h1>
+                                <div class="post-meta clearfix">
+                                    <span class="date meta-item tie-icon">1 Tháng Ba, 2023<i class="fa-brands fa-facebook"></i></span>
+                                    <div class="tie-alignright">
+                                        <span class="meta-views meta-item ">
+                                            <span class="tie-icon-fire" aria-hidden="true"></span> 121  <i class="fa-brands fa-facebook"></i>
+                                        </span>
+                                        <span class="meta-reading-time meta-item"><span class="tie-icon-bookmark" aria-hidden="true"></span> 14 phút đọc</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- ảnh to --}}
+                        <div class="product-images images">
+                            <div class="product-image-slider owl-carousel has-ccols ccols-1 owl-drag">
+                                <div class="owl-stage-outer">
+                                        <div class="owl-stage">
+                                            @forelse($product->product_images as $item)
+                                        <div class="owl-item">
+                                            <div class="img-thumbnail">
+                                                <div class="inner bor-radius-1">
+                                                    <img class="img-responsive bor-radius-1" src="{{asset('admini/productImages/'.$item->name)}}"/>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- ảnh to --}}
-                            <div class="product-images images">
-                                <div class="product-image-slider owl-carousel has-ccols ccols-1 owl-drag">
-                                    <div class="owl-stage-outer">
-                                            <div class="owl-stage">
-                                                @forelse($product->product_images as $item)
-                                            <div class="owl-item">
-                                                <div class="img-thumbnail">
-                                                    <div class="inner bor-radius-1">
-                                                        <img class="img-responsive bor-radius-1" src="{{asset('admini/productImages/'.$item->name)}}"/>
-                                                    </div>
+                                        @empty
+                                        <div class="owl-item">
+                                            <div class="img-thumbnail">
+                                                <div class="inner bor-radius-1">
+                                                    <img class="img-responsive bor-radius-1" src="{{asset('admini/productImages/empty-product.jpg')}}" width="600" height="600">
                                                 </div>
                                             </div>
-                                            @empty
-                                            <div class="owl-item">
-                                                <div class="img-thumbnail">
-                                                    <div class="inner bor-radius-1">
-                                                        <img class="img-responsive bor-radius-1" src="{{asset('admini/productImages/empty-product.jpg')}}" width="600" height="600">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @endforelse
-                                            </div>
-                                    </div>
-                                </div>
-                                <span class="zoom" data-index="0"><i class="fas fa-search" aria-hidden="true"></i></span>
-                            </div>
-                            {{-- nội dung bài viết --}}
-                            <div class="entry-content entry clearfix">
-                                {!! $product->description->description !!}
-                            </div>
-                            {{-- button share bài viết --}}
-                            <div class="share-buttons share-buttons-bottom">
-                                <div class="share-links icons-only share-rounded">
-                                    <a href="https://www.facebook.com/sharer.php?u=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Facebook" target="_blank" class="facebook-share-btn " data-raw="https://www.facebook.com/sharer.php?u={post_link}">
-                                        <span class="share-btn-icon tie-icon-facebook"></span> <span class="screen-reader-text">Facebook</span>
-                                    </a>
-                                    <a href="https://twitter.com/intent/tweet?text=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;url=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Twitter" target="_blank" class="twitter-share-btn " data-raw="https://twitter.com/intent/tweet?text={post_title}&amp;url={post_link}">
-                                        <span class="share-btn-icon tie-icon-twitter"></span> <span class="screen-reader-text">Twitter</span>
-                                    </a>
-                                    <a href="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="messenger-mob-share-btn messenger-share-btn " data-raw="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
-                                        <span class="share-btn-icon tie-icon-messenger"></span> <span class="screen-reader-text">Messenger</span>
-                                    </a>
-                                    <a href="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="messenger-desktop-share-btn messenger-share-btn " data-raw="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
-                                        <span class="share-btn-icon tie-icon-messenger"></span> <span class="screen-reader-text">Messenger</span>
-                                    </a>
-                                    <a href="mailto:?subject=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;body=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Share via Email" target="_blank" class="email-share-btn " data-raw="mailto:?subject={post_title}&amp;body={post_link}">
-                                        <span class="share-btn-icon tie-icon-envelope"></span> <span class="screen-reader-text">Share via Email</span>
-                                    </a>
-                                    <a href="#" rel="external noopener nofollow" title="Print" target="_blank" class="print-share-btn " data-raw="#">
-                                        <span class="share-btn-icon tie-icon-print"></span> <span class="screen-reader-text">Print</span>
-                                    </a>
+                                        </div>
+                                        @endforelse
+                                        </div>
                                 </div>
                             </div>
+                            <span class="zoom" data-index="0"><i class="fas fa-search" aria-hidden="true"></i></span>
                         </div>
-                        {{-- baì viết liên quan --}}
-                        <div class="relate-post">
-                            {{-- header post --}}
-                            <div class="entry-header-outer">
-                                @include('homepage.includes.foreach-products',['data' => $related_products])
+                        {{-- nội dung bài viết --}}
+                        <div class="entry-content entry clearfix">
+                            {!! $product->description->description !!}
+                        </div>
+                        {{-- button share bài viết --}}
+                        <div class="row m-4">
+                            <div class="col-12">
+                                <a href="https://www.facebook.com/sharer.php?u=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Facebook" target="_blank" class="" data-raw="https://www.facebook.com/sharer.php?u={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?text=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;url=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Twitter" target="_blank" class="" data-raw="https://twitter.com/intent/tweet?text={post_title}&amp;url={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
+                                <a href="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="" data-raw="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
+                                <a href="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="" data-raw="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
+                                <a href="mailto:?subject=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;body=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Share via Email" target="_blank" class="" data-raw="mailto:?subject={post_title}&amp;body={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
+                                <a href="#" rel="external noopener nofollow" title="Print" target="_blank" class="print-share-btn " data-raw="#">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                </a>
                             </div>
                         </div>
-                	</div>
-                	{{-- side --}}
-                	<div class="summary entry-summary col-md-4">
-                        @include('homepage.includes.side-bar')
-             		</div>
-          		</div>
-         	</div>
-  		</div>
-	</div>
+                    </div>
+                    {{-- baì viết liên quan --}}
+                    <div class="relate-post">
+                        {{-- header post --}}
+                        <div class="entry-header-outer">
+                            @include('homepage.includes.foreach-products',['data' => $related_products])
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	{{-- </div> --}}
 @endsection
 
 {{-- js library --}}
