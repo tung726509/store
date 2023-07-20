@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\MailNotify;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
