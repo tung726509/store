@@ -63,6 +63,7 @@ class HomeController extends Controller
     public function home(Request $request){
         $customer = $this->customer;
         $cart_items = $this->cart_items;
+        $standing_products = $this->product_m->with(['tags','product_images', 'description'])->where('star', 1)->get();
 
         // các thể loại sản phẩm
             $models = $this->product_m->with(['tags','product_images']);
@@ -70,7 +71,7 @@ class HomeController extends Controller
             $best_sell_products = $models->orderBy('created_at','desc')->get();
 	        $new_products = clone $products->take(10);
 
-    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','customer','cart_items'))->withCookie($this->new_cookie);
+    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','customer','cart_items', 'standing_products'))->withCookie($this->new_cookie);
     }
 
     public function categories(Request $request,$code){
