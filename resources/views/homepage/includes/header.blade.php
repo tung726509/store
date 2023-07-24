@@ -74,13 +74,13 @@
           	            {{-- trang chủ --}}
                         {{-- <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-143 current_page_item active narrow"><a href="{{route('home')}}" class=" current">Trang Chủ</a></li> --}}
                         {{-- danh mục --}}
-                        {{-- @forelse($categories as $item)
-                            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-143 current_page_item narrow {{ $item->code === $category->code ? 'active' : ''}}">
+                        @forelse($categories as $item)
+                            <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-143 current_page_item narrow {{ (isset($category) && $item->code === $category->code) ? 'active' : ''}}">
                                 <a href="{{route('categories',['code'=>$item->code])}}" class=" current">{{ $item->pretty_name }}</a>
                             </li>
                         @empty
                             <h1>chưa có danh mục nào</h1>
-                        @endforelse --}}
+                        @endforelse
                     </ul>
                 </div>
             </div>

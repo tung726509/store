@@ -32,7 +32,7 @@
                     <div class="owl-stage-outer owl-height p-0">
                         <div class="owl-stage">
                             @forelse($data as $item)
-                                {{ $item }}
+                                {{-- {{ $item }} --}}
                                 <div class="owl-item">
                                     <li class="product-col product-default product type-product post-1368 status-publish first instock product_cat-clothing product_cat-shoes product_cat-t-shirts-fashion product_cat-watches product_tag-bag product_tag-clothes product_tag-fashion has-post-thumbnail sale featured shipping-taxable purchasable product-type-variable">
                                         <div class="product-inner">

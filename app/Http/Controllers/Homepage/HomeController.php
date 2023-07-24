@@ -70,6 +70,7 @@ class HomeController extends Controller
             $products = $models->orderBy('created_at','desc')->get();
             $best_sell_products = $models->orderBy('created_at','desc')->get();
 	        $new_products = clone $products->take(10);
+            $category = null;
 
     	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','customer','cart_items', 'standing_products'))->withCookie($this->new_cookie);
     }
@@ -102,9 +103,10 @@ class HomeController extends Controller
     	$product = $this->product_m->with(['tags','description','product_images', 'category'])->where('code',$product_id_decode)->first();
         $related_products = $this->product_m->with(['tags','product_images'])->where('category_id',$product->category_id)->orderBy('created_at','desc')->get();
         $category = $product->category;
+        $standing_products = $this->product_m->with(['tags','product_images', 'description'])->where('star', 1)->get();
         // dd($category);
 
-    	return response()->view('homepage.product-detail.index',compact('product','related_products','customer','cart_items', 'category'))->withCookie($this->new_cookie);
+    	return response()->view('homepage.product-detail.index',compact('product','related_products','customer','cart_items', 'category', 'standing_products'))->withCookie($this->new_cookie);
     }
 
     public function myCart(Request $request){

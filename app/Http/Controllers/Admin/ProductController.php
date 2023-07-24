@@ -377,12 +377,7 @@ class ProductController extends Controller
                 ]);
             }
 
-<<<<<<< HEAD
-            return Response::json(['success' => false,'message' => 'have not file']);
-
-=======
             return Response::json(['success' => false, 'message' => 'have not file']);
->>>>>>> 752d07f65a9058e717d7e1a8bdcc386400cd2bd4
         }
     }
 
