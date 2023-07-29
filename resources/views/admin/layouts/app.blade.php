@@ -31,7 +31,7 @@
       <link rel="stylesheet" href="{{ asset('admini/css/animate.min.css') }}"/>
   </head>
 
-  @include('admin.includes.animate-loading')
+  {{-- @include('admin.includes.animate-loading') --}}
 
   <body class="" data-sidebar-size="default" data-sidebar-color="dark" data-layout-width="fluid" data-layout-menu-position="fixed" data-sidebar-showuser="true" data-topbar-color="light">
     <div id="wrapper">
@@ -44,9 +44,9 @@
          @include('admin.includes.topbar')
          <div class="content">
             <!-- Start Content-->
-            <div class="container-fluid">
+            {{-- <div class="container-fluid"> --}}
                 @yield('content')
-            </div>
+            {{-- </div> --}}
          </div>
          {{-- footer --}}
          @include('admin.includes.footer')
@@ -74,7 +74,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $(".direct-link").click(function(event){
-          $('#preloader').css('display', '');
+          // $('#preloader').css('display', '');
         });
       });
     </script>

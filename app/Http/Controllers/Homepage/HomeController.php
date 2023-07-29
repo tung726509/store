@@ -61,24 +61,27 @@ class HomeController extends Controller
     }
 
     public function home(Request $request){
-        $customer = $this->customer;
-        $cart_items = $this->cart_items;
+        $count = (int) request()->query('count', 10);
+        $search = request()->query('search', '');
         $standing_products = $this->product_m->with(['tags','product_images', 'description'])->where('star', 1)->get();
 
         // các thể loại sản phẩm
             $models = $this->product_m->with(['tags','product_images']);
-            $products = $models->orderBy('created_at','desc')->get();
-            $best_sell_products = $models->orderBy('created_at','desc')->get();
-	        $new_products = clone $products->take(10);
+            $products = $models->where('pretty_name', 'like', '%' . $search . '%')->orderBy('created_at','desc')->paginate($count);
+	        // $new_products = clone $products->take(10);
             $category = null;
 
-    	return response()->view('homepage.home.index',compact('products','best_sell_products','new_products','customer','cart_items', 'standing_products'))->withCookie($this->new_cookie);
+    	return response()->view('homepage.home.index',compact(
+            'products',
+            // 'new_products',
+            'standing_products'
+        ))->withCookie($this->new_cookie);
     }
 
     public function categories(Request $request,$code){
         $customer = $this->customer;
 
-        $count = (int) request()->query('count',10);
+        $count = (int) request()->query('count', 1);
         $param = [];
 
     	$category = $this->category_m->where('code',$code)->first();

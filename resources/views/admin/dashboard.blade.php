@@ -18,28 +18,10 @@
 @section('content')
 <div class="row">
 	<div class="col-12">
-		<div class="card-box">
-			<div class="card-body">
-				<div class="form-group">
-					<label for="code" class="col-form-label">Tọa độ</label>
-		         	<div class="input-group">
-		         		<input type="text" class="form-control" id="code" name="code" placeholder="kinh độ và vĩ độ" value="">
-		         		<div class="input-group-append">
-                            <button class="btn btn-dark waves-effect waves-light convert-address-1ajax" type="button">Convert with 1 ajax</button>
-                            <button class="btn btn-dark waves-effect waves-light convert-address-multi-ajax" type="button">Convert with multi ajax</button>
-                        </div>
-		         	</div>
-				</div>
-			</div>
-			<div class="card-body">
-				<div class="form-group">
-					<label for="code" class="col-form-label">RETURN</label>
-		         	<div class="input-group">
-		         		<textarea id="api_return" rows="30" cols="150"></textarea>
-		         	</div>
-				</div>
-			</div>
-		</div>
+		<img class="w-100" src="/homepage/images/1685524449.png" alt="">
+	</div>
+	<div class="col-12">
+		<h1>CHÀO MỪNG BẠN!</h1>
 	</div>
 </div>
 @endsection

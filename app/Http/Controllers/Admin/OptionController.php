@@ -385,7 +385,8 @@ class OptionController extends Controller
             'company_facebook' => ['nullable','url','max:255'],
             'company_instagram' => ['nullable','url','max:255'],
             'company_twitter' => ['nullable','url','max:255'],
-            'company_opentime' => ['nullable','max:255'],
+            'company_youtube' => ['nullable','url','max:255'],
+            'company_tiktok' => ['nullable','url','max:255'],
         ];
 
         $messages = [
@@ -397,7 +398,10 @@ class OptionController extends Controller
             'company_instagram.max' => 'Tối đa 255 kí tự !',
             'company_twitter.url' => 'Link không đúng định dạng !',
             'company_twitter.max' => 'Tối đa 255 kí tự !',
-            'company_opentime.max' => 'Tối đa 255 kí tự !',
+            'company_youtube.url' => 'Link không đúng định dạng !',
+            'company_youtube.max' => 'Tối đa 255 kí tự !',
+            'company_tiktok.url' => 'Link không đúng định dạng !',
+            'company_tiktok.max' => 'Tối đa 255 kí tự !',
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -406,20 +410,22 @@ class OptionController extends Controller
             return back()->withInput()->withErrors($validator);
         }else{
             $com_email = $request->company_email;
-            $com_phone = $request->company_phone;
-            $com_address = $request->company_address;
+            // $com_phone = $request->company_phone;
+            // $com_address = $request->company_address;
             $fb = $request->company_facebook;
             $ins = $request->company_instagram;
             $twt = $request->company_twitter;
-            $open_time = $request->company_opentime;
+            $ytb = $request->company_youtube;
+            $tik = $request->company_tiktok;
 
             $this->_m->where('slug','fb')->update(['content'=>$fb]);
             $this->_m->where('slug','ins')->update(['content'=>$ins]);
             $this->_m->where('slug','twt')->update(['content'=>$twt]);
-            $this->_m->where('slug','com_phone')->update(['content'=>$com_phone]);
-            $this->_m->where('slug','com_address')->update(['content'=>$com_address]);
+            $this->_m->where('slug','ytb')->update(['content'=>$ytb]);
+            $this->_m->where('slug','tik')->update(['content'=>$tik]);
+            // $this->_m->where('slug','com_phone')->update(['content'=>$com_phone]);
+            // $this->_m->where('slug','com_address')->update(['content'=>$com_address]);
             $this->_m->where('slug','com_email')->update(['content'=>$com_email]);
-            $this->_m->where('slug','open_time')->update(['content'=>$open_time]);
 
             return back()->with('success','Cập nhật thành công !');
         }

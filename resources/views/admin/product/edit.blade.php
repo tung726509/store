@@ -89,7 +89,7 @@
 		                        @enderror
 					      	</div>
 					      	<div class="form-group col-md-6">
-					         	<label for="tags" class="col-form-label">Thẻ Tags<span class="text-danger">*</span></label>
+					         	<label for="tags" class="col-form-label">Thẻ Tags</label>
 					         	<select class="form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="Chọn ..." id="tags" name="tags[]">
 				         		@foreach($tags as $item)
 	                            	<option value="{{ $item->id }}" {{in_array($item->id, $tags_of_product) == true ? 'selected' : ''}}>{{ $item->pretty_name }}</option>

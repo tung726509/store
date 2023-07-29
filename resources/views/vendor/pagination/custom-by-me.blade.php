@@ -1,5 +1,6 @@
 @if ($paginator->hasPages())
   <style type="text/css">
+    [data-is='paginate'] {
       .pagination-container {
         margin: 0px;
         text-align: center;
@@ -15,6 +16,7 @@
         font-size: 1.2rem;
         padding: 7px 12px 7px;
         border: 0px;
+        font-size: 16px;
       }
       .pagination a:before {
         z-index: -1;
@@ -24,7 +26,7 @@
         content: "";
         top: 0;
         left: 0;
-        background-color: #2c3e50;
+        background-color: #ff9900;
         border-radius: 24px;
         -webkit-transform: scale(0);
         transform: scale(0);
@@ -36,7 +38,7 @@
         color: #fff;
       }
 
-      .pagination a:hover{
+      .pagination a:hover {
         background-color: white !important;
       }
 
@@ -57,8 +59,16 @@
         transform: scale(1);
       }
       .pagination-newer {
+        color: #ff9900 !important;
+      }
+      .pagination-newer:hover {
+        color: white !important;
       }
       .pagination-older {
+        color: #ff9900 !important;
+      }
+      .pagination-older:hover {
+        color: white !important;
       }
       .tranY{
         transform: translateY(7px);
@@ -67,8 +77,8 @@
         color: silver;
       }
       .txt-silver:hover{
-        -webkit-transform: scale(0);
-        transform: scale(0);
+        /* -webkit-transform: scale(0); */
+        /* transform: scale(0); */
       }
       .pagination div{
         position: relative;
@@ -79,8 +89,9 @@
         padding: 5px 10px 5px;
         border: 0px;
       }
+    }
   </style>
-  <nav class="pagination-container">
+  <nav data-is="paginate" class="pagination-container">
       <div class="pagination">
         @if ($paginator->onFirstPage())
           <div class="txt-silver disabled"><i class="fas fa-chevron-left tranY"></i></div>
@@ -96,7 +107,6 @@
                   @foreach ($element as $page => $url)
                       @if ($page == $paginator->currentPage())
                         <a class="pagination-active" href="#">{{ $page }}</a>
-                        {{-- <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li> --}}
                       @else
                         <a href="{{ $url }}">{{ $page }}</a>
                       @endif

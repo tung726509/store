@@ -7,12 +7,12 @@
 		                     	<aside id="shop_contact_info" class="widget contact-info">
 			                        <h3 class="widget-title">Liên Hệ</h3>
 			                        <div class="contact-info contact-info-block">
-			                           <ul class="contact-details">
+			                           {{-- <ul class="contact-details">
 			                              <li><i class="far fa-dot-circle"></i> <strong>Địa Chỉ:</strong> <span>{{ $options['com_address']['content'] }}</span></li>
 			                              <li><i class="fab fa-whatsapp"></i> <strong>Số Điện Thoại:</strong> <span>{{ $options['com_phone']['content'] }}</span></li>
 			                              <li><i class="far fa-envelope"></i> <strong>Email:</strong> <span><a href="mailto:{{ $options['com_email']['content'] }}">{{ $options['com_email']['content'] }}</a></span></li>
-			                              {{-- <li><i class="far fa-clock"></i> <strong>Thời Giang Hoạt Động :</strong> <span>{{ $options['open_time']['content'] }}</span></li> --}}
-			                           </ul>
+			                              <li><i class="far fa-clock"></i> <strong>Thời Giang Hoạt Động :</strong> <span>{{ $options['open_time']['content'] }}</span></li>
+			                           </ul> --}}
 			                        </div>
 	                     		</aside>
 		                     	<aside id="follow-us-widget-2" class="widget follow-us">
@@ -20,6 +20,8 @@
 			                        	<a href="{{ $options['fb']['content'] }}" rel="nofollow" target="_blank" title="Facebook" class="share-facebook">Facebook</a>
 			                        	<a href="{{ $options['twt']['content'] }}" rel="nofollow" target="_blank" title="Twitter" class="share-twitter">Twitter</a>
 			                        	<a href="{{ $options['ins']['content'] }}" rel="nofollow" target="_blank" title="Instagram" class="share-instagram">Instagram</a>
+			                        	<a href="{{ $options['ytb']['content'] }}" rel="nofollow" target="_blank" title="Instagram" class="share-youtube">Youtube</a>
+			                        	{{-- <a href="{{ $options['tik']['content'] }}" rel="nofollow" target="_blank" title="Instagram" class="share-tiktok">Tiktok</a> --}}
 			                        </div>
 			                    </aside>
 		                  	</div>
@@ -27,11 +29,9 @@
 		                     <aside id="woocommerce_product_tag_cloud-2" class="widget woocommerce widget_product_tag_cloud">
 		                        <h3 class="widget-title">Chuyên Mục</h3>
 		                        <div class="tagcloud">
-		                        	@forelse($categories as $item)
-	                        		<a href="#" class="tag-cloud-link tag-link-33 tag-link-position-1" style="font-size: 8pt;">{{ $item->pretty_name }}</a>
-		                        	@empty
-
-		                        	@endforelse
+		                        	@foreach($categories as $item)
+	                        		<a href="{{ route('categories',['code'=>$item->code]) }}" class="tag-cloud-link tag-link-33 tag-link-position-1" style="font-size: 8pt;">{{ $item->pretty_name }}</a>
+		                        	@endforeach
 		                        </div>
 		                     </aside>
 		                  	</div>

@@ -29,18 +29,9 @@
       	<div class="card animate__animated animate__rollIn animate__faster">
       		<div class="card-body">
       			<div class="row">
-      				<div class="container-fluid col-5 col-sm-5 col-md-5 col-xl-3">
+      				<div class="container-fluid col-12">
       					<h4 class="header-title">THÊM MỚI THẺ TAGS</h4>
-			      		<p class="sub-header">
-			                Thẻ <a href="{{route('administrator.tag.index')}}">tags</a> giúp tổng hợp các loại sản phẩm có cùng tag , tốt cho việc lọc hay tìm kiếm sản phẩm cùng tag .
-			            </p>
 			            <div class="text-muted m-b-20 font-13 position-relative">Các trường đánh dấu <span class="text-danger">*</span> là bắt buộc</div>
-      				</div>
-      				<div class="container-fluid col-7 col-sm-5 col-md-4 col-xl-4">
-      					<h4 class="header-title">ẢNH MINH HỌA</h4>
-			   			<div class="">
-			   				<img src="{{asset('admini/images/tags.png')}}" alt="placeholder+image" width="100%" height="auto" class="img-fluid border-img">
-			   			</div>
       				</div>
       			</div>
       			<hr class="mb-0">

@@ -89,8 +89,6 @@ class ProductController extends Controller
     {
 		$rules = [
             'pretty_name' => ['required','string','min:1','max:100'],
-            'buy_into' => ['nullable','integer','min:500'],
-            'price' => ['required','integer','min:500'],
             'category_id' => ['required','integer','exists:categories,id'],
         ];
 
@@ -101,9 +99,9 @@ class ProductController extends Controller
             'pretty_name.max' => 'Tối đa 100 kí tự',
             'buy_into.integer' => 'Phải là số nguyên',
             'buy_into.min' => 'Tối thiểu 500',
-            'price.required' => 'Vui lòng nhập giá bán',
-            'price.integer' => 'Phải là số nguyên',
-            'price.min' => 'Tối thiểu 500',
+            // 'price.required' => 'Vui lòng nhập giá bán',
+            // 'price.integer' => 'Phải là số nguyên',
+            // 'price.min' => 'Tối thiểu 500',
             'category_id.required' => 'Vui lòng chọn danh mục',
             'category_id.integer' => 'Phải là số nguyên',
             'category_id.exists' => 'Danh mục không tồn tại',

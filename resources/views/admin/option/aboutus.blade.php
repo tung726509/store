@@ -37,11 +37,11 @@
 
 @section('content')
 <div class="row">
-  <div class="col-md-12 col-sm-12 col-12">
+  <div class="col-12">
     @include('admin.includes.form-alert')
   </div>
   {{-- mô tả sản phẩm --}}
-  <div class="col-md-12 col-sm-12 col-12">
+  <div class="col-12">
     <div class="card animate__animated animate__rollIn animate__faster">
       <div class="card-body">
         <h4 class="header-title">1 . Thông tin liên hệ</h4>
@@ -49,7 +49,7 @@
           <form method="post" action="{{ url()->current()}}" id="aboutUsForm">
             @csrf
             <div class="form-row">
-                <div class="form-group col-md-6">
+                {{-- <div class="form-group col-md-6">
                   <label for="company_phone" class="col-form-label">Số ĐT</label>
                   <input type="text" class="form-control @error('company_phone') is-invalid @enderror" id="company_phone" name="company_phone" placeholder="" value="{{ old('company_phone',$data['com_phone']['content']) }}">
                   @error('company_phone')
@@ -62,7 +62,7 @@
                   @error('company_address')
                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                   @enderror
-                </div>
+                </div> --}}
                 <div class="form-group col-md-6">
                   <label for="company_email" class="col-form-label">Email</label>
                   <input type="text" class="form-control @error('company_email') is-invalid @enderror" id="company_email" name="company_email" placeholder="vd : abc@gmail.com" value="{{ old('company_email',$data['com_email']['content']) }}">
@@ -92,9 +92,16 @@
                   @enderror
                 </div>
                 <div class="form-group col-md-6">
-                  <label for="company_opentime" class="col-form-label">Thời gian hoạt động</label>
-                  <input type="text" class="form-control @error('company_opentime') is-invalid @enderror" id="company_opentime" name="company_opentime" placeholder="vd : Thứ Hai - Chủ Nhật / 9:00 AM - 8:00 PM" value="{{ old('company_opentime',$data['open_time']['content']) }}">
-                  @error('company_opentime')
+                  <label for="company_youtube" class="col-form-label">Youtube</label>
+                  <input type="text" class="form-control @error('company_youtube') is-invalid @enderror" id="company_youtube" name="company_youtube" placeholder="vd :" value="{{ old('company_youtube',$data['ytb']['content']) }}">
+                  @error('company_youtube')
+                    <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
+                  @enderror
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="company_tiktok" class="col-form-label">Tiktok</label>
+                  <input type="text" class="form-control @error('company_tiktok') is-invalid @enderror" id="company_tiktok" name="company_tiktok" placeholder="vd :" value="{{ old('company_tiktok',$data['tik']['content']) }}">
+                  @error('company_tiktok')
                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                   @enderror
                 </div>

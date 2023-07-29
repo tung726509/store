@@ -15,7 +15,7 @@
             padding: 0px;
         }
         .relate-post {
-            border: 1px solid rgba(0,0,0,.125);
+            /* border: 1px solid rgba(0,0,0,.125); */
             padding: 0px;
         }
         .entry-header {
@@ -79,6 +79,15 @@
         .share-links {
             margin: 0px !important;
         }
+        .brcr-icon-lr {
+            /* font-size: 30px; */
+        }
+        .text-share {
+            font-size: 13px;
+        }
+        .icon-share {
+            font-size: 30px;
+        }
 	</style>
 @endpush
 
@@ -123,12 +132,12 @@
                                     {!! $product->pretty_name !!}
                                 </h1>
                                 <div class="post-meta clearfix">
-                                    <span class="date meta-item tie-icon">1 Tháng Ba, 2023<i class="fa-brands fa-facebook"></i></span>
+                                    <span class="date meta-item tie-icon">{{convertDateMonth($product->created_at)}}</span>
                                     <div class="tie-alignright">
                                         <span class="meta-views meta-item ">
-                                            <span class="tie-icon-fire" aria-hidden="true"></span> 121  <i class="fa-brands fa-facebook"></i>
+                                            <span class="tie-icon-fire" aria-hidden="true"></span> 121  <i class="fa-regular fa-eye"></i>
                                         </span>
-                                        <span class="meta-reading-time meta-item"><span class="tie-icon-bookmark" aria-hidden="true"></span> 14 phút đọc</span>
+                                        <span class="meta-reading-time meta-item"><span class="tie-icon-bookmark" aria-hidden="true"></span> 14 phút đọc <i class="fa-regular fa-clock"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -167,23 +176,17 @@
                         {{-- button share bài viết --}}
                         <div class="row m-4">
                             <div class="col-12">
-                                <a href="https://www.facebook.com/sharer.php?u=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Facebook" target="_blank" class="" data-raw="https://www.facebook.com/sharer.php?u={post_link}">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                <p class="text-share mb-2">Chia sẻ bài viết:</p>
+                            </div>
+                            <div class="col-12">
+                                <a href="https://www.facebook.com/sharer.php?u={{ url()->full() }}" rel="external noopener nofollow" title="Facebook" target="_blank" class="" data-raw="https://www.facebook.com/sharer.php?u={post_link}">
+                                    <i class="fa-brands fa-facebook brcr-icon-lr icon-share"></i>
                                 </a>
-                                <a href="https://twitter.com/intent/tweet?text=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;url=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Twitter" target="_blank" class="" data-raw="https://twitter.com/intent/tweet?text={post_title}&amp;url={post_link}">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                <a href="https://twitter.com/intent/tweet?text=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;url={{ url()->full() }}" rel="external noopener nofollow" title="Twitter" target="_blank" class="" data-raw="https://twitter.com/intent/tweet?text={post_title}&amp;url={post_link}">
+                                    <i class="fa-brands fa-twitter brcr-icon-lr icon-share"></i>
                                 </a>
-                                <a href="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="" data-raw="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
-                                </a>
-                                <a href="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Messenger" target="_blank" class="" data-raw="https://www.facebook.com/dialog/send?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
-                                </a>
-                                <a href="mailto:?subject=B%E1%BA%A1n%20%C4%91%C3%A3%20s%E1%BB%91ng%20%C4%91%C6%B0%E1%BB%A3c%20bao%20l%C3%A2u%20r%E1%BB%93i%3F&amp;body=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/" rel="external noopener nofollow" title="Share via Email" target="_blank" class="" data-raw="mailto:?subject={post_title}&amp;body={post_link}">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
-                                </a>
-                                <a href="#" rel="external noopener nofollow" title="Print" target="_blank" class="print-share-btn " data-raw="#">
-                                    <i class="fa-brands fa-facebook brcr-icon-lr"></i>
+                                <a href="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link=https://nhatduong.co/ban-da-song-duoc-bao-lau-roi/&amp;redirect_uri={{ url()->full() }}" rel="external noopener nofollow" title="Messenger" target="_blank" class="" data-raw="fb-messenger://share?app_id=5303202981&amp;display=popup&amp;link={post_link}&amp;redirect_uri={post_link}">
+                                    <i class="fa-brands fa-facebook-messenger brcr-icon-lr icon-share" style="color: #ba6daa;"></i>
                                 </a>
                             </div>
                         </div>
@@ -191,7 +194,7 @@
                     {{-- baì viết liên quan --}}
                     <div class="relate-post">
                         {{-- header post --}}
-                        <div class="entry-header-outer">
+                        <div class="entry-header-outer p-0">
                             @include('homepage.includes.foreach-products',['data' => $related_products])
                         </div>
                     </div>

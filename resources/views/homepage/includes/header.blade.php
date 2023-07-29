@@ -50,20 +50,6 @@
                         <img class="img-responsive standard-logo retina-logo" src="//www.portotheme.com/wordpress/porto/gutenberg-shop4/wp-content/uploads/images/logo_ecomblue.png">
                     </h1> --}}
                 </div>
-                {{-- <div class="header-col header-right">
-                    <div id="mini_cart" class="mini-cart minicart-arrow-alt">
-                        <div class="cart-head header-icon-cart">
-                            <span class="cart-icon" style="position: relative;">
-                                <span class="header-icon-cart"><i class="fas fa-shopping-cart"></i></span>
-                                    @if($cart_items)
-                                        <span class="icon-cart-number cart-items-count">{{ $cart_items->count() }}</span>
-                                    @else
-                                        <span class="icon-cart-number cart-items-count">0</span>
-                                    @endif
-                            </span>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
 
@@ -74,13 +60,11 @@
           	            {{-- trang chủ --}}
                         {{-- <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-143 current_page_item active narrow"><a href="{{route('home')}}" class=" current">Trang Chủ</a></li> --}}
                         {{-- danh mục --}}
-                        @forelse($categories as $item)
+                        @foreach($categories as $item)
                             <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-143 current_page_item narrow {{ (isset($category) && $item->code === $category->code) ? 'active' : ''}}">
                                 <a href="{{route('categories',['code'=>$item->code])}}" class=" current">{{ $item->pretty_name }}</a>
                             </li>
-                        @empty
-                            <h1>chưa có danh mục nào</h1>
-                        @endforelse
+                        @endforeach
                     </ul>
                 </div>
             </div>

@@ -59,19 +59,6 @@
                               </select>
                            </div>
                         </div>
-                        {{-- filter discount --}}
-                        <div class="row mb-2">
-                           <div class="col-4">
-                              <p class="text-center m-0">Discount</p>
-                           </div>
-                           <div class="col-7">
-                              <select name="sale" id="sale" aria-controls="datatable" class="custom-select custom-select-sm form-control form-control-sm">
-                                 <option value="" {{ $sale == '' ? 'selected' : '' }}>Tất Cả</option>
-                                 <option value="sale" {{ $sale == 'sale' ? 'selected' : '' }}>Đang giảm</option>
-                                 <option value="not_sale" {{ $sale == 'not_sale' ? 'selected' : '' }}>Không giảm</option>
-                              </select>
-                           </div>
-                        </div>
                         {{-- search --}}
                         <div class="row mb-2">
                            <div class="col-4">

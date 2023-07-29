@@ -69,7 +69,7 @@
                <div class="container">
                    <div class="slider-wrapper">
                        <div class="woocommerce columns-5">
-                           <ul class="products products-container products-slider owl-carousel nav-center-images-only nav-pos-outside nav-style-4 show-nav-hover pcols-lg-5 pcols-md-3 pcols-xs-3 pcols-ls-2 pwidth-lg-5 pwidth-md-3 pwidth-xs-3 pwidth-ls-2 owl-loaded owl-drag mar-0" data-plugin-options="{&quot;themeConfig&quot;:true,&quot;lg&quot;:3,&quot;md&quot;:3,&quot;xs&quot;:2,&quot;ls&quot;:2,&quot;nav&quot;:false}">
+                           <ul class="products products-container products-slider owl-carousel nav-center-images-only nav-pos-outside nav-style-4 show-nav-hover pcols-lg-5 pcols-md-3 pcols-xs-3 pcols-ls-2 pwidth-lg-5 pwidth-md-3 pwidth-xs-3 pwidth-ls-2 owl-loaded owl-drag mar-0" data-plugin-options="{&quot;themeConfig&quot;:true,&quot;lg&quot;:2,&quot;md&quot;:2,&quot;xs&quot;:2,&quot;ls&quot;:2,&quot;nav&quot;:false}">
                                <div class="owl-stage-outer owl-height p-0">
                                    <div class="owl-stage">
                                        @forelse($category_products as $item)
@@ -94,15 +94,14 @@
                                                        <div class="product-content">
                                                            <a class="{{ route('detail',['product_id' => base64_encode($item->code)]) }}">
                                                                <h3 class="p-relate-title fl-left">{{ $item->pretty_name }}</h3>
-                                                               <p class="date meta-item tie-icon m-0">28 Tháng Tám, 2021</p>
+                                                               <p class="date meta-item tie-icon m-0">{{ convertDateMonth($item->created_at) }}</p>
                                                            </a>
                                                        </div>
                                                    </div>
                                                </li>
                                            </div>
                                        @empty
-                                           {{-- {{ $data }} --}}
-                                           <h3>Chưa có bài viết liên quan</h3>
+                                        <h3>Chưa có bài viết liên quan</h3>
                                        @endforelse
                                    </div>
                                </div>
@@ -116,7 +115,7 @@
             {{-- @include('homepage.includes.foreach-products',['data' => $category_products]) --}}
 
             {{-- điều hướng trang --}}
-            {{ $category_products->render('vendor.pagination.custom-by-me') }}
+            {{ $category_products->appends(request()->except('page'))->render('vendor.pagination.custom-by-me') }}
           </div>
          </div>
       </section>

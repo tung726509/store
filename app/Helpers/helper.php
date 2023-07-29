@@ -14,3 +14,12 @@ if (! function_exists('modifierVnd')) {
         return $number;
     }
 }
+
+if (! function_exists('convertDateMonth')) {
+    function convertDateMonth($value) {
+        $day = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->day;
+        $month = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->month;
+        $year = Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value)->year;
+        return $day.' Tháng '.$month.', '.$year;
+    }
+}
